@@ -419,13 +419,22 @@ export default async function Home() {
             </AccordionItem>
           ))}
         </Accordion>
-        <p className="mt-8 text-center text-sm text-muted-foreground">
+        <p className="mx-auto max-w-xl text-balance text-center text-sm text-muted-foreground mt-8">
           Still have a question? Email us at{" "}
           <a
             href={`mailto:${EVENT.contactEmail}`}
             className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
           >
             {EVENT.contactEmail}
+          </a>{" "}
+          or{" "}
+          <a
+            href={EVENT.discordInvite}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+          >
+            find us on Discord
           </a>
           .
         </p>
