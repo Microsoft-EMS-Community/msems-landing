@@ -316,6 +316,7 @@ export const TEAM: readonly TeamMember[] = [
     name: "Sven Visser",
     handle: "falc0n123",
     role: "contributor",
+    photo: "/team/sven-visser.jpg",
     linkedin: "https://www.linkedin.com/in/sven-visser-36904649/",
   },
   { name: "ToastedTy", handle: "toastedty", role: "contributor" },
