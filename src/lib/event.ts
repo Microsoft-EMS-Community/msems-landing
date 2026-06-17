@@ -274,6 +274,7 @@ export const TEAM: readonly TeamMember[] = [
     name: "Jonas Bøgvad",
     handle: "jonasb",
     role: "moderator",
+    photo: "/team/jonas-bogvad.png",
     mvp: true,
     eventTeam: true,
     linkedin: "https://www.linkedin.com/in/jonasbogvad/",
