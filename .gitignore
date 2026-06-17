@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local preview screenshots and source reference material
+.preview*.png
+.m-*.png
+.s*.png
+/screenshots/

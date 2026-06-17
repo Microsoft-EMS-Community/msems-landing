@@ -1,0 +1,61 @@
+import { EVENT } from "./event";
+
+/**
+ * The link people should include when they share. Uses the Discord/notify
+ * link today (guaranteed to work). Swap to the public site URL once the
+ * domain is live.
+ */
+export const SHARE_LINK = EVENT.discordInvite;
+
+export const HASHTAGS: readonly string[] = [
+  "#MSEMS",
+  "#MicrosoftSecurity",
+  "#Intune",
+  "#EntraID",
+  "#MSDefender",
+  "#MEM",
+];
+
+export interface SharePost {
+  readonly id: string;
+  readonly platform: string;
+  readonly note: string;
+  /** Body text without the link; the link is appended in the UI. */
+  readonly body: string;
+}
+
+export const SHARE_POSTS: readonly SharePost[] = [
+  {
+    id: "linkedin",
+    platform: "LinkedIn",
+    note: "Longer and professional. Great for your network.",
+    body: `Exciting news: the first Microsoft EMS Community Summit is happening! 🎉
+
+Join us on ${EVENT.dateLabel} at ${EVENT.venue}, ${EVENT.venueArea}, for a full day of community-led sessions on Intune, Entra ID and Microsoft Defender, our Cloud Hour round-table live, and an evening social.
+
+It's not-for-profit, community-run, and open to everyone. Seats are limited, so save the date and get notified when registration opens.`,
+  },
+  {
+    id: "x",
+    platform: "X / Twitter",
+    note: "Short and punchy. Fits in one post.",
+    body: `The first Microsoft EMS Community Summit is here! 🚀
+
+📅 ${EVENT.dateLabel}
+📍 ${EVENT.venue}, ${EVENT.venueArea}
+
+A full day of sessions, Cloud Hour live, and an evening social. Open to everyone. Save the date 👇`,
+  },
+  {
+    id: "general",
+    platform: "Teams / Discord / email",
+    note: "Casual heads-up to drop in a chat or thread.",
+    body: `Heads up 👋 The Microsoft EMS Community is hosting its first Summit on ${EVENT.dateLabel} at ${EVENT.venue}, ${EVENT.venueArea}. A full day of sessions, our Cloud Hour round-table live, and an evening social. Not-for-profit and open to everyone, seats are limited. Save the date:`,
+  },
+] as const;
+
+/** Builds the full post text including link and hashtags. */
+export function buildPostText(post: SharePost): string {
+  const tags = post.id === "general" ? "" : `\n\n${HASHTAGS.join(" ")}`;
+  return `${post.body}\n\n${SHARE_LINK}${tags}`;
+}
