@@ -87,7 +87,18 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "med", title: "ToastedTy found a USB", detail: "Mystery USB detonating malware on his laptop", correct: "isolate" },
   { sev: "low", title: "Phil scheduled this", detail: "Sanctioned maintenance during the approved change window", correct: "dismiss" },
   { sev: "low", title: "Sven's backup job", detail: "Known backup service account doing its nightly run", correct: "dismiss" },
-  { sev: "high", title: "Nicklas called it", detail: "He confirmed a breach spreading across the lab — hand off", correct: "escalate" },
+  { sev: "high", title: "Nicklas called it", detail: "He confirmed a breach spreading across the lab, hand it off", correct: "escalate" },
+
+  // Intune & Entra / Conditional Access
+  { sev: "high", title: "Entra risky user: high", detail: "Atypical travel + anonymous IP flagged on m.olsen@", correct: "reset" },
+  { sev: "high", title: "PRT token theft", detail: "Primary Refresh Token lifted from an Entra-joined laptop", correct: "reset" },
+  { sev: "high", title: "Admin MFA policy off", detail: "Someone disabled the 'Require MFA for admins' CA policy", correct: "escalate" },
+  { sev: "high", title: "Rogue Global Admin", detail: "A new account was granted Global Administrator at 3am", correct: "escalate" },
+  { sev: "med", title: "Intune device rooted", detail: "A managed laptop reports rooted + malware indicators", correct: "isolate" },
+  { sev: "med", title: "Tenant password spray", detail: "Legacy-auth spray hitting Exchange Online from one IP", correct: "block" },
+  { sev: "low", title: "Report-only CA policy", detail: "A report-only Conditional Access rule logged a would-block", correct: "dismiss" },
+  { sev: "low", title: "Autopilot enrollment", detail: "New device enrolling through the approved Autopilot profile", correct: "dismiss" },
+  { sev: "low", title: "Compliance re-sync", detail: "Device flicked non-compliant mid-sync, already compliant again", correct: "dismiss" },
 ];
 
 const SHIFT_MS = 100_000;
