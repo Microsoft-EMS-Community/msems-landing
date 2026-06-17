@@ -252,13 +252,13 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     }
   }
 
-  const leaderboard =
-    board.length > 0 ? (
-      <div className="mt-4">
-        <h3 className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          <Trophy className="size-3.5 text-brand-pink" />
-          Leaderboard
-        </h3>
+  const leaderboard = (
+    <div className="mt-4">
+      <h3 className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+        <Trophy className="size-3.5 text-brand-pink" />
+        Leaderboard
+      </h3>
+      {board.length > 0 ? (
         <ol className="mt-2 space-y-1">
           {board.slice(0, 5).map((s, i) => (
             <li
@@ -274,8 +274,13 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
             </li>
           ))}
         </ol>
-      </div>
-    ) : null;
+      ) : (
+        <p className="mt-2 text-sm text-muted-foreground">
+          No scores yet — be the first to win!
+        </p>
+      )}
+    </div>
+  );
 
   const modal = (
     <div
