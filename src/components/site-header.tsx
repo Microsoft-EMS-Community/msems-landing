@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NotifyNavButton } from "@/components/notify-nav-button";
 import { MobileNav } from "@/components/mobile-nav";
-import { GameLauncher } from "@/components/games-provider";
+import { GamesLauncher } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
 
 export function SiteHeader() {
@@ -34,7 +34,7 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <GameLauncher
+          <GamesLauncher
             label={null}
             className="hidden size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground md:inline-flex"
           />

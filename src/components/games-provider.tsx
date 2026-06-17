@@ -11,11 +11,14 @@ import {
 import { Gamepad2, Zap } from "lucide-react";
 import { MemoryGame } from "@/components/memory-game";
 import { PatchGame } from "@/components/patch-game";
+import { GamesChooser } from "@/components/games-chooser";
 
 type GameName = "memory" | "patch";
+type OpenState = GameName | "chooser" | null;
 
 interface GamesContextValue {
   openGame: (game: GameName) => void;
+  openChooser: () => void;
   closeGame: () => void;
 }
 
@@ -33,9 +36,10 @@ function useGames(): GamesContextValue {
  * unmount its modal the instant the menu closed.)
  */
 export function GamesProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState<GameName | null>(null);
+  const [open, setOpen] = useState<OpenState>(null);
 
   const openGame = useCallback((game: GameName) => setOpen(game), []);
+  const openChooser = useCallback(() => setOpen("chooser"), []);
   const closeGame = useCallback(() => setOpen(null), []);
 
   // Reopen the right game after a Discord login round-trip (#play / #patch).
@@ -50,8 +54,11 @@ export function GamesProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <GamesContext.Provider value={{ openGame, closeGame }}>
+    <GamesContext.Provider value={{ openGame, openChooser, closeGame }}>
       {children}
+      {open === "chooser" && (
+        <GamesChooser onPick={openGame} onClose={closeGame} />
+      )}
       {open === "memory" && <MemoryGame onClose={closeGame} />}
       {open === "patch" && <PatchGame onClose={closeGame} />}
     </GamesContext.Provider>
@@ -67,6 +74,29 @@ interface LauncherProps {
 
 const defaultLauncherClass =
   "inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground";
+
+/** Single entry point: opens a picker to choose which game to play. */
+export function GamesLauncher({
+  className,
+  onOpen,
+  label = "Play a game",
+}: LauncherProps) {
+  const { openChooser } = useGames();
+  return (
+    <button
+      type="button"
+      aria-label="Play a game"
+      onClick={() => {
+        openChooser();
+        onOpen?.();
+      }}
+      className={className ?? defaultLauncherClass}
+    >
+      <Gamepad2 className="size-4" />
+      {label}
+    </button>
+  );
+}
 
 /** Opens the memory match game. */
 export function GameLauncher({

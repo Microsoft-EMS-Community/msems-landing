@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { GameLauncher, PatchLauncher } from "@/components/games-provider";
+import { GamesLauncher } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
 import { SIGNUP } from "@/lib/event";
 
@@ -68,12 +68,8 @@ export function MobileNav() {
           </Button>
         </div>
 
-        <div className="mt-3 flex flex-col gap-3 px-4">
-          <GameLauncher
-            onOpen={close}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          />
-          <PatchLauncher
+        <div className="mt-3 px-4">
+          <GamesLauncher
             onOpen={close}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
           />

@@ -117,7 +117,7 @@ export default async function LeaderboardPage() {
     <main className="flex-1">
       <SiteHeader />
 
-      <section className="mx-auto max-w-2xl px-4 pb-20 pt-16 sm:px-6">
+      <section className="mx-auto max-w-5xl px-4 pb-20 pt-16 sm:px-6">
         <div className="text-center">
           <span className="inline-grid size-14 place-items-center rounded-2xl brand-gradient-bg">
             <Trophy className="size-7 text-white" />

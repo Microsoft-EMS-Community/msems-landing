@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { GameLauncher, PatchLauncher } from "@/components/games-provider";
+import { GamesLauncher } from "@/components/games-provider";
 import { LeaderboardPreview } from "@/components/leaderboard-preview";
 import { COMMUNITY, EVENT } from "@/lib/event";
 
@@ -67,10 +67,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             <p className="text-xs text-muted-foreground">
               © {EVENT.dateLabel.split(", ").pop()} {COMMUNITY.name}.
             </p>
-            <div className="flex items-center gap-4">
-              <GameLauncher />
-              <PatchLauncher />
-            </div>
+            <GamesLauncher />
           </div>
         </div>
       </div>
