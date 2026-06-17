@@ -28,34 +28,26 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
               </p>
             </div>
           </div>
-          <div className="flex flex-col gap-1 sm:items-end">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm sm:justify-end">
             <a
               href={EVENT.discordInvite}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium transition-colors hover:text-brand-pink"
+              className="font-medium transition-colors hover:text-brand-pink"
             >
-              Join us on Discord →
-            </a>
-            <a
-              href={EVENT.discordInvite}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {EVENT.discordInvite.replace(/^https?:\/\//, "")}
+              Discord
             </a>
             <a
               href={EVENT.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-muted-foreground transition-colors hover:text-foreground"
             >
-              GitHub →
+              GitHub
             </a>
             <a
               href={`mailto:${EVENT.contactEmail}`}
-              className="mt-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-muted-foreground transition-colors hover:text-foreground"
             >
               {EVENT.contactEmail}
             </a>
