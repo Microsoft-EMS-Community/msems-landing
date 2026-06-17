@@ -1,3 +1,4 @@
+import { type CSSProperties } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { TEAM, type TeamMember, type TeamRole } from "@/lib/event";
@@ -26,9 +27,12 @@ const GROUPS: ReadonlyArray<{ role: TeamRole; label: string }> = [
   { role: "contributor", label: "Contributors" },
 ];
 
-function MemberCard({ member }: { member: TeamMember }) {
+function MemberCard({ member, index }: { member: TeamMember; index: number }) {
   return (
-    <div className="reveal scroll-spotlight flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <div
+      style={{ "--card-index": index } as CSSProperties}
+      className="reveal scroll-spotlight flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+    >
       <span className="brand-gradient-bg shrink-0 rounded-full p-[2px]">
         {member.photo ? (
           <Image
@@ -120,8 +124,12 @@ export function Team() {
               {group.label}
             </h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {members.map((member) => (
-                <MemberCard key={member.handle} member={member} />
+              {members.map((member, index) => (
+                <MemberCard
+                  key={member.handle}
+                  member={member}
+                  index={index}
+                />
               ))}
             </div>
           </div>
