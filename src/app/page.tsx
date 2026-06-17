@@ -104,102 +104,106 @@ export default async function Home() {
       <section className="relative">
         <AuroraBackground />
 
-        <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 text-center sm:px-6 sm:pt-16">
-          <div className="rise-in">
-            <Badge
-              variant="outline"
-              className="mb-6 gap-2 border-white/15 bg-white/5 px-4 py-1.5 text-sm backdrop-blur-sm"
-            >
-              <Sparkles className="size-3.5 text-brand-pink" />
-              {EVENT.name}
-            </Badge>
-          </div>
-
-          <h1 className="rise-in mx-auto max-w-4xl text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-            The Microsoft EMS Community,{" "}
-            <span className="brand-gradient-text">in real life.</span>
-          </h1>
-
-          <p className="rise-in mx-auto mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
-            A full day of community-led sessions across Intune, Entra ID and
-            Microsoft Defender, hosted at {EVENT.venue}, {EVENT.venueArea}. Open
-            to everyone.
-          </p>
-
-          {/* Date / location chips */}
-          <div className="rise-in mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
-              <CalendarDays className="size-4 text-brand-teal" />
-              {EVENT.dateLabel}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
-              <MapPin className="size-4 text-brand-pink" />
-              {EVENT.venue}, {EVENT.venueArea}
-            </span>
-          </div>
-
-          {/* Countdown */}
-          <div className="rise-in mx-auto mt-10 max-w-xl">
-            <Countdown targetISO={EVENT.startsAtISO} />
-          </div>
-
-          {/* Quick email capture */}
-          <div id="signup-top" className="rise-in mx-auto mt-10 max-w-md scroll-mt-24">
-            <p className="mb-3 text-base font-semibold text-foreground">
-              Get notified when registration opens
-            </p>
-            <NotifyForm />
-            <p className="mt-3 text-sm text-muted-foreground">
-              Or{" "}
-              <a
-                href={EVENT.discordInvite}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+        <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+            {/* Left: story */}
+            <div className="rise-in text-center lg:text-left">
+              <Badge
+                variant="outline"
+                className="gap-2 border-white/15 bg-white/5 px-4 py-1.5 text-sm backdrop-blur-sm"
               >
-                join the Discord
-              </a>
-              .
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5 font-medium text-brand-teal">
-                <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-teal opacity-75" />
-                  <span className="relative inline-flex size-2 rounded-full bg-brand-teal" />
+                <Sparkles className="size-3.5 text-brand-pink" />
+                {EVENT.name}
+              </Badge>
+
+              <h1 className="mt-6 text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+                The Microsoft EMS Community,{" "}
+                <span className="brand-gradient-text">in real life.</span>
+              </h1>
+
+              <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-muted-foreground lg:mx-0">
+                A full day of community-led sessions across Intune, Entra ID and
+                Microsoft Defender, hosted at {EVENT.venue}, {EVENT.venueArea}.
+                Open to everyone.
+              </p>
+
+              {/* Date / location chips */}
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm lg:justify-start">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                  <CalendarDays className="size-4 text-brand-teal" />
+                  {EVENT.dateLabel}
                 </span>
-                Call for Speakers is open
-              </span>{" "}
-              ·{" "}
-              <a
-                href={EVENT.cfsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
-              >
-                submit a session
-              </a>
-            </p>
-          </div>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                  <MapPin className="size-4 text-brand-pink" />
+                  {EVENT.venue}, {EVENT.venueArea}
+                </span>
+              </div>
 
-          {/* Live community proof */}
-          <div className="rise-in mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-2">
-              <Users className="size-4" />
-              <CountUp value={stats.memberCount ?? 2775} suffix="+" /> community
-              members
-            </span>
-            {onlineLabel && (
-              <>
-                <span className="hidden sm:inline">·</span>
+              {/* Live community proof */}
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground lg:justify-start">
                 <span className="inline-flex items-center gap-2">
-                  <span className="relative flex size-2">
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75" />
-                    <span className="relative inline-flex size-2 rounded-full bg-green-500" />
-                  </span>
-                  <CountUp value={stats.onlineCount ?? 0} /> online now
+                  <Users className="size-4" />
+                  <CountUp value={stats.memberCount ?? 2775} suffix="+" />{" "}
+                  community members
                 </span>
-              </>
-            )}
+                {onlineLabel && (
+                  <>
+                    <span className="hidden sm:inline">·</span>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="relative flex size-2">
+                        <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75" />
+                        <span className="relative inline-flex size-2 rounded-full bg-green-500" />
+                      </span>
+                      <CountUp value={stats.onlineCount ?? 0} /> online now
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Right: action card */}
+            <div className="rise-in">
+              <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-center backdrop-blur-sm sm:p-8">
+                <Countdown targetISO={EVENT.startsAtISO} />
+
+                <div id="signup-top" className="mt-7 scroll-mt-24">
+                  <p className="mb-3 text-base font-semibold text-foreground">
+                    Get notified when registration opens
+                  </p>
+                  <NotifyForm />
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Or{" "}
+                    <a
+                      href={EVENT.discordInvite}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+                    >
+                      join the Discord
+                    </a>
+                    .
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5 font-medium text-brand-teal">
+                      <span className="relative flex size-2">
+                        <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-teal opacity-75" />
+                        <span className="relative inline-flex size-2 rounded-full bg-brand-teal" />
+                      </span>
+                      Call for Speakers is open
+                    </span>{" "}
+                    ·{" "}
+                    <a
+                      href={EVENT.cfsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+                    >
+                      submit a session
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

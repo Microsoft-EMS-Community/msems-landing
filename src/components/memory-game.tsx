@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Gamepad2, RotateCcw, Trophy, X } from "lucide-react";
 
 // EMS/security-flavoured faces (6 pairs).
@@ -53,15 +54,22 @@ function formatTime(total: number): string {
 interface GameLauncherProps {
   className?: string;
   onOpen?: () => void;
+  /** Visible label; pass null for an icon-only button. */
+  label?: string | null;
 }
 
 /** A trigger button that opens the memory game modal. */
-export function GameLauncher({ className, onOpen }: GameLauncherProps) {
+export function GameLauncher({
+  className,
+  onOpen,
+  label = "Bored? Play Memory",
+}: GameLauncherProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <button
         type="button"
+        aria-label="Play the memory game"
         onClick={() => {
           setOpen(true);
           onOpen?.();
@@ -72,7 +80,7 @@ export function GameLauncher({ className, onOpen }: GameLauncherProps) {
         }
       >
         <Gamepad2 className="size-4" />
-        Bored? Play Memory
+        {label}
       </button>
       {open && <MemoryGame onClose={() => setOpen(false)} />}
     </>
@@ -80,6 +88,7 @@ export function GameLauncher({ className, onOpen }: GameLauncherProps) {
 }
 
 function MemoryGame({ onClose }: { onClose: () => void }) {
+  const [started, setStarted] = useState(false);
   const [deck, setDeck] = useState<Card[]>(() => newDeck());
   const [flipped, setFlipped] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -87,7 +96,8 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
   const [locked, setLocked] = useState(false);
   const [best, setBest] = useState<Best | null>(null);
   const [board, setBoard] = useState<Score[]>([]);
-  // Pre-fill the name from a previous submit (modal is client-only, no SSR).
+  const [submitted, setSubmitted] = useState(false);
+  // Pre-fill the name from a previous play (modal is client-only, no SSR).
   const [name, setName] = useState<string>(() => {
     try {
       return localStorage.getItem(NAME_KEY) ?? "";
@@ -95,8 +105,6 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
       return "";
     }
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const savedRef = useRef(false);
 
   const won = deck.length > 0 && deck.every((c) => c.matched);
@@ -112,35 +120,10 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
   }, []);
 
   useEffect(() => {
-    // Async fetch; setState happens after the request resolves, not synchronously.
+    // Async fetch; setState resolves after the request, not synchronously.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadLeaderboard();
   }, [loadLeaderboard]);
-
-  async function submitScore() {
-    if (!name.trim() || submitting || submitted) return;
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, moves, time: seconds }),
-      });
-      if (res.ok) {
-        setSubmitted(true);
-        try {
-          localStorage.setItem(NAME_KEY, name.trim());
-        } catch {
-          // ignore unavailable storage
-        }
-        await loadLeaderboard();
-      }
-    } catch {
-      // ignore; player can retry
-    } finally {
-      setSubmitting(false);
-    }
-  }
 
   // Load best score once.
   useEffect(() => {
@@ -153,12 +136,12 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     }
   }, []);
 
-  // Tick the timer until won.
+  // Timer runs only while playing.
   useEffect(() => {
-    if (won) return;
+    if (!started || won) return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(id);
-  }, [won]);
+  }, [started, won]);
 
   // Close on Escape.
   useEffect(() => {
@@ -169,10 +152,11 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // Persist best score when the board is cleared.
+  // On win: save local best and auto-submit the score (name entered up front).
   useEffect(() => {
     if (!won || savedRef.current) return;
     savedRef.current = true;
+
     const score: Best = { moves, time: seconds };
     setBest((prev) => {
       const better =
@@ -183,11 +167,55 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
       try {
         localStorage.setItem(BEST_KEY, JSON.stringify(next));
       } catch {
-        // ignore unavailable storage
+        // ignore
       }
       return next;
     });
-  }, [won, moves, seconds]);
+
+    void (async () => {
+      try {
+        const res = await fetch("/api/score", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name.trim(), moves, time: seconds }),
+        });
+        if (res.ok) {
+          setSubmitted(true);
+          await loadLeaderboard();
+        }
+      } catch {
+        // best-effort
+      }
+    })();
+  }, [won, moves, seconds, name, loadLeaderboard]);
+
+  function start() {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    try {
+      localStorage.setItem(NAME_KEY, trimmed);
+    } catch {
+      // ignore
+    }
+    savedRef.current = false;
+    setDeck(newDeck());
+    setFlipped([]);
+    setMoves(0);
+    setSeconds(0);
+    setLocked(false);
+    setSubmitted(false);
+    setStarted(true);
+  }
+
+  function reset() {
+    savedRef.current = false;
+    setDeck(newDeck());
+    setFlipped([]);
+    setMoves(0);
+    setSeconds(0);
+    setLocked(false);
+    setSubmitted(false);
+  }
 
   function flip(id: number) {
     if (locked || won) return;
@@ -200,7 +228,6 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
       return;
     }
 
-    // Second card of the pair.
     const first = deck.find((c) => c.id === flipped[0]);
     setMoves((m) => m + 1);
     setDeck((d) => d.map((c) => (c.id === id ? { ...c, flipped: true } : c)));
@@ -225,17 +252,32 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     }
   }
 
-  function reset() {
-    savedRef.current = false;
-    setDeck(newDeck());
-    setFlipped([]);
-    setMoves(0);
-    setSeconds(0);
-    setLocked(false);
-    setSubmitted(false);
-  }
+  const leaderboard =
+    board.length > 0 ? (
+      <div className="mt-4">
+        <h3 className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <Trophy className="size-3.5 text-brand-pink" />
+          Leaderboard
+        </h3>
+        <ol className="mt-2 space-y-1">
+          {board.slice(0, 5).map((s, i) => (
+            <li
+              key={`${s.name}-${i}`}
+              className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-1.5 text-sm"
+            >
+              <span className="truncate">
+                <span className="text-muted-foreground">{i + 1}.</span> {s.name}
+              </span>
+              <span className="ml-2 shrink-0 font-mono text-xs text-muted-foreground">
+                {s.moves} / {formatTime(s.time_seconds)}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ) : null;
 
-  return (
+  const modal = (
     <div
       className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
       onClick={onClose}
@@ -262,120 +304,114 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <div className="mt-3 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm">
-          <span>
-            Moves <span className="font-semibold text-foreground">{moves}</span>
-          </span>
-          <span>
-            Time{" "}
-            <span className="font-mono font-semibold text-foreground">
-              {formatTime(seconds)}
-            </span>
-          </span>
-          <span className="text-muted-foreground">
-            Best:{" "}
-            {best ? `${best.moves} / ${formatTime(best.time)}` : "—"}
-          </span>
-        </div>
-
-        <div className="mt-4 grid grid-cols-4 gap-2.5">
-          {deck.map((card) => {
-            const shown = card.flipped || card.matched;
-            return (
-              <button
-                key={card.id}
-                type="button"
-                onClick={() => flip(card.id)}
-                aria-label={shown ? card.face : "Hidden card"}
-                className="aspect-square [perspective:600px]"
-              >
-                <div
-                  className={`relative h-full w-full rounded-xl transition-transform duration-300 [transform-style:preserve-3d] ${
-                    shown ? "[transform:rotateY(180deg)]" : ""
-                  }`}
-                >
-                  <div className="absolute inset-0 grid place-items-center rounded-xl border border-white/10 bg-white/5 text-muted-foreground [backface-visibility:hidden]">
-                    <span className="text-lg font-bold">?</span>
-                  </div>
-                  <div
-                    className={`absolute inset-0 grid place-items-center rounded-xl text-2xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${
-                      card.matched
-                        ? "brand-gradient-bg"
-                        : "border border-brand-pink/40 bg-brand-pink/10"
-                    }`}
-                  >
-                    {card.face}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {won ? (
-          <div className="mt-4 rounded-xl border border-brand-teal/30 bg-brand-teal/10 p-3 text-center text-sm">
-            🎉 Cleared in <span className="font-semibold">{moves} moves</span>{" "}
-            and {formatTime(seconds)}!
-            {submitted ? (
-              <p className="mt-1 text-muted-foreground">
-                Saved to the leaderboard.
-              </p>
-            ) : (
-              <div className="mt-3 flex gap-2">
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={24}
-                  placeholder="Your name"
-                  className="h-10 min-w-0 flex-1 rounded-lg border border-white/15 bg-white/5 px-3 text-sm text-foreground outline-none focus:border-brand-pink/60"
-                />
-                <button
-                  type="button"
-                  onClick={submitScore}
-                  disabled={submitting || !name.trim()}
-                  className="h-10 shrink-0 rounded-lg brand-gradient-bg px-4 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                >
-                  {submitting ? "…" : "Submit"}
-                </button>
-              </div>
-            )}
-          </div>
-        ) : null}
-
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 py-2.5 text-sm font-medium transition-colors hover:bg-white/10"
-        >
-          <RotateCcw className="size-4" />
-          {won ? "Play again" : "Restart"}
-        </button>
-
-        {board.length > 0 ? (
+        {!started ? (
           <div className="mt-4">
-            <h3 className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              <Trophy className="size-3.5 text-brand-pink" />
-              Leaderboard
-            </h3>
-            <ol className="mt-2 space-y-1">
-              {board.slice(0, 5).map((s, i) => (
-                <li
-                  key={`${s.name}-${i}`}
-                  className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-1.5 text-sm"
-                >
-                  <span className="truncate">
-                    <span className="text-muted-foreground">{i + 1}.</span>{" "}
-                    {s.name}
-                  </span>
-                  <span className="ml-2 shrink-0 font-mono text-xs text-muted-foreground">
-                    {s.moves} / {formatTime(s.time_seconds)}
-                  </span>
-                </li>
-              ))}
-            </ol>
+            <p className="text-sm text-muted-foreground">
+              Match all six pairs in as few moves as you can. Enter your name to
+              get on the leaderboard.
+            </p>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") start();
+              }}
+              maxLength={24}
+              placeholder="Your name"
+              className="mt-3 h-11 w-full rounded-xl border border-white/15 bg-white/5 px-4 text-sm text-foreground outline-none focus:border-brand-pink/60"
+            />
+            <button
+              type="button"
+              onClick={start}
+              disabled={!name.trim()}
+              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl brand-gradient-bg py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              <Gamepad2 className="size-4" />
+              Start game
+            </button>
+            {leaderboard}
           </div>
-        ) : null}
+        ) : (
+          <>
+            <div className="mt-3 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm">
+              <span>
+                Moves{" "}
+                <span className="font-semibold text-foreground">{moves}</span>
+              </span>
+              <span>
+                Time{" "}
+                <span className="font-mono font-semibold text-foreground">
+                  {formatTime(seconds)}
+                </span>
+              </span>
+              <span className="text-muted-foreground">
+                Best: {best ? `${best.moves} / ${formatTime(best.time)}` : "—"}
+              </span>
+            </div>
+
+            <div className="mt-4 grid grid-cols-4 gap-2.5">
+              {deck.map((card) => {
+                const shown = card.flipped || card.matched;
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onClick={() => flip(card.id)}
+                    aria-label={shown ? card.face : "Hidden card"}
+                    className="aspect-square [perspective:600px]"
+                  >
+                    <div
+                      className={`relative h-full w-full rounded-xl transition-transform duration-300 [transform-style:preserve-3d] ${
+                        shown ? "[transform:rotateY(180deg)]" : ""
+                      }`}
+                    >
+                      <div className="absolute inset-0 grid place-items-center rounded-xl border border-white/10 bg-white/5 text-muted-foreground [backface-visibility:hidden]">
+                        <span className="text-lg font-bold">?</span>
+                      </div>
+                      <div
+                        className={`absolute inset-0 grid place-items-center rounded-xl text-2xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${
+                          card.matched
+                            ? "brand-gradient-bg"
+                            : "border border-brand-pink/40 bg-brand-pink/10"
+                        }`}
+                      >
+                        {card.face}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {won ? (
+              <div className="mt-4 rounded-xl border border-brand-teal/30 bg-brand-teal/10 p-3 text-center text-sm">
+                🎉 Cleared in{" "}
+                <span className="font-semibold">{moves} moves</span> and{" "}
+                {formatTime(seconds)}!
+                <p className="mt-1 text-muted-foreground">
+                  {submitted
+                    ? `Saved to the leaderboard as ${name.trim()}.`
+                    : "Saving your score…"}
+                </p>
+              </div>
+            ) : null}
+
+            <button
+              type="button"
+              onClick={reset}
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 py-2.5 text-sm font-medium transition-colors hover:bg-white/10"
+            >
+              <RotateCcw className="size-4" />
+              {won ? "Play again" : "Restart"}
+            </button>
+
+            {leaderboard}
+          </>
+        )}
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modal, document.body);
 }
