@@ -11,13 +11,15 @@ same filename.** No code change needed.
 | `entra.svg`    | Microsoft Entra ID |
 | `defender.svg` | Microsoft Defender |
 | `purview.svg`  | Microsoft Purview  |
-| `windows.svg`  | Windows            |
-| `azure.svg`    | Microsoft Azure    |
+| `copilot.svg`  | Microsoft Copilot  |
+| `teams.svg`    | Microsoft Teams    |
 
 Notes:
 - SVG is preferred (crisp at any size). PNG also works if you keep the
   `.svg` filename pointing at it, but better to update the path in
   `src/components/memory-game.tsx` if you switch formats.
-- Icons render inside a white rounded tile, so transparent-background icons
+- Each product also has an `accent` colour in `memory-game.tsx` that tints its
+  card tile, so the (mostly blue) official icons stay easy to tell apart. If
+  you swap a product, give it a distinct accent there too.
+- Icons render inside a tinted rounded tile, so transparent-background icons
   designed for light surfaces look correct.
-- The six faces must be visually distinct (it's a memory game).
