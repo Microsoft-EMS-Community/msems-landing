@@ -291,8 +291,8 @@ export default async function Home() {
       <section id="speakers" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         <Card className="relative overflow-hidden border-white/10 bg-white/[0.03]">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-purple/20 blur-[100px]" />
-          <CardContent className="relative flex flex-col items-start gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
-            <div className="flex items-start gap-4">
+          <CardContent className="relative flex flex-col items-center gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
               <span className="grid size-12 shrink-0 place-items-center rounded-2xl brand-gradient-bg">
                 <Mic className="size-6 text-white" />
               </span>

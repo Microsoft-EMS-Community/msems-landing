@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GameLauncher } from "@/components/memory-game";
 import { COMMUNITY, EVENT } from "@/lib/event";
 
 interface SiteFooterProps {
@@ -67,9 +68,12 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
           by Microsoft. Microsoft and product names are trademarks of the
           Microsoft group of companies.
         </p>
-        <p className="mt-4 text-xs text-muted-foreground">
-          © {EVENT.dateLabel.split(", ").pop()} {COMMUNITY.name}.
-        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs text-muted-foreground">
+            © {EVENT.dateLabel.split(", ").pop()} {COMMUNITY.name}.
+          </p>
+          <GameLauncher />
+        </div>
       </div>
     </footer>
   );
