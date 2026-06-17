@@ -1,13 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { NotifyNavButton } from "@/components/notify-nav-button";
-
-const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
-  { href: "/#agenda", label: "Agenda" },
-  { href: "/#tickets", label: "Tickets" },
-  { href: "/#team", label: "Team" },
-  { href: "/#faq", label: "FAQ" },
-];
+import { MobileNav } from "@/components/mobile-nav";
+import { NAV_LINKS } from "@/lib/nav";
 
 export function SiteHeader() {
   return (
@@ -22,24 +17,30 @@ export function SiteHeader() {
             className="rounded-lg"
             priority
           />
-          <span className="hidden text-sm font-semibold sm:inline">
-            MS EMS Community
-          </span>
+          <span className="text-sm font-semibold">MS EMS Community</span>
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+        <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-7 md:flex">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-        <NotifyNavButton />
+          <div className="hidden md:block">
+            <NotifyNavButton />
+          </div>
+
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
+        </div>
       </div>
     </header>
   );
