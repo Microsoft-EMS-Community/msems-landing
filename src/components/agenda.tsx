@@ -35,7 +35,10 @@ export function Agenda() {
         {AGENDA.map((item) => {
           const { label, icon: Icon } = KIND_META[item.kind];
           return (
-            <li key={`${item.time}-${item.title}`} className="relative flex gap-4">
+            <li
+              key={`${item.time}-${item.title}`}
+              className="reveal relative flex gap-4"
+            >
               <span
                 className={`relative z-10 grid size-12 shrink-0 place-items-center rounded-2xl border ${
                   item.featured

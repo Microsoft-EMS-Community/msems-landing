@@ -28,7 +28,7 @@ export function Pricing() {
         {PRICING.tiers.map((tier) => (
           <div
             key={tier.id}
-            className={`relative flex flex-col overflow-hidden rounded-3xl border p-7 ${
+            className={`reveal relative flex flex-col overflow-hidden rounded-3xl border p-7 ${
               tier.featured
                 ? "border-brand-pink/40 bg-brand-pink/[0.05]"
                 : "border-white/10 bg-white/[0.03]"

@@ -42,7 +42,7 @@ export function NotifyNavButton() {
           <a href="#notify" onClick={handleClick} />
         )
       }
-      className="brand-gradient-bg border-0 text-white hover:opacity-90"
+      className="sheen brand-gradient-bg border-0 text-white hover:opacity-90"
     >
       Get notified
     </Button>

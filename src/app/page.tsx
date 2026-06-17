@@ -8,6 +8,7 @@ import {
   Mic,
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
+import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
 import { Pricing } from "@/components/pricing";
 import { Team } from "@/components/team";
@@ -184,7 +185,8 @@ export default async function Home() {
           <div className="rise-in mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-2">
               <Users className="size-4" />
-              {memberLabel} community members
+              <CountUp value={stats.memberCount ?? 2775} suffix="+" /> community
+              members
             </span>
             {onlineLabel && (
               <>
@@ -194,7 +196,7 @@ export default async function Home() {
                     <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75" />
                     <span className="relative inline-flex size-2 rounded-full bg-green-500" />
                   </span>
-                  {onlineLabel} online now
+                  <CountUp value={stats.onlineCount ?? 0} /> online now
                 </span>
               </>
             )}
@@ -245,7 +247,7 @@ export default async function Home() {
           {HIGHLIGHTS.map((item) => (
             <Card
               key={item.title}
-              className="group relative overflow-hidden border-white/10 bg-white/[0.03] transition-colors hover:bg-white/[0.06]"
+              className="reveal group relative overflow-hidden border-white/10 bg-white/[0.03] transition-colors hover:bg-white/[0.06]"
             >
               <div className="absolute inset-x-0 top-0 h-px brand-gradient-bg opacity-0 transition-opacity group-hover:opacity-100" />
               <CardHeader>
@@ -258,21 +260,23 @@ export default async function Home() {
           ))}
         </div>
 
-        {/* Topics */}
+        {/* Topics marquee */}
         <div className="mt-12 text-center">
           <p className="text-sm uppercase tracking-widest text-muted-foreground">
             Topics on the table
           </p>
-          <div className="mt-5 flex flex-wrap justify-center gap-2.5">
-            {TOPICS.map((topic) => (
-              <Badge
-                key={topic.label}
-                variant="secondary"
-                className="border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-normal"
-              >
-                {topic.label}
-              </Badge>
-            ))}
+          <div className="marquee-mask relative mt-5 overflow-hidden">
+            <div className="animate-marquee flex gap-2.5">
+              {[...TOPICS, ...TOPICS].map((topic, i) => (
+                <Badge
+                  key={`${topic.label}-${i}`}
+                  variant="secondary"
+                  className="shrink-0 border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-normal"
+                >
+                  {topic.label}
+                </Badge>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -366,21 +370,33 @@ export default async function Home() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { value: memberLabel, label: "Members", live: false },
                 {
-                  value: onlineLabel ?? "Active",
+                  node: <CountUp value={stats.memberCount ?? 2775} suffix="+" />,
+                  label: "Members",
+                  live: false,
+                },
+                {
+                  node: onlineLabel ? (
+                    <CountUp value={stats.onlineCount ?? 0} />
+                  ) : (
+                    "Active"
+                  ),
                   label: "Online now",
                   live: Boolean(onlineLabel),
                 },
-                { value: COMMUNITY.founded, label: "Established", live: false },
-                { value: "100%", label: "Community-run", live: false },
+                { node: COMMUNITY.founded, label: "Established", live: false },
+                {
+                  node: <CountUp value={100} suffix="%" />,
+                  label: "Community-run",
+                  live: false,
+                },
               ].map((stat) => (
                 <div
                   key={stat.label}
                   className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
                 >
                   <div className="brand-gradient-text text-3xl font-bold">
-                    {stat.value}
+                    {stat.node}
                   </div>
                   <div className="mt-1 flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
                     {stat.live && (
