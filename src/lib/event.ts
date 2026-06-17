@@ -274,7 +274,7 @@ export const TEAM: readonly TeamMember[] = [
     name: "Jonas Bøgvad",
     handle: "jonasb",
     role: "moderator",
-    photo: "/team/jonas-bogvad.png",
+    photo: "/team/jonas-bogvad.jpg",
     mvp: true,
     eventTeam: true,
     linkedin: "https://www.linkedin.com/in/jonasbogvad/",
@@ -304,6 +304,7 @@ export const TEAM: readonly TeamMember[] = [
     photo: "/team/sebastian.jpg",
     mvp: true,
     eventTeam: true,
+    linkedin: "https://www.linkedin.com/in/sebastian-markdanner/",
   },
   {
     name: "Nicklas Olsen",
@@ -311,6 +312,7 @@ export const TEAM: readonly TeamMember[] = [
     role: "contributor",
     photo: "/team/nicklas-olsen.jpg",
     mvp: true,
+    linkedin: "https://www.linkedin.com/in/nicklas-o-40337b205/",
   },
   {
     name: "Sven Visser",
