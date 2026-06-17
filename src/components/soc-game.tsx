@@ -77,6 +77,17 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "high", title: "Confirmed C2 to nation-state", detail: "Multiple hosts beaconing to known APT infrastructure", correct: "escalate" },
   { sev: "high", title: "Network-wide encryption", detail: "Ransom note dropped, many file shares encrypting at once", correct: "escalate" },
   { sev: "high", title: "Active intrusion spreading", detail: "Compromised creds authenticating across 9 servers", correct: "escalate" },
+
+  // The people behind it (playful, fictional gags)
+  { sev: "high", title: "Jonas reused his password", detail: "Impossible-travel sign-in on jonasb — again", correct: "reset" },
+  { sev: "high", title: "Effie clicked the phish", detail: "Creds harvested from effie@ after a convincing lure", correct: "reset" },
+  { sev: "med", title: "Joël's token got lifted", detail: "Session token stolen on the conference Wi-Fi", correct: "reset" },
+  { sev: "high", title: "Jay skipped DMARC", detail: "No p=reject, so spoofed CEO mail is landing in inboxes", correct: "block" },
+  { sev: "med", title: "Sebastian left RDP open", detail: "One IP brute-forcing his exposed host", correct: "block" },
+  { sev: "med", title: "ToastedTy found a USB", detail: "Mystery USB detonating malware on his laptop", correct: "isolate" },
+  { sev: "low", title: "Phil scheduled this", detail: "Sanctioned maintenance during the approved change window", correct: "dismiss" },
+  { sev: "low", title: "Sven's backup job", detail: "Known backup service account doing its nightly run", correct: "dismiss" },
+  { sev: "high", title: "Nicklas called it", detail: "He confirmed a breach spreading across the lab — hand off", correct: "escalate" },
 ];
 
 const SHIFT_MS = 100_000;
@@ -259,10 +270,10 @@ export function SocGame({ onClose }: { onClose: () => void }) {
       g.streak += 1;
       setFeedback({ text: `+${gained} · correct`, ok: true });
     } else {
-      g.breach = Math.min(100, g.breach + sevPenalty(a.sev));
+      const pen = sevPenalty(a.sev);
+      g.breach = Math.min(100, g.breach + pen);
       g.streak = 0;
-      const right = ACTIONS.find((x) => x.key === a.correct)?.label ?? "";
-      setFeedback({ text: `Wrong — should be ${right}`, ok: false });
+      setFeedback({ text: `Wrong call · breach +${pen}%`, ok: false });
     }
     g.alerts = g.alerts.filter((x) => x.uid !== uid);
     sync();
