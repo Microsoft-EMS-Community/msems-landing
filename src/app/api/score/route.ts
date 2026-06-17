@@ -131,13 +131,13 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (webhook) {
       const icon = improved ? "🥇" : "🎮";
       const verb = !prev ? "scored" : improved ? "improved to" : "played";
-      const tail = !improved && prev ? " — best still stands" : "";
+      const tail = !improved && prev ? " - best still stands" : "";
       try {
         await fetch(webhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: `${icon} <@${user.id}> ${verb} **${moves} moves** · ${formatScoreTime(time)} in the EMS Memory game${tail}`,
+            content: `${icon} <@${user.id}> ${verb} **${moves} moves** · ${formatScoreTime(time)} in the MS EMS memory game${tail}`,
             // Only this one user may be pinged — never @everyone/here/roles.
             allowed_mentions: { users: [user.id] },
           }),
