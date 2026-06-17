@@ -265,3 +265,35 @@
     transform: translateX(150%);
   }
 }
+
+/* Team "shine": a light sweeps across each card as it scrolls into view,
+   giving every volunteer their moment. Guarded so it only runs where
+   scroll-driven animation is supported and motion is allowed. */
+@keyframes shine-sweep {
+  from { transform: translateX(-160%) skewX(-12deg); }
+  to { transform: translateX(160%) skewX(-12deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .team-shine {
+      position: relative;
+      overflow: hidden;
+    }
+    .team-shine::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        100deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.22) 50%,
+        transparent 62%
+      );
+      transform: translateX(-160%) skewX(-12deg);
+      animation: shine-sweep linear both;
+      animation-timeline: view();
+      animation-range: entry 15% cover 35%;
+    }
+  }
+}

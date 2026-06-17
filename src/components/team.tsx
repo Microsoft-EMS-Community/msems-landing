@@ -28,7 +28,7 @@ const GROUPS: ReadonlyArray<{ role: TeamRole; label: string }> = [
 
 function MemberCard({ member }: { member: TeamMember }) {
   return (
-    <div className="reveal flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <div className="reveal team-shine flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <span className="brand-gradient-bg shrink-0 rounded-full p-[2px]">
         {member.photo ? (
           <Image
