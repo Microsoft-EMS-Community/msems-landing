@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
 import { Agenda } from "@/components/agenda";
+import { Pricing } from "@/components/pricing";
 import { Countdown } from "@/components/countdown";
 import { NotifyForm } from "@/components/notify-form";
 import { PoweredByMicrosoft } from "@/components/powered-by-microsoft";
@@ -60,13 +61,9 @@ export default async function Home() {
               className="mb-6 gap-2 border-white/15 bg-white/5 px-4 py-1.5 text-sm backdrop-blur-sm"
             >
               <Sparkles className="size-3.5 text-brand-pink" />
-              {EVENT.status} · {EVENT.dateLabel}
+              {EVENT.name}
             </Badge>
           </div>
-
-          <p className="rise-in mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-pink">
-            {EVENT.name}
-          </p>
 
           <h1 className="rise-in mx-auto max-w-4xl text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
             The Microsoft EMS Community,{" "}
@@ -98,25 +95,44 @@ export default async function Home() {
 
           {/* Quick email capture */}
           <div className="rise-in mx-auto mt-10 max-w-md">
+            <p className="mb-3 text-base font-semibold text-foreground">
+              Get notified when registration opens
+            </p>
             <NotifyForm />
             <p className="mt-3 text-sm text-muted-foreground">
-              Leave your email and be first in line when registration opens, or{" "}
+              Or{" "}
               <a
                 href={EVENT.discordInvite}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground underline underline-offset-4 hover:text-brand-pink"
+                className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
               >
                 join the Discord
               </a>
               .
             </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5 font-medium text-brand-teal">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-teal opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-brand-teal" />
+                </span>
+                Call for Speakers is open
+              </span>{" "}
+              ·{" "}
+              <a
+                href={EVENT.cfsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+              >
+                submit a session
+              </a>
+            </p>
           </div>
 
           {/* Live community proof */}
           <div className="rise-in mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-            <span>Seats are limited</span>
-            <span className="hidden sm:inline">·</span>
             <span className="inline-flex items-center gap-2">
               <Users className="size-4" />
               {memberLabel} community members
@@ -133,10 +149,6 @@ export default async function Home() {
                 </span>
               </>
             )}
-          </div>
-
-          <div className="rise-in mt-8 flex justify-center">
-            <PoweredByMicrosoft variant="pill" />
           </div>
         </div>
       </section>
@@ -219,8 +231,11 @@ export default async function Home() {
       {/* ---------- Agenda ---------- */}
       <Agenda />
 
+      {/* ---------- Tickets / Pricing ---------- */}
+      <Pricing />
+
       {/* ---------- Call for Speakers ---------- */}
-      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+      <section id="speakers" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         <Card className="relative overflow-hidden border-white/10 bg-white/[0.03]">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-purple/20 blur-[100px]" />
           <CardContent className="relative flex flex-col items-start gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
@@ -229,29 +244,32 @@ export default async function Home() {
                 <Mic className="size-6 text-white" />
               </span>
               <div>
-                <h3 className="text-2xl font-bold">
-                  Call for Speakers, opening soon
-                </h3>
+                <Badge
+                  variant="secondary"
+                  className="mb-2 border border-brand-teal/30 bg-brand-teal/10 text-xs font-medium text-brand-teal"
+                >
+                  Now open
+                </Badge>
+                <h3 className="text-2xl font-bold">Call for Speakers is open</h3>
                 <p className="mt-2 max-w-xl text-muted-foreground">
-                  Got something to share with the community? The agenda is being
-                  finalised and the Call for Speakers opens shortly. Watch this
-                  page and the Discord to submit your session.
+                  Got something to share with the community? Submit your session
+                  on Sessionize. Talks, demos and Cloud Hour topics across the
+                  Microsoft EMS stack are all welcome.
                 </p>
               </div>
             </div>
             <Button
               render={
                 <a
-                  href={EVENT.discordInvite}
+                  href={EVENT.cfsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 />
               }
               size="lg"
-              variant="outline"
-              className="shrink-0 border-white/15 bg-white/5 hover:bg-white/10"
+              className="shrink-0 brand-gradient-bg border-0 text-white hover:opacity-90"
             >
-              Follow on Discord
+              Submit a session
             </Button>
           </CardContent>
         </Card>
@@ -378,14 +396,14 @@ export default async function Home() {
               href={EVENT.discordInvite}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground underline underline-offset-4 hover:text-brand-pink"
+              className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
             >
               Join the server
             </a>{" "}
             and hit Interested on the event. Or{" "}
             <a
               href="/share"
-              className="text-foreground underline underline-offset-4 hover:text-brand-pink"
+              className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
             >
               help spread the word
             </a>

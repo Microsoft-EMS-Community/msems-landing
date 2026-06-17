@@ -38,6 +38,9 @@ export function Countdown({ targetISO }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
+    // Seed after mount (server renders placeholders) to avoid a hydration
+    // mismatch, then tick every second.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeLeft(getTimeLeft(target));
     const id = setInterval(() => setTimeLeft(getTimeLeft(target)), 1000);
     return () => clearInterval(id);

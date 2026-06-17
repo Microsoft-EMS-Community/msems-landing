@@ -1,19 +1,20 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SIGNUP } from "@/lib/event";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/#agenda", label: "Agenda" },
+  { href: "/#tickets", label: "Tickets" },
   { href: "/#community", label: "Community" },
   { href: "/#faq", label: "FAQ" },
-  { href: "/share", label: "Spread the word" },
 ];
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/logo.png"
             alt="Microsoft EMS Community logo"
@@ -25,7 +26,7 @@ export function SiteHeader() {
           <span className="hidden text-sm font-semibold sm:inline">
             MS EMS Community
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
           {NAV_LINKS.map((link) => (

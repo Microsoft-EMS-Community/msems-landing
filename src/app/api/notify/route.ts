@@ -28,10 +28,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
   }
 
-  // TODO: connect a real destination here (Resend audience, Mailchimp list,
-  // Microsoft List, Google Sheet, etc). For now we just acknowledge the
-  // signup so the UI can confirm. No email is stored yet.
-  // eslint-disable-next-line no-console
+  // TODO: connect a real destination here (Microsoft Forms/List, Mailchimp,
+  // Resend audience, etc). For now we just acknowledge the signup so the UI
+  // can confirm. No email is stored yet.
   console.info(`[notify] new signup: ${email}`);
 
   return NextResponse.json({ ok: true });

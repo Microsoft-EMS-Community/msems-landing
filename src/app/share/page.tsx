@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Link from "next/link";
 import { Download, ArrowLeft, Hash, Megaphone } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -168,7 +168,7 @@ export default function SharePage() {
 
         <div className="mt-10 text-center">
           <Button
-            render={<a href="/" />}
+            render={<Link href="/" />}
             variant="outline"
             className="border-white/15 bg-white/5 hover:bg-white/10"
           >

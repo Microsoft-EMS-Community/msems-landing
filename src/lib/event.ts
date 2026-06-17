@@ -12,12 +12,15 @@ export const EVENT = {
   timeLabel: "09:00, full day",
   venue: "Microsoft Denmark",
   venueArea: "near Copenhagen",
-  feeLabel: "~€30",
+  feeLabel: "From €30",
   feeNote:
     "The small fee covers lunch, drinks and beverages for the day, plus an optional evening get-together.",
   discordInvite: "https://aka.ms/M365EMSDiscord",
   registrationUrl: "https://aka.ms/M365EMSDiscord",
   status: "Save the date",
+  // Call for Speakers (Sessionize). Set cfsOpen to false once submissions close.
+  cfsUrl: "https://sessionize.com/microsoft-ems-community-summit/",
+  cfsOpen: true,
 } as const;
 
 /**
@@ -166,6 +169,58 @@ export const AGENDA: readonly AgendaItem[] = [
   },
 ] as const;
 
+export interface PricingTier {
+  readonly id: string;
+  readonly name: string;
+  readonly price: number;
+  readonly seatsLabel: string;
+  readonly badge?: string;
+  readonly featured?: boolean;
+  readonly features: readonly string[];
+}
+
+/**
+ * Ticket pricing. NOTE: prices are not final yet. Keep `pricesFinal: false`
+ * until confirmed; the UI shows an "indicative pricing" note while it's false.
+ */
+export const PRICING = {
+  currency: "€",
+  pricesFinal: false,
+  note: "Indicative pricing, not final yet. Exact prices are confirmed when registration opens.",
+  totalSeats: 64,
+  socialAddon: {
+    label: "Evening social",
+    price: 80,
+    description: "Optional dinner and drinks with the community after the sessions.",
+  },
+  tiers: [
+    {
+      id: "early-bird",
+      name: "Early bird",
+      price: 30,
+      seatsLabel: "First 25 seats",
+      badge: "Only 25 available",
+      featured: true,
+      features: [
+        "Full day of sessions",
+        "Cloud Hour round-table, live",
+        "Lunch, drinks & beverages",
+      ],
+    },
+    {
+      id: "standard",
+      name: "Standard",
+      price: 40,
+      seatsLabel: "Seats 26 to 64",
+      features: [
+        "Full day of sessions",
+        "Cloud Hour round-table, live",
+        "Lunch, drinks & beverages",
+      ],
+    },
+  ] satisfies readonly PricingTier[],
+} as const;
+
 export interface FaqItem {
   readonly question: string;
   readonly answer: string;
@@ -185,7 +240,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "How much does it cost?",
     answer:
-      "It's a not-for-profit event. A small commitment fee of around €30 covers the day's costs, lunch, drinks and beverages, plus an optional evening get-together. No sponsors, no upsells.",
+      "It's a not-for-profit event, priced to cover costs only. Early-bird tickets start at €30 and standard tickets are €40, both including the full day, sessions, lunch and drinks. An optional evening social can be added on. Prices are indicative and confirmed when registration opens. See the Tickets section for the full breakdown.",
   },
   {
     question: "Where exactly is it?",
@@ -195,7 +250,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "What about the agenda and speakers?",
     answer:
-      "The program is being finalised. A Call for Speakers is opening soon, so if you'd like to present, watch this space and the Discord for the announcement. The full agenda will be published here once locked in.",
+      "The program is being finalised and the Call for Speakers is now open on Sessionize, so if you'd like to present, submit your session via the Call for Speakers section. The full agenda will be published here once it's locked in.",
   },
   {
     question: "How do I get a seat?",
