@@ -99,6 +99,16 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "low", title: "Report-only CA policy", detail: "A report-only Conditional Access rule logged a would-block", correct: "dismiss" },
   { sev: "low", title: "Autopilot enrollment", detail: "New device enrolling through the approved Autopilot profile", correct: "dismiss" },
   { sev: "low", title: "Compliance re-sync", detail: "Device flicked non-compliant mid-sync, already compliant again", correct: "dismiss" },
+
+  // Defender for Cloud Apps & Purview DLP (aligned with Microsoft Learn)
+  { sev: "high", title: "Cloud Apps: TOR IP", detail: "MDCA flagged a user signing in from an anonymous TOR proxy", correct: "reset" },
+  { sev: "med", title: "Cloud Apps: inbox rule", detail: "MDCA found a hidden mail-forwarding rule on a mailbox", correct: "reset" },
+  { sev: "low", title: "Impossible travel (known)", detail: "MDCA flag, but it's a frequent traveller on the exclusion list", correct: "dismiss" },
+  { sev: "low", title: "Anon IP = your red team", detail: "MDCA anonymous-IP alert traced to the sanctioned pentest", correct: "dismiss" },
+  { sev: "high", title: "Purview DLP: PII leak", detail: "5,000 customer PII records being emailed to a personal Gmail", correct: "block" },
+  { sev: "med", title: "DLP: card data pasted", detail: "Credit-card numbers pasted into an external web form", correct: "block" },
+  { sev: "low", title: "DLP false positive", detail: "Pattern matched a card number but it's an internal order ID", correct: "dismiss" },
+  { sev: "high", title: "DLP: trade-secret theft", detail: "Confirmed bulk export of a tagged trade-secret document", correct: "escalate" },
 ];
 
 const SHIFT_MS = 100_000;
