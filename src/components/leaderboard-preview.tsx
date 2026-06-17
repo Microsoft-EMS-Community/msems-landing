@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy } from "lucide-react";
+import { Gamepad2, Zap } from "lucide-react";
 import { MEDALS } from "@/lib/medals";
 
 interface Score {
@@ -9,45 +9,84 @@ interface Score {
   moves: number;
 }
 
+interface Reaction {
+  name: string;
+  best_ms: number;
+}
+
+function Row({
+  label,
+  icon,
+  entries,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  entries: { name: string; value: string }[];
+}) {
+  if (entries.length === 0) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+      <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+        {icon}
+        {label}
+      </span>
+      {entries.slice(0, 3).map((s, i) => (
+        <span key={`${s.name}-${i}`} className="whitespace-nowrap">
+          {MEDALS[i]} {s.name}{" "}
+          <span className="text-muted-foreground/70">({s.value})</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 /**
- * Compact top-3 of the memory-game leaderboard. Renders nothing until there
- * are scores, so it stays out of the way when the board is empty.
+ * Compact top-3 previews for both games. Each row hides itself until that
+ * board has scores, and the whole block disappears when both are empty.
  */
 export function LeaderboardPreview() {
-  const [board, setBoard] = useState<Score[]>([]);
+  const [memory, setMemory] = useState<Score[]>([]);
+  const [reaction, setReaction] = useState<Reaction[]>([]);
 
   useEffect(() => {
     let active = true;
     fetch("/api/score", { cache: "no-store" })
       .then((r) => r.json())
       .then((d: { scores?: Score[] }) => {
-        if (active) setBoard(Array.isArray(d.scores) ? d.scores : []);
+        if (active) setMemory(Array.isArray(d.scores) ? d.scores : []);
       })
-      .catch(() => {
-        // best-effort
-      });
+      .catch(() => {});
+    fetch("/api/reaction", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { scores?: Reaction[] }) => {
+        if (active) setReaction(Array.isArray(d.scores) ? d.scores : []);
+      })
+      .catch(() => {});
     return () => {
       active = false;
     };
   }, []);
 
-  if (board.length === 0) return null;
+  if (memory.length === 0 && reaction.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-      <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
-        <Trophy className="size-3.5 text-brand-pink" />
-        Memory leaderboard
-      </span>
-      {board.slice(0, 3).map((s, i) => (
-        <span key={`${s.name}-${i}`} className="whitespace-nowrap">
-          {i < 3 ? MEDALS[i] : `${i + 1}.`} {s.name}{" "}
-          <span className="text-muted-foreground/70">({s.moves})</span>
-        </span>
-      ))}
+    <div className="space-y-1.5">
+      <Row
+        label="Memory match"
+        icon={<Gamepad2 className="size-3.5 text-brand-pink" />}
+        entries={memory.map((s) => ({ name: s.name, value: `${s.moves}` }))}
+      />
+      <Row
+        label="Patch the Threat"
+        icon={<Zap className="size-3.5 text-brand-pink" />}
+        entries={reaction.map((s) => ({
+          name: s.name,
+          value: `${s.best_ms} ms`,
+        }))}
+      />
       <a
         href="/leaderboard"
-        className="whitespace-nowrap underline underline-offset-2 transition-colors hover:text-foreground"
+        className="inline-block whitespace-nowrap text-xs text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
       >
         View all →
       </a>
