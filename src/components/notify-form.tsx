@@ -4,6 +4,7 @@ import { useId, useState, type FormEvent } from "react";
 import { Check, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EVENT, SIGNUP } from "@/lib/event";
+import { burstConfetti } from "@/lib/confetti";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -98,6 +99,7 @@ function InlineNotifyForm() {
 
       setStatus("success");
       setEmail("");
+      burstConfetti();
     } catch (error: unknown) {
       setStatus("error");
       setMessage(

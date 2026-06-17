@@ -322,7 +322,7 @@ export default async function Home() {
                 />
               }
               size="lg"
-              className="shrink-0 brand-gradient-bg border-0 text-white hover:opacity-90"
+              className="sheen shrink-0 self-center brand-gradient-bg border-0 text-white hover:opacity-90 sm:self-auto"
             >
               Submit a session
             </Button>
