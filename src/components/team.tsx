@@ -29,16 +29,28 @@ const GROUPS: ReadonlyArray<{ role: TeamRole; label: string }> = [
 function MemberCard({ member }: { member: TeamMember }) {
   return (
     <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <span
-        aria-hidden
-        className={`grid size-11 shrink-0 place-items-center rounded-full text-sm font-bold ${
-          member.eventTeam
-            ? "brand-gradient-bg text-white"
-            : "border border-white/10 bg-white/5 brand-gradient-text"
-        }`}
-      >
-        {initials(member.name)}
-      </span>
+      {member.photo ? (
+        <Image
+          src={member.photo}
+          alt={member.name}
+          width={44}
+          height={44}
+          className={`size-11 shrink-0 rounded-full object-cover ${
+            member.eventTeam ? "ring-2 ring-brand-pink/60" : "ring-1 ring-white/10"
+          }`}
+        />
+      ) : (
+        <span
+          aria-hidden
+          className={`grid size-11 shrink-0 place-items-center rounded-full text-sm font-bold ${
+            member.eventTeam
+              ? "brand-gradient-bg text-white"
+              : "border border-white/10 bg-white/5 brand-gradient-text"
+          }`}
+        >
+          {initials(member.name)}
+        </span>
+      )}
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

@@ -249,42 +249,74 @@ export interface TeamMember {
   readonly eventTeam?: boolean;
   /** Full LinkedIn profile URL; renders a LinkedIn link when set. */
   readonly linkedin?: string;
+  /** Photo path in /public; falls back to initials avatar when unset. */
+  readonly photo?: string;
 }
 
 export const TEAM: readonly TeamMember[] = [
   // Moderators
-  { name: "Phil", handle: "katos.", role: "moderator" },
-  { name: "Joël", handle: "joelprins", role: "moderator", eventTeam: true },
+  {
+    name: "Philip Marsh",
+    handle: "katos.",
+    role: "moderator",
+    photo: "/team/philip-marsh.jpg",
+    linkedin: "https://www.linkedin.com/in/marshsecurity/",
+  },
+  {
+    name: "Joël Prins",
+    handle: "joelprins",
+    role: "moderator",
+    photo: "/team/joel-prins.jpg",
+    eventTeam: true,
+    linkedin: "https://www.linkedin.com/in/jo%C3%ABl-prins-4b4655aa/",
+  },
   {
     name: "Jonas Bøgvad",
     handle: "jonasb",
     role: "moderator",
     mvp: true,
     eventTeam: true,
+    linkedin: "https://www.linkedin.com/in/jonasbogvad/",
   },
   {
-    name: "Devfender",
+    name: "Jay Kerai",
     handle: "darkmodeordie",
     role: "moderator",
+    photo: "/team/jay-kerai.jpg",
     mvp: true,
     eventTeam: true,
+    linkedin: "https://www.linkedin.com/in/jay-kerai-cyber/",
   },
   // Contributors
-  { name: "Effie", handle: "badfish64", role: "contributor", eventTeam: true },
+  {
+    name: "Effie Antoniadi",
+    handle: "badfish64",
+    role: "contributor",
+    photo: "/team/effie-antoniadi.png",
+    eventTeam: true,
+    linkedin: "https://www.linkedin.com/in/eantoniadi/",
+  },
   {
     name: "Sebastian Flæng Markdanner",
     handle: "taintia",
     role: "contributor",
+    photo: "/team/sebastian.jpg",
     mvp: true,
     eventTeam: true,
   },
   {
-    name: "Nicklas",
+    name: "Nicklas Olsen",
     handle: "nicklas_olsen",
     role: "contributor",
+    photo: "/team/nicklas-olsen.jpg",
     mvp: true,
   },
-  { name: "SvenV", handle: "falc0n123", role: "contributor" },
+  {
+    name: "Sven Visser",
+    handle: "falc0n123",
+    role: "contributor",
+    linkedin: "https://www.linkedin.com/in/sven-visser-36904649/",
+  },
   { name: "ToastedTy", handle: "toastedty", role: "contributor" },
 ] as const;
 
