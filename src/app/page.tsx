@@ -10,6 +10,7 @@ import {
 import { AuroraBackground } from "@/components/aurora-background";
 import { Agenda } from "@/components/agenda";
 import { Pricing } from "@/components/pricing";
+import { Team } from "@/components/team";
 import { Countdown } from "@/components/countdown";
 import { NotifyForm } from "@/components/notify-form";
 import { PoweredByMicrosoft } from "@/components/powered-by-microsoft";
@@ -30,7 +31,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { EVENT, COMMUNITY, HIGHLIGHTS, TOPICS, FAQS } from "@/lib/event";
+import {
+  EVENT,
+  COMMUNITY,
+  HIGHLIGHTS,
+  TOPICS,
+  FAQS,
+  PRICING,
+  SITE_URL,
+} from "@/lib/event";
 import { getDiscordStats, formatCount } from "@/lib/discord";
 
 const FACTS = [
@@ -47,8 +56,47 @@ export default async function Home() {
     : COMMUNITY.members;
   const onlineLabel = stats.onlineCount ? formatCount(stats.onlineCount) : null;
 
+  // Schema.org Event structured data for search engines (rich results).
+  const eventJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: EVENT.name,
+    startDate: EVENT.startsAtISO,
+    endDate: EVENT.endsAtISO,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: EVENT.venue,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Copenhagen",
+        addressCountry: "DK",
+      },
+    },
+    description:
+      "A full day of community-led sessions across Intune, Entra ID and Microsoft Defender, plus the CloudHour speaker AMA and an evening social. Open to everyone.",
+    image: [`${SITE_URL}/share-card`],
+    organizer: {
+      "@type": "Organization",
+      name: COMMUNITY.name,
+      url: SITE_URL,
+    },
+    offers: {
+      "@type": "Offer",
+      price: String(PRICING.tiers[0].price),
+      priceCurrency: "EUR",
+      availability: "https://schema.org/PreOrder",
+      url: SITE_URL,
+    },
+  };
+
   return (
     <main id="top" className="flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+      />
       <SiteHeader />
 
       {/* ---------- Hero ---------- */}
@@ -346,6 +394,9 @@ export default async function Home() {
           </CardContent>
         </Card>
       </section>
+
+      {/* ---------- Team ---------- */}
+      <Team />
 
       {/* ---------- FAQ ---------- */}
       <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-4 pb-20 sm:px-6">

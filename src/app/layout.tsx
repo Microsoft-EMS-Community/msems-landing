@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SITE_URL } from "@/lib/event";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,10 +13,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://www.msems.community";
+const siteUrl = SITE_URL;
 const eventTitle = "Microsoft EMS Community Summit 2026";
 const eventDescription =
   "A full day of community-led sessions for the Microsoft Enterprise Mobility + Security community. Friday, September 4th 2026 · Microsoft Denmark, near Copenhagen.";
+
+export const viewport: Viewport = {
+  themeColor: "#0f0a1e",
+  colorScheme: "dark",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

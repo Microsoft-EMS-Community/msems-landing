@@ -3,11 +3,15 @@
  * and the community itself. Update these values as details get confirmed.
  */
 
+/** Canonical site URL (www is the primary domain on Vercel). */
+export const SITE_URL = "https://www.msems.community";
+
 export const EVENT = {
   name: "Microsoft EMS Community Summit",
   shortName: "EMS Community Summit",
-  // Friday, September 4th 2026, 08:30 (Central European Summer Time, UTC+2)
+  // Friday, September 4th 2026, 08:30 to 17:00 (Central European Summer Time, UTC+2)
   startsAtISO: "2026-09-04T08:30:00+02:00",
+  endsAtISO: "2026-09-04T17:00:00+02:00",
   dateLabel: "Friday, September 4th, 2026",
   timeLabel: "08:30 to 17:00",
   venue: "Microsoft Denmark",
@@ -232,6 +236,57 @@ export const PRICING = {
     },
   ] satisfies readonly PricingTier[],
 } as const;
+
+export type TeamRole = "moderator" | "contributor";
+
+export interface TeamMember {
+  readonly name: string;
+  readonly handle: string;
+  readonly role: TeamRole;
+  /** Microsoft MVP awardee (renders the MVP badge). */
+  readonly mvp?: boolean;
+  /** Part of the summit organising team (gets an "Event team" badge). */
+  readonly eventTeam?: boolean;
+  /** Full LinkedIn profile URL; renders a LinkedIn link when set. */
+  readonly linkedin?: string;
+}
+
+export const TEAM: readonly TeamMember[] = [
+  // Moderators
+  { name: "Phil", handle: "katos.", role: "moderator" },
+  { name: "Joël", handle: "joelprins", role: "moderator", eventTeam: true },
+  {
+    name: "Jonas Bøgvad",
+    handle: "jonasb",
+    role: "moderator",
+    mvp: true,
+    eventTeam: true,
+  },
+  {
+    name: "Devfender",
+    handle: "darkmodeordie",
+    role: "moderator",
+    mvp: true,
+    eventTeam: true,
+  },
+  // Contributors
+  { name: "Effie", handle: "badfish64", role: "contributor", eventTeam: true },
+  {
+    name: "Sebastian Flæng Markdanner",
+    handle: "taintia",
+    role: "contributor",
+    mvp: true,
+    eventTeam: true,
+  },
+  {
+    name: "Nicklas",
+    handle: "nicklas_olsen",
+    role: "contributor",
+    mvp: true,
+  },
+  { name: "SvenV", handle: "falc0n123", role: "contributor" },
+  { name: "ToastedTy", handle: "toastedty", role: "contributor" },
+] as const;
 
 export interface FaqItem {
   readonly question: string;

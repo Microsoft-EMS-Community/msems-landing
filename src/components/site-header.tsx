@@ -5,7 +5,7 @@ import { NotifyNavButton } from "@/components/notify-nav-button";
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/#agenda", label: "Agenda" },
   { href: "/#tickets", label: "Tickets" },
-  { href: "/#community", label: "Community" },
+  { href: "/#team", label: "Team" },
   { href: "/#faq", label: "FAQ" },
 ];
 
