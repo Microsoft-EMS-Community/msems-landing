@@ -6,6 +6,7 @@ import { Gamepad2, RotateCcw, Trophy, X } from "lucide-react";
 // EMS/security-flavoured faces (6 pairs).
 const FACES = ["🛡️", "🔐", "☁️", "📱", "🆔", "⚙️"];
 const BEST_KEY = "msems-memory-best";
+const NAME_KEY = "msems-memory-name";
 
 interface Card {
   id: number;
@@ -86,7 +87,14 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
   const [locked, setLocked] = useState(false);
   const [best, setBest] = useState<Best | null>(null);
   const [board, setBoard] = useState<Score[]>([]);
-  const [name, setName] = useState("");
+  // Pre-fill the name from a previous submit (modal is client-only, no SSR).
+  const [name, setName] = useState<string>(() => {
+    try {
+      return localStorage.getItem(NAME_KEY) ?? "";
+    } catch {
+      return "";
+    }
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const savedRef = useRef(false);
@@ -120,6 +128,11 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
       });
       if (res.ok) {
         setSubmitted(true);
+        try {
+          localStorage.setItem(NAME_KEY, name.trim());
+        } catch {
+          // ignore unavailable storage
+        }
         await loadLeaderboard();
       }
     } catch {
