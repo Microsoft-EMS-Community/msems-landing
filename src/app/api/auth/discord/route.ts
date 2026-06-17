@@ -46,7 +46,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   authUrl.searchParams.set("scope", "identify");
   authUrl.searchParams.set("redirect_uri", redirectUri);
   authUrl.searchParams.set("state", state);
-  authUrl.searchParams.set("prompt", "consent");
+  // Omit prompt=consent: Discord shows the authorize screen only on a user's
+  // first login, then auto-redirects silently on subsequent logins.
 
   const res = NextResponse.redirect(authUrl);
   const secure = origin.startsWith("https");
