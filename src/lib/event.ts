@@ -75,9 +75,9 @@ export const HIGHLIGHTS: readonly HighlightItem[] = [
       "You don't need to be on the Discord to join. Anyone working with or curious about the Microsoft EMS stack is welcome.",
   },
   {
-    title: "Not-for-profit",
+    title: "Independent, no agenda",
     description:
-      "An independent, community-run event with no sponsors. Proudly powered by Microsoft and hosted at Microsoft Denmark.",
+      "Not-for-profit, community-run and sponsor-free, so the sessions are honest, real-world takes on the Microsoft stack: what works and what doesn't.",
   },
   {
     title: "Optional evening",
