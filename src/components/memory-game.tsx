@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Gamepad2, LogOut, RotateCcw, Trophy, X } from "lucide-react";
+import { MEDALS } from "@/lib/medals";
 
 // Microsoft EMS product faces (6 pairs). Icon files live in /public/games
 // (see that folder's README to swap any of them). The official product icons
@@ -295,7 +296,10 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
               className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-1.5 text-sm"
             >
               <span className="truncate">
-                <span className="text-muted-foreground">{i + 1}.</span> {s.name}
+                <span className="text-muted-foreground">
+                  {i < 3 ? MEDALS[i] : `${i + 1}.`}
+                </span>{" "}
+                {s.name}
               </span>
               <span className="ml-2 shrink-0 font-mono text-xs text-muted-foreground">
                 {s.moves} / {formatTime(s.time_seconds)}

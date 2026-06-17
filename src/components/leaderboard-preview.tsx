@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Trophy } from "lucide-react";
+import { MEDALS } from "@/lib/medals";
 
 interface Score {
   name: string;
@@ -40,7 +41,7 @@ export function LeaderboardPreview() {
       </span>
       {board.slice(0, 3).map((s, i) => (
         <span key={`${s.name}-${i}`} className="whitespace-nowrap">
-          {i + 1}. {s.name}{" "}
+          {i < 3 ? MEDALS[i] : `${i + 1}.`} {s.name}{" "}
           <span className="text-muted-foreground/70">({s.moves})</span>
         </span>
       ))}

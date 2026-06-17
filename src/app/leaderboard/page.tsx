@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { GameLauncher, PatchLauncher } from "@/components/games-provider";
 import { getTopScores, formatScoreTime } from "@/lib/scores";
 import { getTopReactions } from "@/lib/reactions";
+import { medal } from "@/lib/medals";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +15,6 @@ export const metadata: Metadata = {
   title: "Leaderboards | Microsoft EMS Community Summit",
   description: "Top scores for the MS EMS Community games.",
 };
-
-const RANK_ACCENT = ["text-brand-pink", "text-brand-purple", "text-brand-teal"];
 
 interface Row {
   name: string;
@@ -59,13 +58,18 @@ function Board({
                   : "border-white/10 bg-white/[0.03]"
               }`}
             >
-              <span
-                className={`w-6 shrink-0 text-center text-lg font-bold tabular-nums ${
-                  RANK_ACCENT[i] ?? "text-muted-foreground"
-                }`}
-              >
-                {i + 1}
-              </span>
+              {i < 3 ? (
+                <span
+                  className="w-7 shrink-0 text-center text-xl"
+                  aria-label={`Rank ${i + 1}`}
+                >
+                  {medal(i + 1)}
+                </span>
+              ) : (
+                <span className="w-7 shrink-0 text-center text-lg font-bold tabular-nums text-muted-foreground">
+                  {i + 1}
+                </span>
+              )}
               {s.avatar ? (
                 <Image
                   src={s.avatar}

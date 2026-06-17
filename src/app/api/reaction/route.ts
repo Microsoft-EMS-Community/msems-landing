@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { getTopReactions } from "@/lib/reactions";
 import { getSession } from "@/lib/auth";
+import { topStandings } from "@/lib/ranking";
+import { medal } from "@/lib/medals";
 
 export const dynamic = "force-dynamic";
+
+const ORDER = "best_ms.asc";
 
 const supabaseUrl =
   process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -74,6 +78,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (!existingRes.ok) throw new Error(`Supabase ${existingRes.status}`);
     const existing = (await existingRes.json()) as ExistingReaction[];
     const prev = existing[0];
+    const willImprove = !prev || ms < prev.best_ms;
+
+    // Current leader before saving, to detect a dethrone.
+    const preLeader = willImprove
+      ? (await topStandings("reactions", ORDER, 1))[0]
+      : undefined;
 
     const row = {
       discord_id: user.id,
@@ -103,17 +113,33 @@ export async function POST(request: Request): Promise<NextResponse> {
       improved = false;
     }
 
+    // Podium rank after saving (only when it changed).
+    let podiumRank = 0;
+    if (improved) {
+      const standings = await topStandings("reactions", ORDER, 3);
+      podiumRank = standings.findIndex((s) => s.discord_id === user.id) + 1;
+    }
+
     const webhook = process.env.DISCORD_WEBHOOK_URL;
     if (webhook) {
-      const icon = improved ? "⚡" : "🎮";
       const verb = !prev ? "clocked" : improved ? "improved to" : "played";
-      const tail = !improved && prev ? " - best still stands" : "";
+      let tail = "";
+      if (!improved && prev) {
+        tail = " - best still stands";
+      } else if (podiumRank >= 1 && podiumRank <= 3) {
+        tail = ` ${medal(podiumRank)} now #${podiumRank}`;
+        if (podiumRank === 1 && preLeader && preLeader.discord_id !== user.id) {
+          tail += `, passed ${preLeader.name}`;
+        }
+      } else if (improved && prev) {
+        tail = " - new personal best";
+      }
       try {
         await fetch(webhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: `${icon} <@${user.id}> ${verb} **${ms} ms** in Patch the Threat${tail}`,
+            content: `⚡ <@${user.id}> ${verb} **${ms} ms** in Patch the Threat${tail}`,
             allowed_mentions: { users: [user.id] },
           }),
         });

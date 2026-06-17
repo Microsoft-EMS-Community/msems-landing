@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LogOut, RotateCcw, ShieldAlert, Trophy, X, Zap } from "lucide-react";
 import { useAuthUser, loginHref } from "@/components/use-auth-user";
+import { MEDALS } from "@/lib/medals";
 
 const ROUNDS = 6;
 const CELLS = 9; // 3x3 grid
@@ -162,7 +163,10 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
               className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-1.5 text-sm"
             >
               <span className="truncate">
-                <span className="text-muted-foreground">{i + 1}.</span> {s.name}
+                <span className="text-muted-foreground">
+                  {i < 3 ? MEDALS[i] : `${i + 1}.`}
+                </span>{" "}
+                {s.name}
               </span>
               <span className="ml-2 shrink-0 font-mono text-xs text-muted-foreground">
                 {s.best_ms} ms

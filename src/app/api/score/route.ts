@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { getTopScores, formatScoreTime } from "@/lib/scores";
 import { getSession } from "@/lib/auth";
+import { topStandings } from "@/lib/ranking";
+import { medal } from "@/lib/medals";
 
 export const dynamic = "force-dynamic";
+
+const ORDER = "moves.asc,time_seconds.asc";
 
 const supabaseUrl =
   process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -96,6 +100,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (!existingRes.ok) throw new Error(`Supabase ${existingRes.status}`);
     const existing = (await existingRes.json()) as ExistingScore[];
     const prev = existing[0];
+    const willImprove = !prev || isBetter(moves, time, prev);
+
+    // Current leader before saving, to detect a dethrone.
+    const preLeader = willImprove
+      ? (await topStandings("scores", ORDER, 1))[0]
+      : undefined;
 
     const row = {
       discord_id: user.id,
@@ -126,18 +136,34 @@ export async function POST(request: Request): Promise<NextResponse> {
       improved = false; // kept their existing, better score
     }
 
+    // Work out the player's podium rank after saving (only when it changed).
+    let podiumRank = 0;
+    if (improved) {
+      const standings = await topStandings("scores", ORDER, 3);
+      podiumRank = standings.findIndex((s) => s.discord_id === user.id) + 1;
+    }
+
     // Announce every completed game to Discord. Off until the webhook URL set.
     const webhook = process.env.DISCORD_WEBHOOK_URL;
     if (webhook) {
-      const icon = improved ? "🥇" : "🎮";
       const verb = !prev ? "scored" : improved ? "improved to" : "played";
-      const tail = !improved && prev ? " - best still stands" : "";
+      let tail = "";
+      if (!improved && prev) {
+        tail = " - best still stands";
+      } else if (podiumRank >= 1 && podiumRank <= 3) {
+        tail = ` ${medal(podiumRank)} now #${podiumRank}`;
+        if (podiumRank === 1 && preLeader && preLeader.discord_id !== user.id) {
+          tail += `, passed ${preLeader.name}`;
+        }
+      } else if (improved && prev) {
+        tail = " - new personal best";
+      }
       try {
         await fetch(webhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: `${icon} <@${user.id}> ${verb} **${moves} moves** · ${formatScoreTime(time)} in the MS EMS memory game${tail}`,
+            content: `🎮 <@${user.id}> ${verb} **${moves} moves** · ${formatScoreTime(time)} in the MS EMS memory game${tail}`,
             // Only this one user may be pinged — never @everyone/here/roles.
             allowed_mentions: { users: [user.id] },
           }),
