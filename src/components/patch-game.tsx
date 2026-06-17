@@ -176,7 +176,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
         </ol>
       ) : (
         <p className="mt-2 text-sm text-muted-foreground">
-          No times yet — set the first one!
+          No times yet, set the first one!
         </p>
       )}
       <a

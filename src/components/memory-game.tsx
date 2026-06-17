@@ -309,7 +309,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
         </ol>
       ) : (
         <p className="mt-2 text-sm text-muted-foreground">
-          No scores yet — be the first to win!
+          No scores yet, be the first to win!
         </p>
       )}
       <a

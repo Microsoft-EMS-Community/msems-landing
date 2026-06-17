@@ -151,21 +151,21 @@ export default async function LeaderboardPage() {
             title="Memory match"
             icon={<Gamepad2 className="size-5 text-brand-pink" />}
             rows={memoryRows}
-            empty="No scores yet — be the first to win!"
+            empty="No scores yet, be the first to win!"
             play={<GameLauncher className={PLAY_BTN} label="Play" />}
           />
           <Board
             title="Patch the Threat"
             icon={<Zap className="size-5 text-brand-pink" />}
             rows={reactionRows}
-            empty="No times yet — set the first one!"
+            empty="No times yet, set the first one!"
             play={<PatchLauncher className={PLAY_BTN} label="Play" />}
           />
           <Board
             title="Defender SOC"
             icon={<ShieldCheck className="size-5 text-brand-pink" />}
             rows={socRows}
-            empty="No shifts logged yet — set the first score!"
+            empty="No shifts logged yet, set the first score!"
             play={<SocLauncher className={PLAY_BTN} label="Play" />}
           />
         </div>

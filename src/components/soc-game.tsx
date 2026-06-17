@@ -64,7 +64,7 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "high", title: "Phishing wave", detail: "20 users reported the same credential-harvest sender", correct: "block" },
   { sev: "med", title: "Password spray", detail: "600 failed sign-ins from 5.188.x.x in 4 min", correct: "block" },
   { sev: "med", title: "Typosquat clicks", detail: "SmartScreen logging repeat clicks to micros0ft-secure.com", correct: "block" },
-  { sev: "low", title: "Known-bad C2 domain", detail: "DNS log shows lookups to a malware command domain", correct: "block" },
+  { sev: "low", title: "New C2 domain to block", detail: "Threat-intel feed lists a fresh malware C2 domain for the blocklist", correct: "block" },
 
   // dismiss — known-benign / approved
   { sev: "low", title: "Scheduled EICAR test", detail: "The SecOps scanner running its daily test signature", correct: "dismiss" },
@@ -73,13 +73,12 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "low", title: "Backup service account", detail: "Expected sign-in from the known backup server", correct: "dismiss" },
 
   // escalate — confirmed, network-wide incident for the IR team
-  { sev: "high", title: "Data exfiltration", detail: "12 GB uploaded to a personal cloud account after hours", correct: "escalate" },
   { sev: "high", title: "Confirmed C2 to nation-state", detail: "Multiple hosts beaconing to known APT infrastructure", correct: "escalate" },
   { sev: "high", title: "Network-wide encryption", detail: "Ransom note dropped, many file shares encrypting at once", correct: "escalate" },
-  { sev: "high", title: "Active intrusion spreading", detail: "Compromised creds authenticating across 9 servers", correct: "escalate" },
+  { sev: "high", title: "Active intrusion spreading", detail: "Attacker pivoting across 9 servers in real time, call IR", correct: "escalate" },
 
   // The people behind it (playful, fictional gags)
-  { sev: "high", title: "Jonas reused his password", detail: "Impossible-travel sign-in on jonasb — again", correct: "reset" },
+  { sev: "high", title: "Jonas reused his password", detail: "Impossible-travel sign-in on jonasb, yet again", correct: "reset" },
   { sev: "high", title: "Effie clicked the phish", detail: "Creds harvested from effie@ after a convincing lure", correct: "reset" },
   { sev: "med", title: "Joël's token got lifted", detail: "Session token stolen on the conference Wi-Fi", correct: "reset" },
   { sev: "high", title: "Jay skipped DMARC", detail: "No p=reject, so spoofed CEO mail is landing in inboxes", correct: "block" },
@@ -93,7 +92,7 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "high", title: "Entra risky user: high", detail: "Atypical travel + anonymous IP flagged on m.olsen@", correct: "reset" },
   { sev: "high", title: "PRT token theft", detail: "Primary Refresh Token lifted from an Entra-joined laptop", correct: "reset" },
   { sev: "high", title: "Admin MFA policy off", detail: "Someone disabled the 'Require MFA for admins' CA policy", correct: "escalate" },
-  { sev: "high", title: "Rogue Global Admin", detail: "A new account was granted Global Administrator at 3am", correct: "escalate" },
+  { sev: "high", title: "Privilege escalation in progress", detail: "An attacker just granted itself Global Admin, declare incident", correct: "escalate" },
   { sev: "med", title: "Intune device rooted", detail: "A managed laptop reports rooted + malware indicators", correct: "isolate" },
   { sev: "med", title: "Tenant password spray", detail: "Legacy-auth spray hitting Exchange Online from one IP", correct: "block" },
   { sev: "low", title: "Report-only CA policy", detail: "A report-only Conditional Access rule logged a would-block", correct: "dismiss" },
@@ -333,7 +332,7 @@ export function SocGame({ onClose }: { onClose: () => void }) {
         </ol>
       ) : (
         <p className="mt-2 text-sm text-muted-foreground">
-          No shifts logged yet — set the first score!
+          No shifts logged yet, set the first score!
         </p>
       )}
       <a
