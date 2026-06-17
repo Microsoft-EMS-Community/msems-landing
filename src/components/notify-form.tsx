@@ -3,7 +3,7 @@
 import { useId, useState, type FormEvent } from "react";
 import { Check, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SIGNUP } from "@/lib/event";
+import { EVENT, SIGNUP } from "@/lib/event";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -108,10 +108,20 @@ function InlineNotifyForm() {
 
   if (status === "success") {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-brand-teal/30 bg-brand-teal/10 px-5 py-4 text-sm">
-        <Check className="size-4 text-brand-teal" />
+      <div className="mx-auto flex w-full max-w-md items-start gap-2.5 rounded-2xl border border-brand-teal/30 bg-brand-teal/10 px-5 py-4 text-left text-sm">
+        <Check className="mt-0.5 size-4 shrink-0 text-brand-teal" />
         <span>
-          You&apos;re on the list. We&apos;ll email you when registration opens.
+          You&apos;re on the list! We&apos;ll email you the moment registration
+          opens. While you wait,{" "}
+          <a
+            href={EVENT.discordInvite}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium underline underline-offset-2 hover:text-foreground"
+          >
+            come say hi on Discord
+          </a>
+          .
         </span>
       </div>
     );

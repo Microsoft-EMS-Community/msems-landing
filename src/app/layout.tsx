@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://msems.community";
+const siteUrl = "https://www.msems.community";
 const eventTitle = "Microsoft EMS Community Summit 2026";
 const eventDescription =
   "A full day of community-led sessions for the Microsoft Enterprise Mobility + Security community. Friday, September 4th 2026 · Microsoft Denmark, near Copenhagen.";

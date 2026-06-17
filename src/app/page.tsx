@@ -49,12 +49,13 @@ export default async function Home() {
 
   return (
     <main id="top" className="flex-1">
-      {/* ---------- Hero ---------- */}
-      <section className="relative overflow-hidden">
-        <AuroraBackground />
-        <SiteHeader />
+      <SiteHeader />
 
-        <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 text-center sm:px-6 sm:pt-24">
+      {/* ---------- Hero ---------- */}
+      <section className="relative">
+        <AuroraBackground />
+
+        <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 text-center sm:px-6 sm:pt-16">
           <div className="rise-in">
             <Badge
               variant="outline"
@@ -94,7 +95,7 @@ export default async function Home() {
           </div>
 
           {/* Quick email capture */}
-          <div className="rise-in mx-auto mt-10 max-w-md">
+          <div id="signup-top" className="rise-in mx-auto mt-10 max-w-md scroll-mt-24">
             <p className="mb-3 text-base font-semibold text-foreground">
               Get notified when registration opens
             </p>

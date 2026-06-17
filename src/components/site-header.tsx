@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { SIGNUP } from "@/lib/event";
+import { NotifyNavButton } from "@/components/notify-nav-button";
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/#agenda", label: "Agenda" },
@@ -40,12 +39,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Button
-          render={<a href={SIGNUP.externalUrl ?? `/${SIGNUP.anchor}`} />}
-          className="brand-gradient-bg border-0 text-white hover:opacity-90"
-        >
-          Get notified
-        </Button>
+        <NotifyNavButton />
       </div>
     </header>
   );
