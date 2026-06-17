@@ -375,7 +375,9 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
                             : "border border-brand-pink/40 bg-brand-pink/10"
                         }`}
                       >
-                        {card.face}
+                        {/* Only render the face when revealed, so the board
+                            can't be solved by peeking at the DOM. */}
+                        {shown ? card.face : null}
                       </div>
                     </div>
                   </button>
