@@ -44,6 +44,12 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             >
               {EVENT.discordInvite.replace(/^https?:\/\//, "")}
             </a>
+            <a
+              href={`mailto:${EVENT.contactEmail}`}
+              className="mt-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {EVENT.contactEmail}
+            </a>
           </div>
         </div>
 
