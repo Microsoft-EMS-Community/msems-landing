@@ -253,7 +253,7 @@ export default async function Home() {
                 <h3 className="text-2xl font-bold">Call for Speakers is open</h3>
                 <p className="mt-2 max-w-xl text-muted-foreground">
                   Got something to share with the community? Submit your session
-                  on Sessionize. Talks, demos and Cloud Hour topics across the
+                  on Sessionize. Talks, demos and CloudHour topics across the
                   Microsoft EMS stack are all welcome.
                 </p>
               </div>

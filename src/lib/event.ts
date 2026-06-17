@@ -6,10 +6,10 @@
 export const EVENT = {
   name: "Microsoft EMS Community Summit",
   shortName: "EMS Community Summit",
-  // Friday, September 4th 2026, 09:00 (Central European Summer Time, UTC+2)
-  startsAtISO: "2026-09-04T09:00:00+02:00",
+  // Friday, September 4th 2026, 08:30 (Central European Summer Time, UTC+2)
+  startsAtISO: "2026-09-04T08:30:00+02:00",
   dateLabel: "Friday, September 4th, 2026",
-  timeLabel: "09:00, full day",
+  timeLabel: "08:30 to 17:00",
   venue: "Microsoft Denmark",
   venueArea: "near Copenhagen",
   feeLabel: "From €30",
@@ -104,9 +104,13 @@ export type AgendaKind =
 
 export interface AgendaItem {
   readonly time: string;
+  /** End time, shown as a range for multi-session blocks. */
+  readonly endTime?: string;
   readonly title: string;
   readonly description: string;
   readonly kind: AgendaKind;
+  /** Number of talks in this block (renders a "N sessions" badge). */
+  readonly sessions?: number;
   /** Highlights a signature moment of the day. */
   readonly featured?: boolean;
 }
@@ -116,23 +120,25 @@ export const AGENDA_NOTE =
 
 export const AGENDA: readonly AgendaItem[] = [
   {
-    time: "09:00",
+    time: "08:30",
     title: "Doors open & coffee",
     description: "Badge pickup, coffee and good mornings.",
     kind: "registration",
   },
   {
-    time: "09:30",
+    time: "09:00",
     title: "Welcome & kickoff",
     description: "A quick hello from the community and how the day will run.",
     kind: "welcome",
   },
   {
-    time: "09:45",
+    time: "09:15",
+    endTime: "12:30",
     title: "Morning sessions",
     description:
-      "Community-led talks and deep dives across Intune, Entra ID and Microsoft Defender XDR.",
+      "Community-led talks across Intune, Entra ID and Microsoft Defender XDR, around 45 minutes each, with a coffee break in between.",
     kind: "sessions",
+    sessions: 4,
   },
   {
     time: "12:30",
@@ -142,22 +148,26 @@ export const AGENDA: readonly AgendaItem[] = [
   },
   {
     time: "13:30",
+    endTime: "15:45",
     title: "Afternoon sessions",
-    description: "More community talks and hands-on, real-world stories.",
+    description:
+      "More community talks, around 45 minutes each, with hands-on, real-world stories.",
     kind: "sessions",
+    sessions: 3,
   },
   {
-    time: "15:00",
-    title: "Cloud Hour, live",
+    time: "15:45",
+    endTime: "16:45",
+    title: "CloudHour, live",
     description:
-      "Our round-the-table discussion from Discord, in person for the first time. Open floor, real questions, no slides. Bring your hardest problems.",
+      "Our round-the-table discussion from Discord, in person for the first time. An open-floor AMA with the day's speakers and the community. Bring your hardest questions.",
     kind: "discussion",
     featured: true,
   },
   {
-    time: "16:30",
+    time: "16:45",
     title: "Wrap-up & thanks",
-    description: "Closing notes and what's next for the community.",
+    description: "Closing notes and what's next for the community. The program wraps by 17:00.",
     kind: "welcome",
   },
   {
@@ -203,7 +213,7 @@ export const PRICING = {
       featured: true,
       features: [
         "Full day of sessions",
-        "Cloud Hour round-table, live",
+        "CloudHour round-table & speaker AMA",
         "Lunch, drinks & beverages",
       ],
     },
@@ -214,7 +224,7 @@ export const PRICING = {
       seatsLabel: "Seats 26 to 64",
       features: [
         "Full day of sessions",
-        "Cloud Hour round-table, live",
+        "CloudHour round-table & speaker AMA",
         "Lunch, drinks & beverages",
       ],
     },

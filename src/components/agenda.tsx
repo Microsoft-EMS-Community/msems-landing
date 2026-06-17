@@ -25,8 +25,8 @@ export function Agenda() {
           The day, <span className="brand-gradient-text">hour by hour</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          Talks and deep dives through the day, our Cloud Hour round-table in
-          the afternoon, and a social evening to round it off.
+          Talks and deep dives through the day, our CloudHour round-table and
+          speaker AMA in the afternoon, and a social evening to round it off.
         </p>
       </div>
 
@@ -52,21 +52,29 @@ export function Agenda() {
                     : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
                 }`}
               >
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <div className="flex items-start justify-between gap-3">
                   <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
-                    {item.time}
+                    {item.endTime ? `${item.time}–${item.endTime}` : item.time}
                   </span>
-                  <Badge
-                    variant="secondary"
-                    className="border border-white/10 bg-white/5 text-xs font-normal"
-                  >
-                    {label}
-                  </Badge>
-                  {item.featured && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium text-brand-pink">
+                  {item.sessions ? (
+                    <Badge
+                      variant="secondary"
+                      className="shrink-0 border border-brand-pink/30 bg-brand-pink/10 text-xs font-medium text-brand-pink"
+                    >
+                      {item.sessions} sessions
+                    </Badge>
+                  ) : item.featured ? (
+                    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-brand-pink">
                       <Sparkles className="size-3" />
                       Community signature
                     </span>
+                  ) : (
+                    <Badge
+                      variant="secondary"
+                      className="shrink-0 border border-white/10 bg-white/5 text-xs font-normal"
+                    >
+                      {label}
+                    </Badge>
                   )}
                 </div>
                 <h3 className="mt-2 font-semibold">{item.title}</h3>
