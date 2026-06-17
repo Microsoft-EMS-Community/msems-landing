@@ -100,7 +100,7 @@ export default function SharePage() {
 
       {/* Ready-made posts */}
       <section className="mx-auto max-w-3xl px-4 pb-16 pt-12 sm:px-6">
-        <h2 className="text-2xl font-bold tracking-tight">
+        <h2 className="text-balance text-2xl font-bold tracking-tight">
           Pick a post and copy it
         </h2>
         <p className="mt-2 text-muted-foreground">

@@ -222,11 +222,11 @@ export default async function Home() {
       {/* ---------- About ---------- */}
       <section id="about" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
             One day. The whole community.{" "}
             <span className="brand-gradient-text">In one room.</span>
           </h2>
-          <p className="mt-5 text-lg text-muted-foreground">
+          <p className="mt-5 text-balance text-lg text-muted-foreground">
             We&apos;re taking the community offline for a full day of sessions,
             debate and good company. It&apos;s a not-for-profit, community-run
             event, open to everyone who cares about the Microsoft Enterprise
@@ -299,7 +299,9 @@ export default async function Home() {
                 >
                   Now open
                 </Badge>
-                <h3 className="text-2xl font-bold">Call for Speakers is open</h3>
+                <h3 className="text-balance text-2xl font-bold">
+                  Call for Speakers is open
+                </h3>
                 <p className="mt-2 max-w-xl text-muted-foreground">
                   Got something to share with the community? Submit your session
                   on Sessionize. Talks, demos and CloudHour topics across the
@@ -339,7 +341,7 @@ export default async function Home() {
                 <Users className="size-3.5 text-brand-teal" />
                 Who we are
               </Badge>
-              <h2 className="text-3xl font-bold tracking-tight">
+              <h2 className="text-balance text-3xl font-bold tracking-tight">
                 {COMMUNITY.name}
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -400,7 +402,7 @@ export default async function Home() {
 
       {/* ---------- FAQ ---------- */}
       <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-4 pb-20 sm:px-6">
-        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
+        <h2 className="text-balance text-center text-3xl font-bold tracking-tight sm:text-4xl">
           Frequently asked questions
         </h2>
         <Accordion className="mt-10">

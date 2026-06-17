@@ -22,7 +22,7 @@ export function Agenda() {
       className="mx-auto max-w-3xl scroll-mt-20 px-4 pb-20 sm:px-6"
     >
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           The day, <span className="brand-gradient-text">hour by hour</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">

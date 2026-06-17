@@ -117,7 +117,7 @@ function InlineNotifyForm() {
             href={EVENT.discordInvite}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium underline underline-offset-2 hover:text-foreground"
+            className="whitespace-nowrap font-medium underline underline-offset-2 hover:text-foreground"
           >
             come say hi on Discord
           </a>
