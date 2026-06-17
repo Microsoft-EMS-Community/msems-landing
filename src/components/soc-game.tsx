@@ -43,23 +43,40 @@ const ACTIONS: { key: Action; label: string }[] = [
   { key: "escalate", label: "Escalate" },
 ];
 
+// Each scenario maps to exactly one correct action; the detail telegraphs it.
+// isolate = malware/ransomware on a single endpoint; reset = identity/account
+// compromise; block = an external source (sender/IP/URL/domain); dismiss =
+// known-benign/approved; escalate = confirmed, network-wide incident for IR.
 const SCENARIOS: readonly Scenario[] = [
-  { sev: "high", title: "Impossible-travel sign-in", detail: "jonas@ — Oslo then Lagos in 7 min", correct: "reset" },
-  { sev: "high", title: "Token replay detected", detail: "OAuth token reused from a new ASN", correct: "reset" },
-  { sev: "med", title: "Suspicious inbox rule", detail: "Auto-forwards all mail to an external address", correct: "reset" },
-  { sev: "high", title: "Rogue MFA method added", detail: "Authenticator registered on effie@ by an unknown device", correct: "reset" },
-  { sev: "high", title: "Ransomware behaviour", detail: "Mass file rename + shadow-copy deletion on DESKTOP-12", correct: "isolate" },
-  { sev: "high", title: "Credential dumper found", detail: "Defender flagged Mimikatz on FINANCE-PC", correct: "isolate" },
-  { sev: "med", title: "Malicious macro", detail: "Word spawned powershell.exe on HR-04", correct: "isolate" },
-  { sev: "high", title: "Phishing wave", detail: "20 users reported the same credential-harvest mail", correct: "block" },
+  // isolate — contain a compromised endpoint
+  { sev: "high", title: "Ransomware on a device", detail: "Mass file encryption + shadow-copy deletion on DESKTOP-12", correct: "isolate" },
+  { sev: "high", title: "Credential dumper found", detail: "Defender caught Mimikatz running on FINANCE-PC", correct: "isolate" },
+  { sev: "med", title: "Malware executing", detail: "Word spawned PowerShell pulling a payload on HR-04", correct: "isolate" },
+  { sev: "med", title: "Beacon from one host", detail: "Cobalt Strike process active on LAPTOP-07", correct: "isolate" },
+
+  // reset — revoke an identity/account compromise
+  { sev: "high", title: "Impossible-travel sign-in", detail: "jonas@ signed in from Oslo then Lagos 7 min apart", correct: "reset" },
+  { sev: "high", title: "Stolen token replay", detail: "A valid session token is being reused from a new ASN", correct: "reset" },
+  { sev: "high", title: "Rogue MFA method added", detail: "An unknown device registered an authenticator on effie@", correct: "reset" },
+  { sev: "med", title: "Malicious inbox rule", detail: "Account is auto-forwarding all mail to an external address", correct: "reset" },
+
+  // block — cut off an external source
+  { sev: "high", title: "Phishing wave", detail: "20 users reported the same credential-harvest sender", correct: "block" },
   { sev: "med", title: "Password spray", detail: "600 failed sign-ins from 5.188.x.x in 4 min", correct: "block" },
-  { sev: "med", title: "Malicious URL clicks", detail: "SmartScreen blocked repeat clicks to evil.example", correct: "block" },
-  { sev: "low", title: "Scheduled EICAR test", detail: "Known SecOps scanner running its daily check", correct: "dismiss" },
+  { sev: "med", title: "Typosquat clicks", detail: "SmartScreen logging repeat clicks to micros0ft-secure.com", correct: "block" },
+  { sev: "low", title: "Known-bad C2 domain", detail: "DNS log shows lookups to a malware command domain", correct: "block" },
+
+  // dismiss — known-benign / approved
+  { sev: "low", title: "Scheduled EICAR test", detail: "The SecOps scanner running its daily test signature", correct: "dismiss" },
   { sev: "low", title: "Sanctioned admin task", detail: "Approved admin running PsExec during the change window", correct: "dismiss" },
-  { sev: "low", title: "Approved vuln scan", detail: "Whitelisted scanner tripping port alerts", correct: "dismiss" },
-  { sev: "high", title: "Data exfiltration", detail: "12 GB uploaded to personal cloud after hours", correct: "escalate" },
-  { sev: "high", title: "Confirmed C2 beacon", detail: "Host beaconing to known nation-state infra", correct: "escalate" },
-  { sev: "med", title: "Lateral movement", detail: "Same creds authenticating across 9 hosts in minutes", correct: "escalate" },
+  { sev: "low", title: "Whitelisted vuln scan", detail: "Approved scanner tripping the usual port-scan alerts", correct: "dismiss" },
+  { sev: "low", title: "Backup service account", detail: "Expected sign-in from the known backup server", correct: "dismiss" },
+
+  // escalate — confirmed, network-wide incident for the IR team
+  { sev: "high", title: "Data exfiltration", detail: "12 GB uploaded to a personal cloud account after hours", correct: "escalate" },
+  { sev: "high", title: "Confirmed C2 to nation-state", detail: "Multiple hosts beaconing to known APT infrastructure", correct: "escalate" },
+  { sev: "high", title: "Network-wide encryption", detail: "Ransom note dropped, many file shares encrypting at once", correct: "escalate" },
+  { sev: "high", title: "Active intrusion spreading", detail: "Compromised creds authenticating across 9 servers", correct: "escalate" },
 ];
 
 const SHIFT_MS = 100_000;
