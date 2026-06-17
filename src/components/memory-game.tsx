@@ -85,53 +85,7 @@ function DiscordIcon({ className }: { className?: string }) {
   );
 }
 
-interface GameLauncherProps {
-  className?: string;
-  onOpen?: () => void;
-  /** Visible label; pass null for an icon-only button. */
-  label?: string | null;
-}
-
-/** A trigger button that opens the memory game modal. */
-export function GameLauncher({
-  className,
-  onOpen,
-  label = "Bored? Play Memory",
-}: GameLauncherProps) {
-  const [open, setOpen] = useState(false);
-
-  // Reopen automatically after a Discord login round-trip (`/path#play`).
-  useEffect(() => {
-    if (window.location.hash !== "#play") return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setOpen(true);
-    onOpen?.();
-    history.replaceState(null, "", window.location.pathname + window.location.search);
-  }, [onOpen]);
-
-  return (
-    <>
-      <button
-        type="button"
-        aria-label="Play the memory game"
-        onClick={() => {
-          setOpen(true);
-          onOpen?.();
-        }}
-        className={
-          className ??
-          "inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        }
-      >
-        <Gamepad2 className="size-4" />
-        {label}
-      </button>
-      {open && <MemoryGame onClose={() => setOpen(false)} />}
-    </>
-  );
-}
-
-function MemoryGame({ onClose }: { onClose: () => void }) {
+export function MemoryGame({ onClose }: { onClose: () => void }) {
   const [started, setStarted] = useState(false);
   const [deck, setDeck] = useState<Card[]>(() => newDeck());
   const [flipped, setFlipped] = useState<number[]>([]);

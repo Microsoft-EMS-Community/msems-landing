@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NotifyNavButton } from "@/components/notify-nav-button";
 import { MobileNav } from "@/components/mobile-nav";
-import { GameLauncher } from "@/components/memory-game";
+import { GameLauncher } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
 
 export function SiteHeader() {

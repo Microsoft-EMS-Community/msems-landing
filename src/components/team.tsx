@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { TEAM, type TeamMember, type TeamRole } from "@/lib/event";
 
 // Inlined LinkedIn glyph (lucide dropped brand logos in recent versions).
@@ -65,14 +64,6 @@ function MemberCard({ member }: { member: TeamMember }) {
               height={16}
               className="rounded-[3px]"
             />
-          )}
-          {member.eventTeam && (
-            <Badge
-              variant="secondary"
-              className="border border-brand-pink/30 bg-brand-pink/10 text-[10px] font-medium text-brand-pink"
-            >
-              Event team
-            </Badge>
           )}
         </div>
         <div className="truncate text-sm text-muted-foreground">
