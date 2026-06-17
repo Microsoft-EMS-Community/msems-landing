@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 const siteUrl = SITE_URL;
 const eventTitle = "Microsoft EMS Community Summit 2026";
 const eventDescription =
-  "A full day of community-led sessions for the Microsoft Enterprise Mobility + Security community. Friday, September 4th 2026 · Microsoft Denmark, near Copenhagen.";
+  "A full day of community-led sessions for the Microsoft Enterprise Mobility + Security community. Friday, September 4th 2026 · Microsoft, near Copenhagen.";
 
 export const viewport: Viewport = {
   themeColor: "#0f0a1e",

@@ -9,12 +9,12 @@ export const SITE_URL = "https://www.msems.community";
 export const EVENT = {
   name: "Microsoft EMS Community Summit",
   shortName: "EMS Community Summit",
-  // Friday, September 4th 2026, 08:30 to 17:00 (Central European Summer Time, UTC+2)
+  // Friday, September 4th 2026, 8:30 AM to 5:00 PM (Central European Summer Time, UTC+2)
   startsAtISO: "2026-09-04T08:30:00+02:00",
   endsAtISO: "2026-09-04T17:00:00+02:00",
   dateLabel: "Friday, September 4th, 2026",
-  timeLabel: "08:30 to 17:00",
-  venue: "Microsoft Denmark",
+  timeLabel: "8:30 AM to 5:00 PM",
+  venue: "Microsoft",
   venueArea: "near Copenhagen",
   feeLabel: "From €30",
   feeNote:
@@ -339,7 +339,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "Is this an official Microsoft event?",
     answer:
-      "No. The Microsoft EMS Community is an independent, community-run group and is not directly affiliated with Microsoft. The event is kindly hosted at Microsoft Denmark and powered by Microsoft, but it is organised by the community, for the community.",
+      "No. The Microsoft EMS Community is an independent, community-run group and is not directly affiliated with Microsoft. The event is kindly hosted by Microsoft near Copenhagen and powered by Microsoft, but it is organised by the community, for the community.",
   },
   {
     question: "How much does it cost?",
@@ -349,7 +349,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "Where exactly is it?",
     answer:
-      "At Microsoft Denmark, near Copenhagen. The location is confirmed; the full address and travel details will be shared with registered attendees closer to the date.",
+      "At Microsoft, near Copenhagen. The location is confirmed; the full address and travel details will be shared with registered attendees closer to the date.",
   },
   {
     question: "What about the agenda and speakers?",

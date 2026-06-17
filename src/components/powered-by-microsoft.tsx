@@ -48,7 +48,7 @@ export function PoweredByMicrosoft({
             <span className="font-semibold text-foreground">Microsoft</span>
           </p>
           <p className="text-sm text-muted-foreground">
-            Microsoft kindly hosts the community at their Denmark office, near
+            Microsoft kindly hosts the community at their office near
             Copenhagen.
           </p>
         </div>
