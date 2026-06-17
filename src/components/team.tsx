@@ -110,7 +110,9 @@ export function Team() {
       </div>
 
       {GROUPS.map((group) => {
-        const members = TEAM.filter((member) => member.role === group.role);
+        const members = TEAM.filter(
+          (member) => member.role === group.role,
+        ).sort((a, b) => a.name.localeCompare(b.name));
         if (!members.length) return null;
         return (
           <div key={group.role} className="mt-10">
