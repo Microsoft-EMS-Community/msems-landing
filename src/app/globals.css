@@ -153,11 +153,13 @@
 }
 
 .brand-gradient-bg {
+  /* Teal end darkened (#0e7490) so white text/icons meet WCAG AA contrast;
+     the bright --color-brand-teal stays for text/accents that pass on dark. */
   background-image: linear-gradient(
     100deg,
     var(--color-brand-pink),
-    var(--color-brand-purple) 50%,
-    var(--color-brand-teal)
+    var(--color-brand-purple) 52%,
+    #0e7490
   );
 }
 
