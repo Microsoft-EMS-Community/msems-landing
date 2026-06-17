@@ -266,45 +266,6 @@
   }
 }
 
-/* Team "snake": a brand-gradient border + glow chases continuously through
-   the cards, lighting each in turn (staggered by --card-index). Time-based
-   so it animates regardless of scroll position and works in every browser. */
-@keyframes card-chase {
-  0%, 100% { opacity: 0; }
-  6%, 13% { opacity: 1; }
-}
-.scroll-spotlight {
-  position: relative;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .scroll-spotlight::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1.5px;
-    pointer-events: none;
-    background: linear-gradient(
-      120deg,
-      var(--color-brand-pink),
-      var(--color-brand-purple),
-      var(--color-brand-teal)
-    );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    box-shadow: 0 0 28px -8px color-mix(in oklch, var(--color-brand-purple) 60%, transparent);
-    opacity: 0;
-    animation: card-chase 5s linear infinite;
-    animation-delay: calc(var(--card-index, 0) * 0.55s);
-  }
-}
-
 /* Scroll progress bar (top, brand gradient) — pure CSS scroll-driven */
 @keyframes scroll-progress {
   from { transform: scaleX(0); }
