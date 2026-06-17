@@ -8,10 +8,10 @@ import { EVENT, SIGNUP } from "@/lib/event";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
-  "h-12 flex-1 rounded-xl border border-white/15 bg-white/5 px-4 text-base outline-none backdrop-blur-sm transition-colors placeholder:text-muted-foreground focus:border-brand-pink/60 focus:ring-2 focus:ring-brand-pink/30 disabled:opacity-60";
+  "h-14 w-full sm:flex-1 rounded-xl border border-white/15 bg-white/5 px-4 text-base outline-none backdrop-blur-sm transition-colors placeholder:text-muted-foreground focus:border-brand-pink/60 focus:ring-2 focus:ring-brand-pink/30 disabled:opacity-60";
 
 const buttonClass =
-  "brand-gradient-bg h-12 shrink-0 border-0 px-6 text-base text-white hover:opacity-90";
+  "brand-gradient-bg h-14 shrink-0 border-0 px-6 text-base text-white hover:opacity-90";
 
 /**
  * Sign-up capture. Renders one of three modes based on `SIGNUP` config:
