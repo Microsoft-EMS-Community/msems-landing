@@ -21,6 +21,7 @@ export const EVENT = {
     "The small fee covers lunch, drinks and beverages for the day, plus an optional evening get-together.",
   discordInvite: "https://aka.ms/M365EMSDiscord",
   registrationUrl: "https://aka.ms/M365EMSDiscord",
+  githubUrl: "https://github.com/Microsoft-EMS-Community",
   contactEmail: "hello@msems.community",
   status: "Save the date",
   // Call for Speakers (Sessionize). Set cfsOpen to false once submissions close.

@@ -45,6 +45,14 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
               {EVENT.discordInvite.replace(/^https?:\/\//, "")}
             </a>
             <a
+              href={EVENT.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              GitHub →
+            </a>
+            <a
               href={`mailto:${EVENT.contactEmail}`}
               className="mt-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
