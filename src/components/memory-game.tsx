@@ -94,6 +94,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
   const [moves, setMoves] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [locked, setLocked] = useState(false);
+  const [active, setActive] = useState(false); // timer runs after first flip
   const [best, setBest] = useState<Best | null>(null);
   const [board, setBoard] = useState<Score[]>([]);
   const [submitted, setSubmitted] = useState(false);
@@ -136,12 +137,12 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     }
   }, []);
 
-  // Timer runs only while playing.
+  // Timer runs once the first card is flipped, until the board is cleared.
   useEffect(() => {
-    if (!started || won) return;
+    if (!active || won) return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(id);
-  }, [started, won]);
+  }, [active, won]);
 
   // Close on Escape.
   useEffect(() => {
@@ -203,6 +204,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     setMoves(0);
     setSeconds(0);
     setLocked(false);
+    setActive(false);
     setSubmitted(false);
     setStarted(true);
   }
@@ -214,6 +216,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     setMoves(0);
     setSeconds(0);
     setLocked(false);
+    setActive(false);
     setSubmitted(false);
   }
 
@@ -221,6 +224,8 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     if (locked || won) return;
     const card = deck.find((c) => c.id === id);
     if (!card || card.flipped || card.matched) return;
+
+    if (!active) setActive(true); // start the clock on the first flip
 
     if (flipped.length === 0) {
       setDeck((d) => d.map((c) => (c.id === id ? { ...c, flipped: true } : c)));
