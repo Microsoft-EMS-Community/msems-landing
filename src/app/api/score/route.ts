@@ -126,16 +126,18 @@ export async function POST(request: Request): Promise<NextResponse> {
       improved = false; // kept their existing, better score
     }
 
-    // Announce only genuine new/improved entries to Discord (no spam from
-    // repeated non-improving plays). Off until the webhook URL is set.
+    // Announce every completed game to Discord. Off until the webhook URL set.
     const webhook = process.env.DISCORD_WEBHOOK_URL;
-    if (improved && webhook) {
+    if (webhook) {
+      const icon = improved ? "🥇" : "🎮";
+      const verb = !prev ? "scored" : improved ? "improved to" : "played";
+      const tail = !improved && prev ? " — best still stands" : "";
       try {
         await fetch(webhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: `🥇 <@${user.id}> ${prev ? "improved to" : "scored"} **${moves} moves** · ${formatScoreTime(time)} in the EMS Memory game`,
+            content: `${icon} <@${user.id}> ${verb} **${moves} moves** · ${formatScoreTime(time)} in the EMS Memory game${tail}`,
             // Only this one user may be pinged — never @everyone/here/roles.
             allowed_mentions: { users: [user.id] },
           }),
