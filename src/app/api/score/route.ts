@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getTopScores } from "@/lib/scores";
+import { getTopScores, formatScoreTime } from "@/lib/scores";
 
 export const dynamic = "force-dynamic";
 
@@ -72,6 +72,26 @@ export async function POST(request: Request): Promise<NextResponse> {
       body: JSON.stringify({ name, moves, time_seconds: time }),
     });
     if (!res.ok) throw new Error(`Supabase ${res.status}`);
+
+    // Optional: announce the finish to a Discord channel (off until the
+    // webhook URL is configured). allowed_mentions is empty so a player's
+    // name can never trigger @everyone/role pings.
+    const webhook = process.env.DISCORD_WEBHOOK_URL;
+    if (webhook) {
+      try {
+        await fetch(webhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            content: `🎮 **${name}** cleared the EMS Memory game in **${moves} moves** · ${formatScoreTime(time)}`,
+            allowed_mentions: { parse: [] },
+          }),
+        });
+      } catch {
+        // best-effort; never blocks the score from saving
+      }
+    }
+
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json(

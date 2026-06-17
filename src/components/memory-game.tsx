@@ -402,10 +402,11 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
             </div>
 
             {won ? (
-              <div className="mt-4 rounded-xl border border-brand-teal/30 bg-brand-teal/10 p-3 text-center text-sm">
-                🎉 Cleared in{" "}
-                <span className="font-semibold">{moves} moves</span> and{" "}
-                {formatTime(seconds)}!
+              <div className="mt-4 rounded-xl border border-amber-400/40 bg-amber-400/10 p-4 text-center text-sm">
+                <div className="text-4xl">🥇</div>
+                <p className="mt-1 font-semibold text-amber-300">
+                  Solved! {moves} moves · {formatTime(seconds)}
+                </p>
                 <p className="mt-1 text-muted-foreground">
                   {submitted
                     ? `Saved to the leaderboard as ${name.trim()}.`
