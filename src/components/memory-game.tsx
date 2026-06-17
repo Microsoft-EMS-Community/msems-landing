@@ -279,6 +279,12 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
           No scores yet — be the first to win!
         </p>
       )}
+      <a
+        href="/leaderboard"
+        className="mt-2 inline-block text-xs text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+      >
+        See full leaderboard →
+      </a>
     </div>
   );
 

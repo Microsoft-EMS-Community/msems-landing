@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getTopScores } from "@/lib/scores";
 
 export const dynamic = "force-dynamic";
 
@@ -23,20 +24,8 @@ function restHeaders(key: string) {
 
 /** Top scores: fewest moves, then fastest time. */
 export async function GET(): Promise<NextResponse> {
-  if (!supabaseUrl || !serviceKey) {
-    return NextResponse.json({ scores: [] });
-  }
-  try {
-    const res = await fetch(
-      `${supabaseUrl}/rest/v1/scores?select=name,moves,time_seconds&order=moves.asc,time_seconds.asc&limit=10`,
-      { headers: restHeaders(serviceKey), cache: "no-store" },
-    );
-    if (!res.ok) throw new Error(`Supabase ${res.status}`);
-    const scores = await res.json();
-    return NextResponse.json({ scores });
-  } catch {
-    return NextResponse.json({ scores: [] });
-  }
+  const scores = await getTopScores(10);
+  return NextResponse.json({ scores });
 }
 
 export async function POST(request: Request): Promise<NextResponse> {

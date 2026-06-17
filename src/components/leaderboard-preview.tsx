@@ -44,6 +44,12 @@ export function LeaderboardPreview() {
           <span className="text-muted-foreground/70">({s.moves})</span>
         </span>
       ))}
+      <a
+        href="/leaderboard"
+        className="whitespace-nowrap underline underline-offset-2 transition-colors hover:text-foreground"
+      >
+        View all →
+      </a>
     </div>
   );
 }
