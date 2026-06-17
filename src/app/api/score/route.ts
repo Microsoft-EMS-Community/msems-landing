@@ -135,8 +135,9 @@ export async function POST(request: Request): Promise<NextResponse> {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: `🥇 **${user.username}** ${prev ? "improved to" : "scored"} **${moves} moves** · ${formatScoreTime(time)} in the EMS Memory game`,
-            allowed_mentions: { parse: [] },
+            content: `🥇 <@${user.id}> ${prev ? "improved to" : "scored"} **${moves} moves** · ${formatScoreTime(time)} in the EMS Memory game`,
+            // Only this one user may be pinged — never @everyone/here/roles.
+            allowed_mentions: { users: [user.id] },
           }),
         });
       } catch {
