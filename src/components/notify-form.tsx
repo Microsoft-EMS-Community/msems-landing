@@ -118,44 +118,47 @@ function InlineNotifyForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto flex w-full max-w-md flex-col gap-2 sm:flex-row"
-    >
-      <label htmlFor={fieldId} className="sr-only">
-        Email address
-      </label>
-      <input
-        id={fieldId}
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@company.com"
-        autoComplete="email"
-        disabled={status === "submitting"}
-        className={inputClass}
-      />
-      <Button
-        type="submit"
-        size="lg"
-        disabled={status === "submitting"}
-        className={buttonClass}
+    <div className="mx-auto w-full max-w-md">
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-full flex-col gap-2 sm:flex-row"
       >
-        {status === "submitting" ? (
-          <Loader2 className="size-4 animate-spin" />
-        ) : (
-          "Notify me"
-        )}
-      </Button>
-      {status === "error" && (
-        <p
-          role="alert"
-          className="mt-1 w-full text-center text-sm text-destructive sm:absolute sm:mt-14"
+        <label htmlFor={fieldId} className="sr-only">
+          Email address
+        </label>
+        <input
+          id={fieldId}
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@company.com"
+          autoComplete="email"
+          disabled={status === "submitting"}
+          className={inputClass}
+        />
+        <Button
+          type="submit"
+          size="lg"
+          disabled={status === "submitting"}
+          className={buttonClass}
         >
+          {status === "submitting" ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            "Notify me"
+          )}
+        </Button>
+      </form>
+      {status === "error" ? (
+        <p role="alert" className="mt-2 text-center text-sm text-destructive">
           {message}
         </p>
+      ) : (
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          We&apos;ll only use your email to tell you when registration opens.
+        </p>
       )}
-    </form>
+    </div>
   );
 }

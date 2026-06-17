@@ -7,11 +7,12 @@ const KIND_META: Record<
   { label: string; icon: typeof Coffee }
 > = {
   registration: { label: "Arrival", icon: Coffee },
-  welcome: { label: "Stage", icon: Hand },
+  welcome: { label: "Welcome", icon: Hand },
   sessions: { label: "Sessions", icon: Mic },
   break: { label: "Break", icon: Coffee },
   discussion: { label: "Round-table", icon: Users },
   social: { label: "Social", icon: PartyPopper },
+  closing: { label: "Closing", icon: Hand },
 };
 
 export function Agenda() {

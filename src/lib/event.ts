@@ -100,7 +100,8 @@ export type AgendaKind =
   | "sessions"
   | "break"
   | "discussion"
-  | "social";
+  | "social"
+  | "closing";
 
 export interface AgendaItem {
   readonly time: string;
@@ -168,7 +169,7 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "16:45",
     title: "Wrap-up & thanks",
     description: "Closing notes and what's next for the community. The program wraps by 17:00.",
-    kind: "welcome",
+    kind: "closing",
   },
   {
     time: "18:00",

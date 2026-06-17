@@ -8,6 +8,11 @@ interface NotifyBody {
   email?: unknown;
 }
 
+/**
+ * Stores a "notify me" signup in Supabase via its REST API (no SDK needed).
+ * Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (auto-injected by the
+ * Vercel + Supabase integration). Falls back to logging if not configured.
+ */
 export async function POST(request: Request): Promise<NextResponse> {
   let body: NotifyBody;
   try {
@@ -19,7 +24,8 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
   }
 
-  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const email =
+    typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
 
   if (!EMAIL_RE.test(email) || email.length > 254) {
     return NextResponse.json(
@@ -28,10 +34,46 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
   }
 
-  // TODO: connect a real destination here (Microsoft Forms/List, Mailchimp,
-  // Resend audience, etc). For now we just acknowledge the signup so the UI
-  // can confirm. No email is stored yet.
-  console.info(`[notify] new signup: ${email}`);
+  const supabaseUrl =
+    process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  // Server-only secret key (bypasses RLS). Supports the new sb_secret_* key
+  // (SUPABASE_SECRET_KEY) and the legacy service-role key name.
+  const serviceKey =
+    process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  return NextResponse.json({ ok: true });
+  if (!supabaseUrl || !serviceKey) {
+    // Storage not configured yet (e.g. local without env). Don't break the UX.
+    console.info(`[notify] signup received (no store configured): ${email}`);
+    return NextResponse.json({ ok: true });
+  }
+
+  try {
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/signups?on_conflict=email`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          // Ignore duplicate emails; don't return the row.
+          Prefer: "resolution=ignore-duplicates,return=minimal",
+        },
+        body: JSON.stringify({ email, source: "website" }),
+      },
+    );
+
+    if (!res.ok && res.status !== 409) {
+      const detail = await res.text();
+      throw new Error(`Supabase responded ${res.status}: ${detail}`);
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error: unknown) {
+    console.error("[notify] failed to store signup:", error);
+    return NextResponse.json(
+      { ok: false, error: "Could not save right now. Please try again." },
+      { status: 502 },
+    );
+  }
 }
