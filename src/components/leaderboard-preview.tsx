@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Gamepad2, Zap } from "lucide-react";
+import { Gamepad2, ShieldCheck, Zap } from "lucide-react";
 import { MEDALS } from "@/lib/medals";
 
 interface Score {
@@ -12,6 +12,11 @@ interface Score {
 interface Reaction {
   name: string;
   best_ms: number;
+}
+
+interface Soc {
+  name: string;
+  best_score: number;
 }
 
 function Row({
@@ -47,6 +52,7 @@ function Row({
 export function LeaderboardPreview() {
   const [memory, setMemory] = useState<Score[]>([]);
   const [reaction, setReaction] = useState<Reaction[]>([]);
+  const [soc, setSoc] = useState<Soc[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -62,12 +68,19 @@ export function LeaderboardPreview() {
         if (active) setReaction(Array.isArray(d.scores) ? d.scores : []);
       })
       .catch(() => {});
+    fetch("/api/soc", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { scores?: Soc[] }) => {
+        if (active) setSoc(Array.isArray(d.scores) ? d.scores : []);
+      })
+      .catch(() => {});
     return () => {
       active = false;
     };
   }, []);
 
-  if (memory.length === 0 && reaction.length === 0) return null;
+  if (memory.length === 0 && reaction.length === 0 && soc.length === 0)
+    return null;
 
   return (
     <div className="space-y-1.5">
@@ -83,6 +96,11 @@ export function LeaderboardPreview() {
           name: s.name,
           value: `${s.best_ms} ms`,
         }))}
+      />
+      <Row
+        label="Defender SOC"
+        icon={<ShieldCheck className="size-3.5 text-brand-pink" />}
+        entries={soc.map((s) => ({ name: s.name, value: `${s.best_score} pts` }))}
       />
       <a
         href="/leaderboard"

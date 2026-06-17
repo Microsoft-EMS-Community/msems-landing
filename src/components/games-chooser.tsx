@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { ChevronRight, Gamepad2, X, Zap } from "lucide-react";
+import { ChevronRight, Gamepad2, ShieldCheck, X, Zap } from "lucide-react";
 
 interface GamesChooserProps {
-  onPick: (game: "memory" | "patch") => void;
+  onPick: (game: "memory" | "patch" | "soc") => void;
   onClose: () => void;
 }
 
@@ -21,6 +21,12 @@ const OPTIONS = [
     icon: Zap,
     title: "Patch the Threat",
     desc: "Tap each threat the instant it appears. Fastest average wins.",
+  },
+  {
+    key: "soc" as const,
+    icon: ShieldCheck,
+    title: "Defender SOC",
+    desc: "Triage live security alerts before the tenant is breached.",
   },
 ];
 

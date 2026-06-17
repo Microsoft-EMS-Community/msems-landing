@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Gamepad2, Trophy, Zap } from "lucide-react";
+import { ArrowLeft, Gamepad2, ShieldCheck, Trophy, Zap } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { GameLauncher, PatchLauncher } from "@/components/games-provider";
+import {
+  GameLauncher,
+  PatchLauncher,
+  SocLauncher,
+} from "@/components/games-provider";
 import { getTopScores, formatScoreTime } from "@/lib/scores";
 import { getTopReactions } from "@/lib/reactions";
+import { getTopSoc } from "@/lib/soc";
 import { medal } from "@/lib/medals";
 
 export const dynamic = "force-dynamic";
@@ -101,9 +106,10 @@ function Board({
 }
 
 export default async function LeaderboardPage() {
-  const [memory, reactions] = await Promise.all([
+  const [memory, reactions, soc] = await Promise.all([
     getTopScores(100),
     getTopReactions(100),
+    getTopSoc(100),
   ]);
 
   const memoryRows: Row[] = memory.map((s) => ({
@@ -115,6 +121,11 @@ export default async function LeaderboardPage() {
     name: s.name,
     avatar: s.avatar,
     value: `${s.best_ms} ms`,
+  }));
+  const socRows: Row[] = soc.map((s) => ({
+    name: s.name,
+    avatar: s.avatar,
+    value: `${s.best_score} pts`,
   }));
 
   return (
@@ -135,7 +146,7 @@ export default async function LeaderboardPage() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-8">
+        <div className="mt-12 grid gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           <Board
             title="Memory match"
             icon={<Gamepad2 className="size-5 text-brand-pink" />}
@@ -149,6 +160,13 @@ export default async function LeaderboardPage() {
             rows={reactionRows}
             empty="No times yet — set the first one!"
             play={<PatchLauncher className={PLAY_BTN} label="Play" />}
+          />
+          <Board
+            title="Defender SOC"
+            icon={<ShieldCheck className="size-5 text-brand-pink" />}
+            rows={socRows}
+            empty="No shifts logged yet — set the first score!"
+            play={<SocLauncher className={PLAY_BTN} label="Play" />}
           />
         </div>
 

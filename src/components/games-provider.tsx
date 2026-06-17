@@ -8,12 +8,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Gamepad2, Zap } from "lucide-react";
+import { Gamepad2, ShieldCheck, Zap } from "lucide-react";
 import { MemoryGame } from "@/components/memory-game";
 import { PatchGame } from "@/components/patch-game";
+import { SocGame } from "@/components/soc-game";
 import { GamesChooser } from "@/components/games-chooser";
 
-type GameName = "memory" | "patch";
+type GameName = "memory" | "patch" | "soc";
 type OpenState = GameName | "chooser" | null;
 
 interface GamesContextValue {
@@ -46,7 +47,13 @@ export function GamesProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const hash = window.location.hash;
     const game: GameName | null =
-      hash === "#play" ? "memory" : hash === "#patch" ? "patch" : null;
+      hash === "#play"
+        ? "memory"
+        : hash === "#patch"
+          ? "patch"
+          : hash === "#soc"
+            ? "soc"
+            : null;
     if (!game) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setOpen(game);
@@ -61,6 +68,7 @@ export function GamesProvider({ children }: { children: ReactNode }) {
       )}
       {open === "memory" && <MemoryGame onClose={closeGame} />}
       {open === "patch" && <PatchGame onClose={closeGame} />}
+      {open === "soc" && <SocGame onClose={closeGame} />}
     </GamesContext.Provider>
   );
 }
@@ -139,6 +147,29 @@ export function PatchLauncher({
       className={className ?? defaultLauncherClass}
     >
       <Zap className="size-4" />
+      {label}
+    </button>
+  );
+}
+
+/** Opens the Defender SOC triage game. */
+export function SocLauncher({
+  className,
+  onOpen,
+  label = "Defender SOC",
+}: LauncherProps) {
+  const { openGame } = useGames();
+  return (
+    <button
+      type="button"
+      aria-label="Play Defender SOC"
+      onClick={() => {
+        openGame("soc");
+        onOpen?.();
+      }}
+      className={className ?? defaultLauncherClass}
+    >
+      <ShieldCheck className="size-4" />
       {label}
     </button>
   );

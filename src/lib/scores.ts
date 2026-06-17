@@ -1,7 +1,4 @@
-const supabaseUrl =
-  process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceKey =
-  process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
+import { getTopGame } from "@/lib/leaderboards";
 
 export interface ScoreRow {
   name: string;
@@ -10,24 +7,16 @@ export interface ScoreRow {
   avatar?: string | null;
 }
 
+export const MEMORY_ORDER = "moves.asc,time_seconds.asc";
+
 /** Top scores, ranked by fewest moves then fastest time. */
-export async function getTopScores(limit = 10): Promise<ScoreRow[]> {
-  if (!supabaseUrl || !serviceKey) return [];
-  const capped = Math.min(Math.max(1, Math.trunc(limit)), 100);
-  try {
-    const res = await fetch(
-      `${supabaseUrl}/rest/v1/scores?select=name,moves,time_seconds,avatar&order=moves.asc,time_seconds.asc&limit=${capped}`,
-      {
-        headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
-        cache: "no-store",
-      },
-    );
-    if (!res.ok) return [];
-    const data: unknown = await res.json();
-    return Array.isArray(data) ? (data as ScoreRow[]) : [];
-  } catch {
-    return [];
-  }
+export function getTopScores(limit = 10): Promise<ScoreRow[]> {
+  return getTopGame<ScoreRow>(
+    "scores",
+    "name,moves,time_seconds,avatar",
+    MEMORY_ORDER,
+    limit,
+  );
 }
 
 export function formatScoreTime(total: number): string {
