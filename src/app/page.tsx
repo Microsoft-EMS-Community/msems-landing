@@ -385,7 +385,13 @@ export default async function Home() {
                   label: "Online now",
                   live: Boolean(onlineLabel),
                 },
-                { node: COMMUNITY.founded, label: "Established", live: false },
+                {
+                  // Abbreviate the month ("August 2022" -> "Aug 2022") so the
+                  // long value fits the narrow stat card on mobile.
+                  node: COMMUNITY.founded.replace(/^(\S{3})\S*/, "$1"),
+                  label: "Established",
+                  live: false,
+                },
                 {
                   node: <CountUp value={100} suffix="%" />,
                   label: "Community-run",
@@ -394,9 +400,9 @@ export default async function Home() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-center sm:p-6"
                 >
-                  <div className="brand-gradient-text text-3xl font-bold">
+                  <div className="brand-gradient-text text-2xl font-bold leading-tight break-words sm:text-3xl">
                     {stat.node}
                   </div>
                   <div className="mt-1 flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
