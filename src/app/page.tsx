@@ -353,11 +353,8 @@ export default async function Home() {
                 {COMMUNITY.name}
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                {COMMUNITY.tagline} On our Discord we discuss, debate, ask
-                questions and help each other, building a great community around
-                Microsoft Security, from Intune and Entra ID to Microsoft
-                Defender XDR. The Summit is the one day a year we get to do it in
-                person.
+                {COMMUNITY.tagline} We help each other out on Discord, and the
+                Summit is our one day a year to meet in person.
               </p>
               <Button
                 render={

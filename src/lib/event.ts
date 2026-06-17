@@ -56,7 +56,7 @@ export const COMMUNITY = {
   members: "2,775+",
   founded: "August 2022",
   tagline:
-    "A professional community for enthusiasts and administrators of the Microsoft Enterprise Mobility + Security stack.",
+    "A professional community for admins and enthusiasts of the Microsoft Enterprise Mobility + Security stack, from Intune and Entra ID to Microsoft Defender XDR.",
 } as const;
 
 export interface HighlightItem {
