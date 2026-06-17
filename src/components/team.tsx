@@ -99,6 +99,18 @@ function MemberCard({ member, index }: { member: TeamMember; index: number }) {
 }
 
 export function Team() {
+  // Build groups with a continuous global index so the gradient "snake"
+  // flows top-left through every card in reading order, not per-group.
+  let runningIndex = 0;
+  const groups = GROUPS.map((group) => {
+    const members = TEAM.filter(
+      (member) => member.role === group.role,
+    ).sort((a, b) => a.name.localeCompare(b.name));
+    const startIndex = runningIndex;
+    runningIndex += members.length;
+    return { ...group, members, startIndex };
+  });
+
   return (
     <section
       id="team"
@@ -113,22 +125,19 @@ export function Team() {
         </p>
       </div>
 
-      {GROUPS.map((group) => {
-        const members = TEAM.filter(
-          (member) => member.role === group.role,
-        ).sort((a, b) => a.name.localeCompare(b.name));
-        if (!members.length) return null;
+      {groups.map((group) => {
+        if (!group.members.length) return null;
         return (
           <div key={group.role} className="mt-10">
             <h3 className="text-sm uppercase tracking-widest text-muted-foreground">
               {group.label}
             </h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {members.map((member, index) => (
+              {group.members.map((member, index) => (
                 <MemberCard
                   key={member.handle}
                   member={member}
-                  index={index}
+                  index={group.startIndex + index}
                 />
               ))}
             </div>
