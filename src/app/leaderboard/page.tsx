@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Trophy } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -53,6 +54,20 @@ export default async function LeaderboardPage() {
                 >
                   {i + 1}
                 </span>
+                {s.avatar ? (
+                  <Image
+                    src={s.avatar}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="size-8 shrink-0 rounded-full"
+                    unoptimized
+                  />
+                ) : (
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/10 text-xs font-semibold text-muted-foreground">
+                    {s.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
                 <span className="flex-1 truncate font-medium">{s.name}</span>
                 <span className="shrink-0 text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">

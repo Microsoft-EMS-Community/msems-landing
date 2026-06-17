@@ -7,6 +7,7 @@ export interface ScoreRow {
   name: string;
   moves: number;
   time_seconds: number;
+  avatar?: string | null;
 }
 
 /** Top scores, ranked by fewest moves then fastest time. */
@@ -15,7 +16,7 @@ export async function getTopScores(limit = 10): Promise<ScoreRow[]> {
   const capped = Math.min(Math.max(1, Math.trunc(limit)), 100);
   try {
     const res = await fetch(
-      `${supabaseUrl}/rest/v1/scores?select=name,moves,time_seconds&order=moves.asc,time_seconds.asc&limit=${capped}`,
+      `${supabaseUrl}/rest/v1/scores?select=name,moves,time_seconds,avatar&order=moves.asc,time_seconds.asc&limit=${capped}`,
       {
         headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
         cache: "no-store",

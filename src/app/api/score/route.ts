@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getTopScores, formatScoreTime } from "@/lib/scores";
+import { getSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +10,13 @@ const serviceKey =
   process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 interface ScoreBody {
-  name?: unknown;
   moves?: unknown;
   time?: unknown;
+}
+
+interface ExistingScore {
+  moves: number;
+  time_seconds: number;
 }
 
 function restHeaders(key: string) {
@@ -22,6 +27,15 @@ function restHeaders(key: string) {
   };
 }
 
+/** A run beats the stored one on fewer moves, then faster time. */
+function isBetter(
+  moves: number,
+  time: number,
+  prev: ExistingScore,
+): boolean {
+  return moves < prev.moves || (moves === prev.moves && time < prev.time_seconds);
+}
+
 /** Top scores: fewest moves, then fastest time. */
 export async function GET(): Promise<NextResponse> {
   const scores = await getTopScores(10);
@@ -29,6 +43,16 @@ export async function GET(): Promise<NextResponse> {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
+  // Identity comes from the verified session cookie, never from the client,
+  // so a score can't be submitted under another person's name.
+  const user = await getSession();
+  if (!user) {
+    return NextResponse.json(
+      { ok: false, error: "Log in with Discord to submit a score." },
+      { status: 401 },
+    );
+  }
+
   let body: ScoreBody;
   try {
     body = (await request.json()) as ScoreBody;
@@ -36,17 +60,11 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  // Collapse whitespace, trim, cap length (keeps spaces, drops tabs/newlines).
-  const name =
-    typeof body.name === "string"
-      ? body.name.replace(/\s+/g, " ").trim().slice(0, 24)
-      : "";
   const moves = Number(body.moves);
   const time = Number(body.time);
 
   // Sanity bounds: 6 pairs => 6 minimum moves; cap to keep it tidy.
   const valid =
-    name.length >= 1 &&
     Number.isInteger(moves) &&
     moves >= 6 &&
     moves <= 500 &&
@@ -61,29 +79,63 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
   }
 
+  // No DB configured: accept so the UI still works in local/dev.
   if (!supabaseUrl || !serviceKey) {
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, improved: true });
   }
 
   try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/scores`, {
-      method: "POST",
-      headers: { ...restHeaders(serviceKey), Prefer: "return=minimal" },
-      body: JSON.stringify({ name, moves, time_seconds: time }),
-    });
-    if (!res.ok) throw new Error(`Supabase ${res.status}`);
+    const base = `${supabaseUrl}/rest/v1/scores`;
+    const idFilter = `discord_id=eq.${encodeURIComponent(user.id)}`;
 
-    // Optional: announce the finish to a Discord channel (off until the
-    // webhook URL is configured). allowed_mentions is empty so a player's
-    // name can never trigger @everyone/role pings.
+    // One row per Discord user — look up their current best.
+    const existingRes = await fetch(
+      `${base}?${idFilter}&select=moves,time_seconds&limit=1`,
+      { headers: restHeaders(serviceKey), cache: "no-store" },
+    );
+    if (!existingRes.ok) throw new Error(`Supabase ${existingRes.status}`);
+    const existing = (await existingRes.json()) as ExistingScore[];
+    const prev = existing[0];
+
+    const row = {
+      discord_id: user.id,
+      name: user.username,
+      avatar: user.avatar,
+      moves,
+      time_seconds: time,
+    };
+
+    let improved: boolean;
+    if (!prev) {
+      const insertRes = await fetch(base, {
+        method: "POST",
+        headers: { ...restHeaders(serviceKey), Prefer: "return=minimal" },
+        body: JSON.stringify(row),
+      });
+      if (!insertRes.ok) throw new Error(`Supabase ${insertRes.status}`);
+      improved = true;
+    } else if (isBetter(moves, time, prev)) {
+      const updateRes = await fetch(`${base}?${idFilter}`, {
+        method: "PATCH",
+        headers: { ...restHeaders(serviceKey), Prefer: "return=minimal" },
+        body: JSON.stringify(row),
+      });
+      if (!updateRes.ok) throw new Error(`Supabase ${updateRes.status}`);
+      improved = true;
+    } else {
+      improved = false; // kept their existing, better score
+    }
+
+    // Announce only genuine new/improved entries to Discord (no spam from
+    // repeated non-improving plays). Off until the webhook URL is set.
     const webhook = process.env.DISCORD_WEBHOOK_URL;
-    if (webhook) {
+    if (improved && webhook) {
       try {
         await fetch(webhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            content: `🎮 **${name}** cleared the EMS Memory game in **${moves} moves** · ${formatScoreTime(time)}`,
+            content: `🥇 **${user.username}** ${prev ? "improved to" : "scored"} **${moves} moves** · ${formatScoreTime(time)} in the EMS Memory game`,
             allowed_mentions: { parse: [] },
           }),
         });
@@ -92,7 +144,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       }
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, improved });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Could not save score." },

@@ -2,12 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Gamepad2, RotateCcw, Trophy, X } from "lucide-react";
+import { Gamepad2, LogOut, RotateCcw, Trophy, X } from "lucide-react";
 
 // EMS/security-flavoured faces (6 pairs).
 const FACES = ["🛡️", "🔐", "☁️", "📱", "🆔", "⚙️"];
 const BEST_KEY = "msems-memory-best";
-const NAME_KEY = "msems-memory-name";
 
 interface Card {
   id: number;
@@ -25,6 +24,13 @@ interface Score {
   name: string;
   moves: number;
   time_seconds: number;
+  avatar?: string | null;
+}
+
+interface AuthUser {
+  id: string;
+  username: string;
+  avatar: string | null;
 }
 
 function shuffle<T>(input: readonly T[]): T[] {
@@ -51,6 +57,15 @@ function formatTime(total: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+/** Discord wordmark glyph (lucide has no Discord icon). */
+function DiscordIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 127.14 96.36" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z" />
+    </svg>
+  );
+}
+
 interface GameLauncherProps {
   className?: string;
   onOpen?: () => void;
@@ -65,6 +80,16 @@ export function GameLauncher({
   label = "Bored? Play Memory",
 }: GameLauncherProps) {
   const [open, setOpen] = useState(false);
+
+  // Reopen automatically after a Discord login round-trip (`/path#play`).
+  useEffect(() => {
+    if (window.location.hash !== "#play") return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOpen(true);
+    onOpen?.();
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }, [onOpen]);
+
   return (
     <>
       <button
@@ -98,14 +123,9 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
   const [best, setBest] = useState<Best | null>(null);
   const [board, setBoard] = useState<Score[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  // Pre-fill the name from a previous play (modal is client-only, no SSR).
-  const [name, setName] = useState<string>(() => {
-    try {
-      return localStorage.getItem(NAME_KEY) ?? "";
-    } catch {
-      return "";
-    }
-  });
+  const [improved, setImproved] = useState(true);
+  // Verified Discord identity (null = logged out, undefined = still checking).
+  const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
   const savedRef = useRef(false);
 
   const won = deck.length > 0 && deck.every((c) => c.matched);
@@ -125,6 +145,22 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadLeaderboard();
   }, [loadLeaderboard]);
+
+  // Who's logged in (verified server-side from the session cookie).
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { user?: AuthUser | null }) => {
+        if (alive) setUser(d.user ?? null);
+      })
+      .catch(() => {
+        if (alive) setUser(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // Load best score once.
   useEffect(() => {
@@ -153,7 +189,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // On win: save local best and auto-submit the score (name entered up front).
+  // On win: save local best and submit the score (identity from the session).
   useEffect(() => {
     if (!won || savedRef.current) return;
     savedRef.current = true;
@@ -178,9 +214,11 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
         const res = await fetch("/api/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: name.trim(), moves, time: seconds }),
+          body: JSON.stringify({ moves, time: seconds }),
         });
         if (res.ok) {
+          const data: { improved?: boolean } = await res.json();
+          setImproved(data.improved !== false);
           setSubmitted(true);
           await loadLeaderboard();
         }
@@ -188,16 +226,10 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
         // best-effort
       }
     })();
-  }, [won, moves, seconds, name, loadLeaderboard]);
+  }, [won, moves, seconds, loadLeaderboard]);
 
   function start() {
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    try {
-      localStorage.setItem(NAME_KEY, trimmed);
-    } catch {
-      // ignore
-    }
+    if (!user) return;
     savedRef.current = false;
     setDeck(newDeck());
     setFlipped([]);
@@ -206,6 +238,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     setLocked(false);
     setActive(false);
     setSubmitted(false);
+    setImproved(true);
     setStarted(true);
   }
 
@@ -218,6 +251,17 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     setLocked(false);
     setActive(false);
     setSubmitted(false);
+    setImproved(true);
+  }
+
+  async function logout() {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // ignore
+    }
+    setUser(null);
+    setStarted(false);
   }
 
   function flip(id: number) {
@@ -257,6 +301,11 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     }
   }
 
+  const loginHref =
+    typeof window !== "undefined"
+      ? `/api/auth/discord?return_to=${encodeURIComponent(window.location.pathname + "#play")}`
+      : "/api/auth/discord";
+
   const leaderboard = (
     <div className="mt-4">
       <h3 className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
@@ -293,6 +342,56 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     </div>
   );
 
+  const startScreen = (
+    <div className="mt-4">
+      <p className="text-sm text-muted-foreground">
+        Match all six pairs in as few moves as you can. It&apos;s a real
+        competition, so scores are tied to your Discord account, one entry each.
+      </p>
+
+      {user === undefined ? (
+        <div className="mt-3 h-11 animate-pulse rounded-xl bg-white/5" />
+      ) : user ? (
+        <>
+          <div className="mt-3 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm">
+            <span className="truncate">
+              Playing as{" "}
+              <span className="font-semibold text-foreground">
+                {user.username}
+              </span>
+            </span>
+            <button
+              type="button"
+              onClick={logout}
+              className="ml-2 inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <LogOut className="size-3.5" />
+              Log out
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={start}
+            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl brand-gradient-bg py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          >
+            <Gamepad2 className="size-4" />
+            Start game
+          </button>
+        </>
+      ) : (
+        <a
+          href={loginHref}
+          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#5865F2] py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+        >
+          <DiscordIcon className="size-4" />
+          Log in with Discord to play
+        </a>
+      )}
+
+      {leaderboard}
+    </div>
+  );
+
   const modal = (
     <div
       className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
@@ -321,32 +420,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
         </div>
 
         {!started ? (
-          <div className="mt-4">
-            <p className="text-sm text-muted-foreground">
-              Match all six pairs in as few moves as you can. Enter your name to
-              get on the leaderboard.
-            </p>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") start();
-              }}
-              maxLength={24}
-              placeholder="Your name"
-              className="mt-3 h-11 w-full rounded-xl border border-white/15 bg-white/5 px-4 text-sm text-foreground outline-none focus:border-brand-pink/60"
-            />
-            <button
-              type="button"
-              onClick={start}
-              disabled={!name.trim()}
-              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl brand-gradient-bg py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-            >
-              <Gamepad2 className="size-4" />
-              Start game
-            </button>
-            {leaderboard}
-          </div>
+          startScreen
         ) : (
           <>
             <div className="mt-3 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm">
@@ -408,9 +482,11 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
                   Solved! {moves} moves · {formatTime(seconds)}
                 </p>
                 <p className="mt-1 text-muted-foreground">
-                  {submitted
-                    ? `Saved to the leaderboard as ${name.trim()}.`
-                    : "Saving your score…"}
+                  {!submitted
+                    ? "Saving your score…"
+                    : improved
+                      ? `Saved to the leaderboard as ${user?.username ?? "you"}.`
+                      : "Not your best run, so your top score stands."}
                 </p>
               </div>
             ) : null}
