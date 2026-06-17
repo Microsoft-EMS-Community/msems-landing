@@ -2,31 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import { Gamepad2, LogOut, RotateCcw, Trophy, X } from "lucide-react";
 
-// Microsoft EMS product faces (6 pairs). The icon files live in
-// /public/games — swap them for the official product icons any time.
-interface CardFace {
-  key: string;
-  label: string;
-  src: string;
-}
-
-const FACES: readonly CardFace[] = [
-  { key: "intune", label: "Microsoft Intune", src: "/games/intune.svg" },
-  { key: "entra", label: "Microsoft Entra ID", src: "/games/entra.svg" },
-  { key: "defender", label: "Microsoft Defender", src: "/games/defender.svg" },
-  { key: "purview", label: "Microsoft Purview", src: "/games/purview.svg" },
-  { key: "windows", label: "Windows", src: "/games/windows.svg" },
-  { key: "azure", label: "Microsoft Azure", src: "/games/azure.svg" },
-];
-
+// EMS/security-flavoured faces (6 pairs). Product icons live in /public/games
+// for a future swap (see that folder's README).
+const FACES = ["🛡️", "🔐", "☁️", "📱", "🆔", "⚙️"];
 const BEST_KEY = "msems-memory-best";
 
 interface Card {
   id: number;
-  face: CardFace;
+  face: string;
   flipped: boolean;
   matched: boolean;
 }
@@ -297,11 +282,9 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
     setMoves((m) => m + 1);
     setDeck((d) => d.map((c) => (c.id === id ? { ...c, flipped: true } : c)));
 
-    if (first && first.face.key === card.face.key) {
+    if (first && first.face === card.face) {
       setDeck((d) =>
-        d.map((c) =>
-          c.face.key === card.face.key ? { ...c, matched: true } : c,
-        ),
+        d.map((c) => (c.face === card.face ? { ...c, matched: true } : c)),
       );
       setFlipped([]);
     } else {
@@ -465,7 +448,7 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
                     key={card.id}
                     type="button"
                     onClick={() => flip(card.id)}
-                    aria-label={shown ? card.face.label : "Hidden card"}
+                    aria-label={shown ? card.face : "Hidden card"}
                     className="aspect-square [perspective:600px]"
                   >
                     <div
@@ -477,22 +460,15 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
                         <span className="text-lg font-bold">?</span>
                       </div>
                       <div
-                        className={`absolute inset-0 grid place-items-center rounded-xl bg-white p-2 [backface-visibility:hidden] [transform:rotateY(180deg)] ${
-                          card.matched ? "ring-2 ring-brand-pink" : ""
+                        className={`absolute inset-0 grid place-items-center rounded-xl text-2xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${
+                          card.matched
+                            ? "brand-gradient-bg"
+                            : "border border-brand-pink/40 bg-brand-pink/10"
                         }`}
                       >
                         {/* Only render the face when revealed, so the board
                             can't be solved by peeking at the DOM. */}
-                        {shown ? (
-                          <Image
-                            src={card.face.src}
-                            alt={card.face.label}
-                            width={48}
-                            height={48}
-                            className="h-full w-full object-contain"
-                            unoptimized
-                          />
-                        ) : null}
+                        {shown ? card.face : null}
                       </div>
                     </div>
                   </button>
