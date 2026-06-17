@@ -97,9 +97,7 @@ export function Team() {
           The people behind it
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          The Microsoft EMS Community is run by volunteers. Members marked{" "}
-          <span className="font-medium text-brand-pink">Event team</span> are
-          organising the Summit.
+          The Microsoft EMS Community is run by volunteers.
         </p>
       </div>
 
