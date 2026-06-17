@@ -493,7 +493,9 @@ function MemoryGame({ onClose }: { onClose: () => void }) {
                             can't be solved by peeking at the DOM. */}
                         {shown ? (
                           <Image
-                            src={card.face.src}
+                            // ?v bust: these filenames briefly served placeholder
+                            // tiles; bump the version when an icon file changes.
+                            src={`${card.face.src}?v=2`}
                             alt={card.face.label}
                             width={48}
                             height={48}
