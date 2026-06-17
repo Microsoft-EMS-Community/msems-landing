@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import crypto from "node:crypto";
+import { SITE_URL } from "@/lib/event";
 
 export const dynamic = "force-dynamic";
 
@@ -8,13 +9,25 @@ const STATE_COOKIE = "ems_oauth_state";
 const RETURN_COOKIE = "ems_oauth_return";
 
 /**
+ * In production the origin is pinned to the canonical domain so the OAuth
+ * redirect_uri always matches what's registered with Discord, even behind a
+ * proxy (Cloudflare). In dev it follows the request (localhost).
+ */
+function appOrigin(request: NextRequest): string {
+  return process.env.NODE_ENV === "production"
+    ? SITE_URL
+    : request.nextUrl.origin;
+}
+
+/**
  * Start the Discord OAuth2 authorization-code flow.
  * Sets a short-lived, signed `state` cookie for CSRF protection (validated in
  * the callback) and remembers where to send the user back to.
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const clientId = process.env.DISCORD_CLIENT_ID;
-  const { origin, searchParams } = request.nextUrl;
+  const origin = appOrigin(request);
+  const { searchParams } = request.nextUrl;
 
   if (!clientId) {
     return NextResponse.redirect(`${origin}/?login=unconfigured`);

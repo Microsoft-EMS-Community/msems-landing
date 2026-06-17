@@ -5,8 +5,16 @@ import {
   SESSION_MAX_AGE,
   type DiscordUser,
 } from "@/lib/auth";
+import { SITE_URL } from "@/lib/event";
 
 export const dynamic = "force-dynamic";
+
+/** Must match the origin used to build the authorize redirect_uri. */
+function appOrigin(request: NextRequest): string {
+  return process.env.NODE_ENV === "production"
+    ? SITE_URL
+    : request.nextUrl.origin;
+}
 
 const TOKEN_URL = "https://discord.com/api/oauth2/token";
 const USER_URL = "https://discord.com/api/users/@me";
@@ -31,7 +39,8 @@ interface DiscordApiUser {
  * home with `?login=error` rather than leaking details.
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const { origin, searchParams } = request.nextUrl;
+  const origin = appOrigin(request);
+  const { searchParams } = request.nextUrl;
   const fail = () => NextResponse.redirect(`${origin}/?login=error`);
 
   const clientId = process.env.DISCORD_CLIENT_ID;
