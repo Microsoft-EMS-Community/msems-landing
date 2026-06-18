@@ -558,7 +558,10 @@ export default async function Home() {
         id="notify"
         className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-24 sm:px-6"
       >
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] px-6 py-16 text-center sm:px-10">
+        <div
+          id="notify-card"
+          className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] px-6 py-16 text-center sm:px-10"
+        >
           <div className="aurora-blob absolute -left-10 top-0 h-56 w-56 rounded-full bg-brand-pink/25 blur-[90px]" />
           <div
             className="aurora-blob absolute -right-10 bottom-0 h-56 w-56 rounded-full bg-brand-teal/25 blur-[90px]"

@@ -18,15 +18,25 @@ export function FlyingBird() {
     timer.current = window.setTimeout(() => setShow(false), 6000);
   }
 
-  // Briefly glow the signup form so it's clear where to act.
+  // Send people to the nearest signup form and glow it, without ever scrolling
+  // backward: flash the hero form in place if it's still on screen, otherwise
+  // scroll down to the final signup and blink that instead.
   function flashSignup() {
     setShow(false);
-    const el = document.getElementById("signup-top");
-    if (!el) return;
-    el.classList.remove("signup-flash");
-    void el.offsetWidth; // restart the animation on repeat clicks
-    el.classList.add("signup-flash");
-    window.setTimeout(() => el.classList.remove("signup-flash"), 2300);
+    const hero = document.getElementById("signup-top");
+    // Hero form scrolled off the top (below the sticky header)? Go forward.
+    const heroPast = hero ? hero.getBoundingClientRect().bottom < 120 : true;
+    const target = heroPast
+      ? document.getElementById("notify-card")
+      : hero;
+    if (!target) return;
+    if (heroPast) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    target.classList.remove("signup-flash");
+    void target.offsetWidth; // restart the animation on repeat clicks
+    target.classList.add("signup-flash");
+    window.setTimeout(() => target.classList.remove("signup-flash"), 2300);
   }
 
   return (
@@ -68,14 +78,14 @@ export function FlyingBird() {
       </button>
 
       {show && (
-        <a
-          href="#signup-top"
+        <button
+          type="button"
           onClick={flashSignup}
           className="pointer-events-auto fixed left-1/2 top-28 z-[60] inline-flex -translate-x-1/2 items-center gap-2 rounded-full brand-gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-2xl"
         >
           <Ticket className="size-4" />
           You caught the early bird! Get notified before seats fly →
-        </a>
+        </button>
       )}
     </div>
   );
