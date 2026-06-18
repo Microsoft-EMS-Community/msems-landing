@@ -117,6 +117,13 @@ export default function PoliciesPage() {
                 </li>
               </ul>
               <p>
+                To run the site and the event we rely on a few trusted
+                providers, who process data only to deliver their service:
+                Vercel (hosting), Supabase (database for the game leaderboards),
+                Cloudflare (content delivery and cookieless analytics), Weeztix
+                (ticketing) and Discord (optional game sign-in).
+              </p>
+              <p>
                 You can ask us to access or delete your data at any time, just
                 get in touch.
               </p>
