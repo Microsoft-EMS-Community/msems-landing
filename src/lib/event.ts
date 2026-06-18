@@ -84,7 +84,7 @@ export const HIGHLIGHTS: readonly HighlightItem[] = [
   {
     title: "Independent, no agenda",
     description:
-      "Not-for-profit, community-run and sponsor-free, so the sessions are honest, real-world takes on the Microsoft stack: what works and what doesn't.",
+      "Not-for-profit, community-run and sponsor-free. No booths, no badge scans, no 'quick word from our partners', just honest, real-world takes on what works and what doesn't.",
   },
   {
     title: "Optional evening",
