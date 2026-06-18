@@ -31,8 +31,25 @@ const KIND_META: Record<AgendaKind, { label: string; icon: typeof Coffee }> = {
   closing: { label: "Closing", icon: Hand },
 };
 
-// Short connective moments render as slim one-line rows, not full cards.
-const COMPACT: ReadonlySet<AgendaKind> = new Set(["changeover", "break"]);
+function durationMin(item: AgendaItem): number | null {
+  if (!item.endTime) return null;
+  const toMin = (t: string) => {
+    const [h, m] = t.split(":").map(Number);
+    return h * 60 + m;
+  };
+  return toMin(item.endTime) - toMin(item.time);
+}
+
+// Slim one-line rows for the connective tissue: changeovers and short coffee
+// breaks. Lunch (a full hour) stays a proper card.
+function isCompact(item: AgendaItem): boolean {
+  if (item.kind === "changeover") return true;
+  if (item.kind === "break") {
+    const dur = durationMin(item);
+    return dur !== null && dur <= 30;
+  }
+  return false;
+}
 
 function timeRange(item: AgendaItem): string {
   return item.endTime
@@ -102,7 +119,7 @@ function Column({ label, items }: { label: string; items: AgendaItem[] }) {
       </h3>
       <ol className="space-y-2">
         {items.map((item) =>
-          COMPACT.has(item.kind) ? (
+          isCompact(item) ? (
             <CompactRow key={`${item.time}-${item.title}`} item={item} />
           ) : (
             <FullRow key={`${item.time}-${item.title}`} item={item} />
@@ -126,9 +143,9 @@ export async function Agenda() {
       ? [...anchors, ...liveTalks].sort((a, b) => a.time.localeCompare(b.time))
       : AGENDA;
 
-  // Split the day into two columns at lunchtime so it fits a screen.
-  const morning = items.filter((i) => i.time < "12:25");
-  const afternoon = items.filter((i) => i.time >= "12:25");
+  // Split the day into two balanced columns: morning closes with lunch.
+  const morning = items.filter((i) => i.time <= "12:25");
+  const afternoon = items.filter((i) => i.time > "12:25");
 
   const note =
     liveTalks.length > 0
