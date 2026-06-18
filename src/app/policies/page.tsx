@@ -19,7 +19,6 @@ const PROVIDERS: ReadonlyArray<{ name: string; use: string; region: string }> = 
   { name: "Cloudflare", use: "Content delivery & cookieless analytics", region: "Global (US)" },
   { name: "Supabase", use: "Game leaderboards", region: "EU" },
   { name: "Weeztix", use: "Ticketing", region: "EU (Netherlands)" },
-  { name: "Discord", use: "Optional game sign-in", region: "US" },
   { name: "Microsoft Denmark", use: "Venue guest list", region: "EU" },
 ];
 
@@ -115,9 +114,12 @@ export default function PoliciesPage() {
                   <span className="font-medium text-foreground">
                     Community games.
                   </span>{" "}
-                  The optional Discord login on our mini-games stores your Discord
-                  display name, avatar and score so we can show the leaderboards.
-                  Ask us and we&apos;ll delete it.
+                  The mini-games offer an optional sign-in with your existing
+                  Discord account. We only receive your public Discord name and
+                  avatar, and store them with your score to show the
+                  leaderboards. Your Discord account itself is governed by
+                  Discord, not us. Ask us and we&apos;ll delete your leaderboard
+                  entry.
                 </li>
                 <li>
                   <span className="font-medium text-foreground">Analytics.</span>{" "}
