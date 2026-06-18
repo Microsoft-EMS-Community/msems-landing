@@ -12,6 +12,7 @@ interface SpeakerSession {
 interface SessionizeSpeaker {
   fullName?: string;
   tagLine?: string;
+  bio?: string | null;
   profilePicture?: string | null;
   sessions?: SpeakerSession[];
   links?: SessionizeLink[];
@@ -58,6 +59,7 @@ export async function getSessionizeSpeakers(): Promise<Speaker[]> {
           name: s.fullName!.trim(),
           title: s.tagLine?.trim() || undefined,
           session: session || undefined,
+          bio: s.bio?.trim() || undefined,
           photo: s.profilePicture || undefined,
           linkedin: linkedin || undefined,
         } satisfies Speaker;

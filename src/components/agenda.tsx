@@ -17,11 +17,21 @@ const KIND_META: Record<
 };
 
 export async function Agenda() {
-  // Use the live Sessionize schedule once it's published; otherwise the
-  // hand-curated running order.
-  const live = await getSessionizeAgenda();
-  const items: readonly AgendaItem[] = live.length > 0 ? live : AGENDA;
-  const note = live.length > 0 ? "Times shown in local time. Subject to change." : AGENDA_NOTE;
+  // Merge: keep the curated fixed anchors (doors, lunch, CloudHour, social)
+  // and slot the live Sessionize talks between them by time. Until a schedule
+  // is published there are no live talks, so the full curated AGENDA shows.
+  const liveTalks = (await getSessionizeAgenda()).filter(
+    (i) => i.kind === "sessions",
+  );
+  const anchors = AGENDA.filter((a) => a.kind !== "sessions");
+  const items: readonly AgendaItem[] =
+    liveTalks.length > 0
+      ? [...anchors, ...liveTalks].sort((a, b) => a.time.localeCompare(b.time))
+      : AGENDA;
+  const note =
+    liveTalks.length > 0
+      ? "Talks confirmed via Sessionize. Times shown in local time and may change."
+      : AGENDA_NOTE;
 
   return (
     <section

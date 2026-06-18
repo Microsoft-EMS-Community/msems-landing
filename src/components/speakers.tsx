@@ -87,6 +87,15 @@ export async function Speakers() {
           )}
         </div>
       )}
+
+      <div className="mt-8 text-center">
+        <a
+          href="/speakers"
+          className="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+        >
+          See the full speaker lineup →
+        </a>
+      </div>
     </section>
   );
 }

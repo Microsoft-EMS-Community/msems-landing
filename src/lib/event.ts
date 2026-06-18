@@ -195,6 +195,8 @@ export interface Speaker {
   readonly title?: string;
   /** Session title. */
   readonly session?: string;
+  /** Short speaker bio. */
+  readonly bio?: string;
   /** Photo path in /public, e.g. /speakers/jane-doe.jpg. */
   readonly photo?: string;
   readonly linkedin?: string;
