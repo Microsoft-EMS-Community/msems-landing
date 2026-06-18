@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
+import { cardFonts } from "@/lib/og-font";
 
 // A 1080x1350 "I'm attending, are you?" card for attendees to post.
 export const dynamic = "force-static";
@@ -23,6 +24,10 @@ export async function GET() {
   const logoSrc = `data:image/png;base64,${logoBytes.toString("base64")}`;
   const shareLabel = SHARE_LINK.replace(/^https?:\/\//, "");
 
+  const fonts = await cardFonts();
+  const body = fonts.length ? "Inter" : "sans-serif";
+  const display = fonts.length ? "Space Grotesk" : "sans-serif";
+
   return new ImageResponse(
     (
       <div
@@ -37,7 +42,7 @@ export async function GET() {
           background:
             "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
-          fontFamily: "sans-serif",
+          fontFamily: body,
           position: "relative",
         }}
       >
@@ -58,13 +63,13 @@ export async function GET() {
           <div style={{ fontSize: 34, fontWeight: 600, letterSpacing: 6, textTransform: "uppercase", color: "#cbd5e1" }}>
             {"I'm attending"}
           </div>
-          <div style={{ display: "flex", maxWidth: 880, fontSize: 66, fontWeight: 800, lineHeight: 1.04, letterSpacing: -1, textAlign: "center", backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
+          <div style={{ display: "flex", fontFamily: display, maxWidth: 880, fontSize: 66, fontWeight: 800, lineHeight: 1.04, letterSpacing: -1, textAlign: "center", backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
             {EVENT.name}
           </div>
           <div style={{ display: "flex", maxWidth: 820, fontSize: 30, color: "#e2e8f0", textAlign: "center" }}>
             {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}
           </div>
-          <div style={{ display: "flex", marginTop: 8, fontSize: 40, fontWeight: 800, color: "#f0abfc" }}>
+          <div style={{ display: "flex", fontFamily: display, marginTop: 8, fontSize: 40, fontWeight: 800, color: "#f0abfc" }}>
             Are you?
           </div>
         </div>
@@ -79,6 +84,6 @@ export async function GET() {
         </div>
       </div>
     ),
-    { width: 1080, height: 1350 },
+    { width: 1080, height: 1350, ...(fonts.length ? { fonts } : {}) },
   );
 }

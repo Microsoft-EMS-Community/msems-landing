@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 import { resolvePhoto } from "@/lib/card-photo";
+import { cardFonts } from "@/lib/og-font";
 
 // A 1080x1350 "I'm speaking at" card.
 //  - No name: a generic template with a "Your photo" ring (fill in Canva).
@@ -33,6 +34,10 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
   const logoSrc = `data:image/png;base64,${logoBytes.toString("base64")}`;
   const shareLabel = SHARE_LINK.replace(/^https?:\/\//, "");
 
+  const fonts = await cardFonts();
+  const body = fonts.length ? "Inter" : "sans-serif";
+  const display = fonts.length ? "Space Grotesk" : "sans-serif";
+
   return new ImageResponse(
     (
       <div
@@ -46,7 +51,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
           padding: "104px 64px",
           background: "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
-          fontFamily: "sans-serif",
+          fontFamily: body,
           position: "relative",
         }}
       >
@@ -75,7 +80,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
 
           {personalised ? (
             <>
-              <div style={{ display: "flex", maxWidth: 880, fontSize: 56, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center" }}>
+              <div style={{ display: "flex", fontFamily: display, maxWidth: 880, fontSize: 56, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center" }}>
                 {name}
               </div>
               <div style={{ fontSize: 26, letterSpacing: 4, textTransform: "uppercase", color: "#cbd5e1" }}>
@@ -88,7 +93,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
             </div>
           )}
 
-          <div style={{ display: "flex", maxWidth: 880, fontSize: personalised ? 44 : 62, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center", backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
+          <div style={{ display: "flex", fontFamily: display, maxWidth: 880, fontSize: personalised ? 44 : 62, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center", backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
             {EVENT.name}
           </div>
 
@@ -112,7 +117,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
         </div>
       </div>
     ),
-    { width: 1080, height: 1350 },
+    { width: 1080, height: 1350, ...(fonts.length ? { fonts } : {}) },
   );
 }
 

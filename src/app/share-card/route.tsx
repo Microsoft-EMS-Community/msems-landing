@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
+import { cardFonts } from "@/lib/og-font";
 
 // A 1200x630 branded share graphic, generated on the fly. Used as the page's
 // social preview image and offered as a download on the /share page.
@@ -26,6 +27,10 @@ export async function GET() {
   const logoSrc = `data:image/png;base64,${logoBytes.toString("base64")}`;
   const shareLabel = SHARE_LINK.replace(/^https?:\/\//, "");
 
+  const fonts = await cardFonts();
+  const body = fonts.length ? "Inter" : "sans-serif";
+  const display = fonts.length ? "Space Grotesk" : "sans-serif";
+
   return new ImageResponse(
     (
       <div
@@ -39,7 +44,7 @@ export async function GET() {
           background:
             "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
-          fontFamily: "sans-serif",
+          fontFamily: body,
           position: "relative",
         }}
       >
@@ -98,6 +103,7 @@ export async function GET() {
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <div
             style={{
+              fontFamily: display,
               fontSize: 88,
               fontWeight: 800,
               lineHeight: 1.02,
@@ -108,6 +114,7 @@ export async function GET() {
           </div>
           <div
             style={{
+              fontFamily: display,
               fontSize: 88,
               fontWeight: 800,
               lineHeight: 1.02,
@@ -156,6 +163,6 @@ export async function GET() {
         </div>
       </div>
     ),
-    { width: 1200, height: 630 },
+    { width: 1200, height: 630, ...(fonts.length ? { fonts } : {}) },
   );
 }

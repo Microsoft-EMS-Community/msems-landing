@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 import { resolvePhoto } from "@/lib/card-photo";
+import { cardFonts } from "@/lib/og-font";
 
 // A 1080x1350 "speaker announcement" card for the team.
 //  - GET  ?name=&topic=&photo=  (photo = /public path or https URL)
@@ -31,6 +32,10 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
   const logoSrc = `data:image/png;base64,${logoBytes.toString("base64")}`;
   const shareLabel = SHARE_LINK.replace(/^https?:\/\//, "");
 
+  const fonts = await cardFonts();
+  const body = fonts.length ? "Inter" : "sans-serif";
+  const display = fonts.length ? "Space Grotesk" : "sans-serif";
+
   return new ImageResponse(
     (
       <div
@@ -44,7 +49,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
           padding: "104px 64px",
           background: "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
-          fontFamily: "sans-serif",
+          fontFamily: body,
           position: "relative",
         }}
       >
@@ -75,7 +80,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
               )}
             </div>
           </div>
-          <div style={{ display: "flex", maxWidth: 880, fontSize: 64, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center", backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
+          <div style={{ display: "flex", fontFamily: display, maxWidth: 880, fontSize: 64, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center", backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
             {name}
           </div>
           {topic ? (
@@ -99,7 +104,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
         </div>
       </div>
     ),
-    { width: 1080, height: 1350 },
+    { width: 1080, height: 1350, ...(fonts.length ? { fonts } : {}) },
   );
 }
 
