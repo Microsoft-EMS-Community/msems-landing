@@ -304,6 +304,31 @@
   }
 }
 
+/* "Early bird" that flaps across the hero */
+@keyframes bird-fly {
+  0% { transform: translate(-20vw, 36px); }
+  45% { transform: translate(42vw, -8px); }
+  100% { transform: translate(118vw, 26px); }
+}
+@keyframes bird-flap {
+  0%, 100% { transform: rotate(-20deg); }
+  50% { transform: rotate(30deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bird-fly {
+    animation: bird-fly 16s linear infinite;
+    will-change: transform;
+  }
+  .bird-flap {
+    transform-box: fill-box;
+    transform-origin: 0% 100%;
+    animation: bird-flap 0.4s ease-in-out infinite;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bird-fly { display: none; }
+}
+
 /* Pointer spotlight — soft brand glow following the cursor (set via JS vars) */
 .pointer-glow {
   position: fixed;

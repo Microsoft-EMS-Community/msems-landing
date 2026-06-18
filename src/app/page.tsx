@@ -8,6 +8,7 @@ import {
   Mic,
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
+import { FlyingBird } from "@/components/flying-bird";
 import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
 import { Speakers } from "@/components/speakers";
@@ -104,6 +105,7 @@ export default async function Home() {
       {/* ---------- Hero ---------- */}
       <section className="relative">
         <AuroraBackground />
+        <FlyingBird />
 
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
