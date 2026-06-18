@@ -36,7 +36,7 @@ export function SiteHeader() {
 
           <GamesLauncher
             label={null}
-            className="hidden size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground md:inline-flex"
+            className="game-pulse hidden size-9 items-center justify-center rounded-lg brand-gradient-bg text-white transition-transform hover:scale-105 md:inline-flex"
           />
 
           <div className="hidden md:block">

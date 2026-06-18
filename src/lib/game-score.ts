@@ -27,8 +27,8 @@ export interface MessageCtx {
   improved: boolean;
   /** True when the player already had a stored best. */
   hasPrev: boolean;
-  /** 1-3 if the player is now on the podium, else 0. */
-  podiumRank: number;
+  /** The player's current 1-based rank (0 if outside the top 100). */
+  rank: number;
   /** Name of the player who just lost #1, when applicable. */
   passedName?: string;
 }
@@ -49,12 +49,13 @@ export interface SubmitConfig<Prev> {
   message: (ctx: MessageCtx) => string;
 }
 
-/** Standard suffix: best-stands / podium medal (+ dethrone) / new personal best. */
+/** Standard suffix: best-stands / current place (+ medal + dethrone). */
 export function resultTail(ctx: MessageCtx): string {
   if (!ctx.improved && ctx.hasPrev) return " - best still stands";
-  if (ctx.podiumRank >= 1 && ctx.podiumRank <= 3) {
-    let tail = ` ${medal(ctx.podiumRank)} now #${ctx.podiumRank}`;
-    if (ctx.podiumRank === 1 && ctx.passedName) {
+  if (ctx.rank >= 1) {
+    const m = medal(ctx.rank); // "" outside the podium
+    let tail = ` ${m ? `${m} ` : ""}now #${ctx.rank}`;
+    if (ctx.rank === 1 && ctx.passedName) {
       tail += `, passed ${ctx.passedName}`;
     }
     return tail;
@@ -116,10 +117,11 @@ export async function submitScore<Prev>(
     improved = false;
   }
 
-  let podiumRank = 0;
+  // The player's exact rank (top 100), so we can announce their place.
+  let rank = 0;
   if (improved) {
-    const standings = await topStandings(cfg.table, cfg.order, 3);
-    podiumRank = standings.findIndex((s) => s.discord_id === cfg.user.id) + 1;
+    const standings = await topStandings(cfg.table, cfg.order, 100);
+    rank = standings.findIndex((s) => s.discord_id === cfg.user.id) + 1;
   }
 
   const webhook = process.env.DISCORD_WEBHOOK_URL;
@@ -128,7 +130,7 @@ export async function submitScore<Prev>(
       preLeader && preLeader.discord_id !== cfg.user.id
         ? preLeader.name
         : undefined;
-    const content = cfg.message({ improved, hasPrev, podiumRank, passedName });
+    const content = cfg.message({ improved, hasPrev, rank, passedName });
     if (content) {
       try {
         await fetch(webhook, {

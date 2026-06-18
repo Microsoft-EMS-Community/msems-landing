@@ -270,6 +270,21 @@
   }
 }
 
+/* Game launcher: gradient chip with a soft brand glow so it reads as "play me" */
+@keyframes game-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-brand-purple) 0%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 16px 2px color-mix(in oklch, var(--color-brand-purple) 55%, transparent);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .game-pulse {
+    animation: game-pulse 2.6s ease-in-out infinite;
+  }
+}
+
 /* Scroll progress bar (top, brand gradient) — pure CSS scroll-driven */
 @keyframes scroll-progress {
   from { transform: scaleX(0); }
