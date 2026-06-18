@@ -85,7 +85,7 @@ export default async function Home() {
       },
     },
     description:
-      "A full day of community-led sessions across Intune, Entra ID and Microsoft Defender, plus the CloudHour speaker AMA and an evening social. Open to everyone.",
+      "A full day of community-led sessions across Intune, Entra ID and Microsoft Defender XDR, plus the CloudHour speaker AMA and an evening social. Open to everyone.",
     image: [`${SITE_URL}/share-card`],
     organizer: {
       "@type": "Organization",
@@ -134,7 +134,7 @@ export default async function Home() {
 
               <p className="mx-auto mt-6 max-w-xl text-balance text-lg text-muted-foreground lg:mx-0">
                 A full day of community-led sessions across Intune, Entra ID and
-                Microsoft Defender, hosted at {EVENT.venue}, {EVENT.venueArea}.
+                Microsoft Defender XDR, hosted at {EVENT.venue}, {EVENT.venueArea}.
                 Open to everyone.
               </p>
               <p className="mx-auto mt-4 max-w-xl text-balance text-base italic text-muted-foreground lg:mx-0">

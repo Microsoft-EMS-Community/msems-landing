@@ -29,7 +29,7 @@ export function SocialEvening() {
           </p>
           {!socialAddon.confirmed && (
             <p className="mt-2 text-sm text-muted-foreground">
-              Plans are still being finalised, so the venue may change.
+              Plans are still being finalized, so the venue may change.
             </p>
           )}
           <div className="mt-6 flex flex-wrap items-center gap-3">

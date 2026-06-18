@@ -48,7 +48,7 @@ const TRAVEL: readonly TravelTip[] = [
   {
     icon: Bike,
     title: "Around the city",
-    body: "When you're winding down in town, Copenhagen is flat, compact and famously bike-friendly, with city bikes and e-scooters everywhere and a centre made for walking.",
+    body: "When you're winding down in town, Copenhagen is flat, compact and famously bike-friendly, with city bikes and e-scooters everywhere and a center made for walking.",
   },
 ];
 

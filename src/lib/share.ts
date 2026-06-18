@@ -30,7 +30,7 @@ export const SHARE_POSTS: readonly SharePost[] = [
     note: "Longer and professional. Great for your network.",
     body: `Exciting news: the Microsoft EMS Community Summit is happening! 🎉
 
-Join us on ${EVENT.dateLabel} at ${EVENT.venue}, ${EVENT.venueArea}, for a full day of community-led sessions on Intune, Entra ID and Microsoft Defender, our CloudHour round-table and speaker AMA, and an evening social.
+Join us on ${EVENT.dateLabel} at ${EVENT.venue}, ${EVENT.venueArea}, for a full day of community-led sessions on Intune, Entra ID and Microsoft Defender XDR, our CloudHour round-table and speaker AMA, and an evening social.
 
 It's not-for-profit, community-run, and open to everyone. Seats are limited, so save the date and get notified when registration opens.`,
   },

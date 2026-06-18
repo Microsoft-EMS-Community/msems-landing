@@ -134,7 +134,7 @@ export interface AgendaItem {
 }
 
 export const AGENDA_NOTE =
-  "Provisional running order. Times and sessions will be confirmed as the programme and Call for Speakers are finalised.";
+  "Provisional running order. Times and sessions will be confirmed as the program and Call for Speakers are finalized.";
 
 export const AGENDA: readonly AgendaItem[] = [
   {
@@ -243,7 +243,7 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "18:00",
     title: "Evening social",
     description:
-      "Keep the day going with pétanque, food and drinks in the heart of Copenhagen. Plans being finalised.",
+      "Keep the day going with pétanque, food and drinks in the heart of Copenhagen. Plans being finalized.",
     kind: "social",
     optional: true,
   },
@@ -448,7 +448,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "Is this an official Microsoft event?",
     answer:
-      "No. The Microsoft EMS Community is an independent, community-run group and is not directly affiliated with Microsoft. The event is kindly hosted by Microsoft near Copenhagen and powered by Microsoft, but it is organised by the community, for the community.",
+      "No. The Microsoft EMS Community is an independent, community-run group and is not directly affiliated with Microsoft. The event is kindly hosted by Microsoft near Copenhagen and powered by Microsoft, but it is organized by the community, for the community.",
   },
   {
     question: "How much does it cost?",
@@ -463,7 +463,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "What about the agenda and speakers?",
     answer:
-      "The programme is being finalised and the Call for Speakers is now open on Sessionize, so if you'd like to present, submit your session via the Call for Speakers section. The full agenda will be published here once it's locked in.",
+      "The program is being finalized and the Call for Speakers is now open on Sessionize, so if you'd like to present, submit your session via the Call for Speakers section. The full agenda will be published here once it's locked in.",
   },
   {
     question: "How do I get a seat?",
