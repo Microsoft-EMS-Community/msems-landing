@@ -2,7 +2,7 @@
 // cost. Percentages are an approximate split, not exact accounting.
 const SLICES: ReadonlyArray<{ label: string; pct: number; color: string }> = [
   { label: "Lunch", pct: 35, color: "#ff2e88" },
-  { label: "Coffee, tea & water", pct: 38, color: "#a855f7" },
+  { label: "Coffee & tea", pct: 38, color: "#a855f7" },
   { label: "Drinks", pct: 13, color: "#22d3ee" },
   { label: "Ticketing fees", pct: 7, color: "#64748b" },
   { label: "Snacks, fruit & extras", pct: 7, color: "#f59e0b" },
@@ -44,16 +44,6 @@ export function TicketBreakdown() {
           </li>
         ))}
       </ul>
-
-      {/* Faint barcode, a little ticket flourish */}
-      <div
-        aria-hidden
-        className="mt-6 h-9 w-full opacity-[0.18]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(90deg, #fff 0 2px, transparent 2px 5px, #fff 5px 6px, transparent 6px 11px, #fff 11px 14px, transparent 14px 16px)",
-        }}
-      />
     </div>
   );
 }
