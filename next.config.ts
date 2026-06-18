@@ -6,21 +6,16 @@ const isDev = process.env.NODE_ENV !== "production";
 // bootstrap/hydration scripts and React inline styles (no nonce middleware).
 // 'unsafe-eval' is only added in dev (React Refresh needs it); production
 // stays strict. cloudflareinsights is allowed for Cloudflare Web Analytics.
-// The embedded ticket shop (/tickets) is Weeztix, powered by OpenTicket, so
-// both *.weeztix.com and *.openticket.tech need allowlisting.
-const ticketing =
-  "https://*.weeztix.com https://*.openticket.tech https://tweaks.s3.amazonaws.com";
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'self'",
-  `frame-src 'self' ${ticketing}`,
-  `img-src 'self' data: blob: https://cdn.discordapp.com https://sessionize.com ${ticketing}`,
-  `font-src 'self' data: ${ticketing}`,
-  `style-src 'self' 'unsafe-inline' ${ticketing}`,
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://static.cloudflareinsights.com ${ticketing}`,
-  `connect-src 'self' https://cloudflareinsights.com ${ticketing}`,
+  "img-src 'self' data: blob: https://cdn.discordapp.com https://sessionize.com",
+  "font-src 'self' data:",
+  "style-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://static.cloudflareinsights.com`,
+  "connect-src 'self' https://cloudflareinsights.com",
   "form-action 'self' https://*.list-manage.com",
   "upgrade-insecure-requests",
 ].join("; ");
