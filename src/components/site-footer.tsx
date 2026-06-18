@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
-import { LeaderboardPreview } from "@/components/leaderboard-preview";
 import { COMMUNITY, EVENT } from "@/lib/event";
 
 interface SiteFooterProps {
@@ -62,8 +61,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
           Microsoft group of companies.
         </p>
         <div className="mt-6 border-t border-white/5 pt-6">
-          <LeaderboardPreview />
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs text-muted-foreground">
               © {EVENT.year} {COMMUNITY.name}.
             </p>
