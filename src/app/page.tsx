@@ -140,7 +140,8 @@ export default async function Home() {
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
                   <Ticket className="size-4 text-brand-purple" />
-                  {EVENT.feeLabel}
+                  Early bird {PRICING.currency}
+                  {PRICING.tiers[0].price}
                 </span>
               </div>
 
