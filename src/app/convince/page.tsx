@@ -16,7 +16,7 @@ const earlyBird = `${PRICING.currency}${PRICING.tiers[0].price}`;
 
 const LETTER = `Hi [Manager],
 
-I'd like to attend the ${EVENT.name} on ${EVENT.dateLabel}, hosted at ${EVENT.venue}, ${EVENT.venueAddress}.
+I'd like to attend the ${EVENT.name} on ${EVENT.dateLabel}, hosted at ${EVENT.venue}, ${EVENT.venueArea}, Denmark.
 
 It's a full day of community-led, vendor-neutral sessions on the Microsoft Enterprise Mobility + Security stack: Intune, Entra ID and Microsoft Defender, plus a live CloudHour round-table and speaker AMA. The talks are practical and run by practitioners, so I'll come back with techniques I can apply to our environment right away.
 
