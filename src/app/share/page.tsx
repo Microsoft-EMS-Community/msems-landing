@@ -81,6 +81,48 @@ export default function SharePage() {
         </Card>
       </section>
 
+      {/* Speaker card */}
+      <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-balance text-2xl font-bold tracking-tight">
+            Speaking at the Summit?
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Grab your speaker card. A 1080x1080 PNG, ready to post or to drop
+            into Canva. Pop your headshot into the circle, add your name and
+            session, and share it.
+          </p>
+          <div className="mt-6 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+            <div className="w-full max-w-xs shrink-0 overflow-hidden rounded-2xl border border-white/10">
+              {/* The speaker card is generated at /speaker-card (1080x1080 PNG). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/speaker-card"
+                alt="I'm speaking at the Microsoft EMS Community Summit card"
+                width={1080}
+                height={1080}
+                className="h-auto w-full"
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <Button
+                render={<a href="/speaker-card" download="msems-speaker.png" />}
+                size="lg"
+                className="brand-gradient-bg border-0 text-white hover:opacity-90"
+              >
+                <Download className="size-4" />
+                Download speaker card
+              </Button>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Tip: in Canva, drop your photo inside the circle and add your
+                name plus your session title. The website link is already on the
+                card.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Guidance */}
       <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <div className="grid gap-4 sm:grid-cols-3">
