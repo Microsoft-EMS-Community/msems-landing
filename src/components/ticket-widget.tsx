@@ -10,7 +10,7 @@ export function TicketWidget() {
       title="Ticket shop"
       loading="lazy"
       allow="payment"
-      className="mx-auto block h-[75vh] w-full max-w-[600px] rounded-xl bg-white"
+      className="mx-auto block h-[80vh] w-full max-w-[600px] rounded-xl bg-background"
     />
   );
 }

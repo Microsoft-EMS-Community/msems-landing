@@ -41,15 +41,15 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
     <div
       aria-hidden={!open}
       onClick={onClose}
-      className={`fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm transition-opacity sm:p-6 ${
+      className={`fixed inset-0 z-[80] flex items-center justify-center bg-black/70 p-3 backdrop-blur-sm transition-opacity sm:p-4 ${
         open ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative my-6 w-full max-w-2xl rounded-2xl border border-white/10 bg-card p-4 shadow-2xl sm:my-10 sm:p-6"
+        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col rounded-2xl border border-white/10 bg-card p-3 shadow-2xl sm:p-4"
       >
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-3 flex shrink-0 items-center justify-between">
           <h2 className="text-lg font-bold">Get your ticket</h2>
           <button
             type="button"
@@ -65,10 +65,10 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
           src={SHOP_URL}
           title="Ticket shop"
           allow="payment"
-          className="mx-auto block h-[72vh] w-full max-w-[600px] rounded-xl bg-white"
+          className="min-h-0 w-full flex-1 rounded-xl bg-background"
         />
 
-        <p className="mt-3 text-center text-xs text-muted-foreground">
+        <p className="mt-3 shrink-0 text-center text-xs text-muted-foreground">
           Trouble loading?{" "}
           <a
             href={EVENT.ticketsUrl}
