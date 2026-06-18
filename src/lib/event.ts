@@ -464,8 +464,12 @@ export const FAQS: readonly FaqItem[] = [
   },
   {
     question: "How much does it cost?",
+    answer: `It's a not-for-profit event, priced to cover costs only. Early bird is ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} and standard is ${PRICING.currency}${allInPrice(PRICING.tiers[1].price)}, all in (incl. VAT and booking fees), both covering the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.`,
+  },
+  {
+    question: "Why is there an early bird and standard price?",
     answer:
-      "It's a not-for-profit event, priced to cover costs only. Early-bird tickets are €35 and standard tickets are €45 (incl. VAT), both including the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.",
+      "The event is run at cost, so the price only ever covers the day. Early bird is a small thank-you for booking early, and it helps us plan and pay the venue and catering deposits up front. Standard is the regular price once the early seats are gone. Either way it goes straight into running the event, never profit.",
   },
   {
     question: "Where exactly is it?",
@@ -480,6 +484,6 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "How do I get a seat?",
     answer:
-      "Seats are limited. Sign up to get notified below, or join the Discord, and you'll be first to hear when registration opens.",
+      "Seats are limited. Grab your ticket in the Tickets section, it only takes a couple of minutes. You can also join the Discord to stay in the loop.",
   },
 ] as const;
