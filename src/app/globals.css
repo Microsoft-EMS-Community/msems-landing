@@ -304,11 +304,12 @@
   }
 }
 
-/* "Early bird" that flaps across the hero */
+/* "Early bird" that takes off from the early-bird chip and flaps across */
 @keyframes bird-fly {
-  0% { transform: translate(-20vw, 36px); }
-  45% { transform: translate(42vw, -8px); }
-  100% { transform: translate(118vw, 26px); }
+  0% { transform: translate(2vw, 320px) scale(0.6); }
+  10% { transform: translate(6vw, 215px) scale(0.85); }
+  55% { transform: translate(46vw, 70px) scale(1); }
+  100% { transform: translate(122vw, 15px) scale(0.95); }
 }
 @keyframes bird-flap {
   0%, 100% { transform: rotate(-20deg); }
@@ -316,7 +317,7 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .bird-fly {
-    animation: bird-fly 16s linear infinite;
+    animation: bird-fly 18s ease-in-out infinite;
     will-change: transform;
   }
   .bird-flap {

@@ -12,6 +12,7 @@ import { FlyingBird } from "@/components/flying-bird";
 import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
 import { Speakers } from "@/components/speakers";
+import { Venue } from "@/components/venue";
 import { Pricing } from "@/components/pricing";
 import { Team } from "@/components/team";
 import { Countdown } from "@/components/countdown";
@@ -303,6 +304,9 @@ export default async function Home() {
 
       {/* ---------- Speakers ---------- */}
       <Speakers />
+
+      {/* ---------- Venue / Copenhagen ---------- */}
+      <Venue />
 
       {/* ---------- Tickets / Pricing ---------- */}
       <Pricing />

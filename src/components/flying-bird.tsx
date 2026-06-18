@@ -1,49 +1,71 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { Ticket } from "lucide-react";
+
 /**
- * A playful "early bird" that flaps across the hero (a nod to the early-bird
- * tickets). Pure CSS, decorative, and hidden for reduced-motion users.
+ * A cute "early bird" that takes off from the early-bird ticket and flaps
+ * across the hero. Click it and it chirps the early-bird offer. Decorative,
+ * and hidden for reduced-motion users.
  */
 export function FlyingBird() {
+  const [show, setShow] = useState(false);
+  const timer = useRef<number | null>(null);
+
+  function chirp() {
+    setShow(true);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setShow(false), 6000);
+  }
+
   return (
-    <div
-      className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
-      aria-hidden
-    >
-      <svg
-        viewBox="0 0 80 60"
-        className="bird-fly absolute left-0 top-[14%] w-28 drop-shadow-[0_8px_18px_rgba(168,85,247,0.5)] sm:w-36"
+    <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden" aria-hidden>
+      <button
+        type="button"
+        onClick={chirp}
+        aria-label="Early bird tickets"
+        className="bird-fly pointer-events-auto absolute left-0 top-0 w-24 cursor-pointer drop-shadow-[0_8px_18px_rgba(168,85,247,0.5)] hover:[animation-play-state:paused] sm:w-28"
       >
-        <defs>
-          <linearGradient
-            id="birdGrad"
-            x1="0"
-            y1="0"
-            x2="80"
-            y2="60"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0%" stopColor="#ff2e88" />
-            <stop offset="50%" stopColor="#a855f7" />
-            <stop offset="100%" stopColor="#22d3ee" />
-          </linearGradient>
-        </defs>
-        {/* tail */}
-        <polygon points="18,36 2,30 13,45" fill="url(#birdGrad)" />
-        {/* body */}
-        <ellipse cx="36" cy="36" rx="18" ry="11" fill="url(#birdGrad)" />
-        {/* head */}
-        <circle cx="55" cy="28" r="9" fill="url(#birdGrad)" />
-        {/* beak */}
-        <polygon points="63,27 80,24 64,34" fill="#f59e0b" />
-        {/* eye */}
-        <circle cx="57" cy="25" r="2.4" fill="#fff" />
-        <circle cx="57.8" cy="25" r="1.1" fill="#0f0a1e" />
-        {/* flapping wing */}
-        <path
-          className="bird-flap"
-          d="M34 30 Q46 2 62 14 Q46 22 34 32 Z"
-          fill="url(#birdGrad)"
-        />
-      </svg>
+        <svg viewBox="0 0 72 64" className="h-auto w-full">
+          <defs>
+            <linearGradient id="birdGrad" x1="0" y1="0" x2="72" y2="64" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#ff2e88" />
+              <stop offset="50%" stopColor="#a855f7" />
+              <stop offset="100%" stopColor="#22d3ee" />
+            </linearGradient>
+          </defs>
+          {/* tail */}
+          <path d="M18 42 L2 36 L14 50 Z" fill="url(#birdGrad)" />
+          {/* body */}
+          <ellipse cx="30" cy="42" rx="17" ry="14" fill="url(#birdGrad)" />
+          <ellipse cx="27" cy="46" rx="9" ry="7" fill="#ffffff" opacity="0.18" />
+          {/* head */}
+          <circle cx="48" cy="28" r="14" fill="url(#birdGrad)" />
+          {/* little tuft */}
+          <path d="M47 14 q3 -8 8 -4 q-3 3 -4 8 z" fill="url(#birdGrad)" />
+          {/* cheek blush */}
+          <circle cx="43" cy="33" r="3.4" fill="#ff5fa2" opacity="0.55" />
+          {/* eye */}
+          <circle cx="52" cy="26" r="5" fill="#fff" />
+          <circle cx="53.4" cy="26.4" r="2.6" fill="#0f0a1e" />
+          <circle cx="52.3" cy="25.2" r="1" fill="#fff" />
+          {/* beak */}
+          <path d="M61 25 L70 28.5 L61 32 Z" fill="#f59e0b" />
+          {/* flapping wing */}
+          <path className="bird-flap" d="M28 36 Q40 10 56 22 Q40 30 28 40 Z" fill="url(#birdGrad)" />
+        </svg>
+      </button>
+
+      {show && (
+        <a
+          href="#tickets"
+          onClick={() => setShow(false)}
+          className="pointer-events-auto fixed left-1/2 top-20 z-[60] inline-flex -translate-x-1/2 items-center gap-2 rounded-full brand-gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-2xl"
+        >
+          <Ticket className="size-4" />
+          Early bird tickets, only €30 →
+        </a>
+      )}
     </div>
   );
 }
