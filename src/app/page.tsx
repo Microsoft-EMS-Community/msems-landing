@@ -7,6 +7,7 @@ import {
   Sparkles,
   Mic,
   Megaphone,
+  Languages,
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
@@ -149,6 +150,10 @@ export default async function Home() {
                   <Ticket className="size-4 text-brand-purple" />
                   Early bird {PRICING.currency}
                   {PRICING.tiers[0].price}
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                  <Languages className="size-4 text-brand-teal" />
+                  English-speaking event
                 </span>
               </div>
 
