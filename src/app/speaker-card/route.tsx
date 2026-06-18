@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 
-// A 1080x1080 "I'm speaking at" card.
+// A 1080x1350 "I'm speaking at" card.
 //  - No params: a generic template with a "Your photo" ring (fill in Canva).
 //  - ?name=&topic=&photo=: a personalised card (photo can be an https URL).
 export const dynamic = "force-dynamic";
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "72px 64px",
+          padding: "104px 64px",
           background: "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
           fontFamily: "sans-serif",
@@ -131,6 +131,6 @@ export async function GET(request: NextRequest) {
         </div>
       </div>
     ),
-    { width: 1080, height: 1080 },
+    { width: 1080, height: 1350 },
   );
 }

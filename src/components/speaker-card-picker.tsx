@@ -31,7 +31,7 @@ export function SpeakerCardPicker({ speakers = [] }: { speakers?: Speaker[] }) {
           src={url}
           alt="Speaker card preview"
           width={1080}
-          height={1080}
+          height={1350}
           className="h-auto w-full"
         />
       </div>

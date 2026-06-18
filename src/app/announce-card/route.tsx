@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 
-// A 1080x1080 "speaker announcement" card for the team.
+// A 1080x1350 "speaker announcement" card for the team.
 //  - GET  ?name=&topic=&photo=  (photo = /public path or https URL)
 //  - POST { name, topic, photo } (photo can also be an uploaded data: URL)
 export const dynamic = "force-dynamic";
@@ -58,7 +58,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "64px 64px",
+          padding: "104px 64px",
           background: "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
           fontFamily: "sans-serif",
@@ -116,7 +116,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
         </div>
       </div>
     ),
-    { width: 1080, height: 1080 },
+    { width: 1080, height: 1350 },
   );
 }
 

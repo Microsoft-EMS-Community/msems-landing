@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 
-// A 1080x1080 "I'm attending, are you?" card for attendees to post.
+// A 1080x1350 "I'm attending, are you?" card for attendees to post.
 export const dynamic = "force-static";
 
 function MicrosoftMark() {
@@ -33,7 +33,7 @@ export async function GET() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "72px 64px",
+          padding: "104px 64px",
           background:
             "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
@@ -79,6 +79,6 @@ export async function GET() {
         </div>
       </div>
     ),
-    { width: 1080, height: 1080 },
+    { width: 1080, height: 1350 },
   );
 }

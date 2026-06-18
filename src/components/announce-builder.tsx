@@ -156,11 +156,11 @@ export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
             src={preview}
             alt="Speaker announcement preview"
             width={1080}
-            height={1080}
+            height={1350}
             className="h-auto w-full"
           />
         ) : (
-          <div className="grid aspect-square place-items-center text-sm text-muted-foreground">
+          <div className="grid aspect-[4/5] place-items-center text-sm text-muted-foreground">
             Fill in the details to preview
           </div>
         )}

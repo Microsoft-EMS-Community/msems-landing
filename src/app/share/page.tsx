@@ -99,17 +99,17 @@ export default async function SharePage() {
           </h2>
           <p className="mt-2 text-muted-foreground">
             Post the &quot;I&apos;m attending, are you?&quot; card to your feed.
-            It is a 1080x1080 PNG, ready to share as-is.
+            It is a 1080x1350 PNG, ready to share as-is.
           </p>
           <div className="mt-6 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
             <div className="w-full max-w-xs shrink-0 overflow-hidden rounded-2xl border border-white/10">
-              {/* Generated at /attending-card (1080x1080 PNG). */}
+              {/* Generated at /attending-card (1080x1350 PNG). */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/attending-card"
                 alt="I'm attending the Microsoft EMS Community Summit card"
                 width={1080}
-                height={1080}
+                height={1350}
                 className="h-auto w-full"
               />
             </div>
@@ -132,7 +132,7 @@ export default async function SharePage() {
             Speaking at the Summit?
           </h2>
           <p className="mt-2 text-muted-foreground">
-            A 1080x1080 PNG, ready to post. Confirmed speakers can pick their
+            A 1080x1350 PNG, ready to post. Confirmed speakers can pick their
             name for a finished card; everyone else gets a template to drop a
             headshot into in Canva.
           </p>
