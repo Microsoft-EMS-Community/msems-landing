@@ -463,6 +463,11 @@ export const FAQS: readonly FaqItem[] = [
       "No. The Microsoft EMS Community is an independent, community-run group and is not directly affiliated with Microsoft. The event is kindly hosted by Microsoft near Copenhagen and powered by Microsoft, but it is organized by the community, for the community.",
   },
   {
+    question: "Who runs it, and why is there a company behind it?",
+    answer:
+      "It's organized by the community. A company, sky made simple ApS (owned by organizer Jonas Bøgvad), handles the ticketing, payouts and VAT, since that needs a registered business and a business account. The event is run at cost, not for profit, and anything left over goes back into the day. Full details are on the Policies page.",
+  },
+  {
     question: "How much does it cost?",
     answer: `It's a not-for-profit event, priced to cover costs only. Early bird is ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} and standard is ${PRICING.currency}${allInPrice(PRICING.tiers[1].price)}, all in (incl. VAT and booking fees), both covering the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.`,
   },

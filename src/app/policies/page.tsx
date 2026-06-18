@@ -207,7 +207,7 @@ export default function PoliciesPage() {
                 ticketing, payouts and VAT, and the event is run at cost, not for
                 profit.
               </p>
-              <p className="pt-2">sky made simple ApS (legal entity)</p>
+              <p className="pt-2">sky made simple ApS</p>
               <p>VAT ID: DK43434527</p>
               <p>Owner: Jonas Bøgvad</p>
               <p>Contact: {EVENT.contactEmail}</p>

@@ -155,11 +155,6 @@ export async function Agenda() {
   const morning = items.filter((i) => i.time <= "12:25");
   const afternoon = items.filter((i) => i.time > "12:25");
 
-  const note =
-    live.length > 0
-      ? "Schedule via Sessionize. Times are local and may change."
-      : null;
-
   return (
     <section
       id="agenda"
@@ -179,10 +174,6 @@ export async function Agenda() {
         <Column label="Morning" items={morning} />
         <Column label="Afternoon" items={afternoon} />
       </div>
-
-      {note && (
-        <p className="mt-8 text-center text-xs text-muted-foreground">{note}</p>
-      )}
     </section>
   );
 }
