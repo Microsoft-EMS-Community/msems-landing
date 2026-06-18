@@ -54,7 +54,7 @@ function isCompact(item: AgendaItem): boolean {
 function timeRange(item: AgendaItem): string {
   return item.endTime
     ? `${to12h(item.time)} - ${to12h(item.endTime)}`
-    : to12h(item.time);
+    : `${to12h(item.time)} onwards`;
 }
 
 /** Slim row for changeovers and short breaks — a dot on the rail + a one-liner. */

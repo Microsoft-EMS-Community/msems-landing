@@ -241,7 +241,7 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "18:00",
     title: "Evening social",
     description:
-      "Keep the day going with pétanque, food and drinks nearby. Plans being finalised.",
+      "Keep the day going with pétanque, food and drinks in the heart of Copenhagen. Plans being finalised.",
     kind: "social",
     optional: true,
   },
