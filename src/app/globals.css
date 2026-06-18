@@ -330,6 +330,18 @@
   .bird-fly { display: none; }
 }
 
+/* Layered Copenhagen skyline — each layer drifts at its own speed for depth */
+@keyframes skyline-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skyline-row {
+    animation: skyline-drift linear infinite;
+    will-change: transform;
+  }
+}
+
 /* Pointer spotlight — soft brand glow following the cursor (set via JS vars) */
 .pointer-glow {
   position: fixed;

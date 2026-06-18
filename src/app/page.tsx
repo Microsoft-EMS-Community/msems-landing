@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
+import { CopenhagenSkyline } from "@/components/copenhagen-skyline";
 import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
 import { Speakers } from "@/components/speakers";
@@ -106,11 +107,12 @@ export default async function Home() {
       <SiteHeader />
 
       {/* ---------- Hero ---------- */}
-      <section className="relative">
+      <section className="relative overflow-hidden">
         <AuroraBackground />
+        <CopenhagenSkyline />
         <FlyingBird />
 
-        <div className="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">
+        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Left: story */}
             <div className="rise-in text-center lg:text-left">
