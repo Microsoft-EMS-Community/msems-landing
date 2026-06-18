@@ -9,10 +9,8 @@ import {
   Megaphone,
   Languages,
   ShieldCheck,
-  ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
 import { HeroPhotoBackdrop } from "@/components/hero-photo-backdrop";
@@ -28,6 +26,7 @@ import { PoweredByMicrosoft } from "@/components/powered-by-microsoft";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { TicketButton } from "@/components/ticket-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -198,15 +197,7 @@ export default async function Home() {
                   <p className="mb-3 text-balance text-base font-semibold text-foreground">
                     Tickets are on sale, seats are limited
                   </p>
-                  <Button
-                    render={<Link href="/tickets" />}
-                    size="lg"
-                    className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90"
-                  >
-                    <Ticket className="size-4" />
-                    Get your ticket
-                    <ArrowRight className="size-4" />
-                  </Button>
+                  <TicketButton className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90" />
                   <p className="mt-3 text-sm text-muted-foreground">
                     From {PRICING.currency}
                     {PRICING.tiers[0].price} · or{" "}
@@ -584,15 +575,7 @@ export default async function Home() {
             {EVENT.feeNote} Seats are limited, so grab yours while they last.
           </p>
           <div className="relative mx-auto mt-8 flex justify-center">
-            <Button
-              render={<Link href="/tickets" />}
-              size="lg"
-              className="sheen brand-gradient-bg border-0 px-8 text-base text-white hover:opacity-90"
-            >
-              <Ticket className="size-4" />
-              Get your ticket
-              <ArrowRight className="size-4" />
-            </Button>
+            <TicketButton className="sheen brand-gradient-bg border-0 px-8 text-base text-white hover:opacity-90" />
           </div>
           <p className="relative mt-4 text-sm text-muted-foreground">
             Prefer Discord?{" "}

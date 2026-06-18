@@ -24,10 +24,9 @@ export default function TicketsPage() {
             Get your <span className="brand-gradient-text">ticket</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-            {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}. Early bird{" "}
+            {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}. From{" "}
             {PRICING.currency}
-            {PRICING.tiers[0].price}, then {PRICING.currency}
-            {PRICING.tiers[1].price} (incl. VAT). Seats are limited.
+            {PRICING.tiers[0].price}. Seats are limited.
           </p>
         </div>
 

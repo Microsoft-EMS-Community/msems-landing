@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SITE_URL } from "@/lib/event";
 import { PointerGlow } from "@/components/pointer-glow";
 import { GamesProvider } from "@/components/games-provider";
+import { TicketsProvider } from "@/components/tickets-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -74,7 +75,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <div className="scroll-progress brand-gradient-bg" aria-hidden />
         <PointerGlow />
-        <GamesProvider>{children}</GamesProvider>
+        <GamesProvider>
+          <TicketsProvider>{children}</TicketsProvider>
+        </GamesProvider>
       </body>
     </html>
   );

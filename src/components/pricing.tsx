@@ -1,9 +1,7 @@
 import { Check, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { TicketButton } from "@/components/ticket-button";
 import { EVENT, PRICING } from "@/lib/event";
-
-const ticketsHref = "/tickets";
 
 export function Pricing() {
   const { currency, socialAddon } = PRICING;
@@ -88,18 +86,15 @@ export function Pricing() {
               </li>
             </ul>
 
-            <Button
-              render={<a href={ticketsHref} />}
-              size="lg"
+            <TicketButton
+              label="Get tickets"
+              variant={tier.featured ? "default" : "outline"}
               className={
                 tier.featured
                   ? "mt-7 brand-gradient-bg border-0 text-white hover:opacity-90"
                   : "mt-7 border border-white/15 bg-white/5 hover:bg-white/10"
               }
-              variant={tier.featured ? "default" : "outline"}
-            >
-              Get tickets
-            </Button>
+            />
           </div>
         ))}
       </div>
