@@ -21,7 +21,7 @@ export const EVENT = {
     "https://www.google.com/maps/search/?api=1&query=Microsoft%20Kanalvej%207%202800%20Kongens%20Lyngby",
   feeLabel: "From €30",
   feeNote:
-    "The small fee covers lunch, drinks and beverages for the day, plus an optional evening get-together.",
+    "The small fee covers lunch, drinks and beverages for the day. An optional evening social can be added on.",
   discordInvite: "https://aka.ms/M365EMSDiscord",
   registrationUrl: "https://aka.ms/M365EMSDiscord",
   githubUrl: "https://github.com/Microsoft-EMS-Community",
@@ -218,7 +218,7 @@ export const AGENDA: readonly AgendaItem[] = [
   {
     time: "15:40",
     endTime: "16:25",
-    title: "Cloud Hour (Session 6)",
+    title: "CloudHour (Session 6)",
     description:
       "Our round-the-table discussion from Discord, live and in person. An open-floor AMA with the day's speakers and the community. Bring your hardest questions.",
     kind: "discussion",

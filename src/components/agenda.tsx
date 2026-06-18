@@ -143,7 +143,7 @@ function Column({ label, items }: { label: string; items: AgendaItem[] }) {
 }
 
 export async function Agenda() {
-  // Merge: keep the curated fixed anchors (registration, breaks, Cloud Hour,
+  // Merge: keep the curated fixed anchors (registration, breaks, CloudHour,
   // etc.) and slot the live Sessionize talks between them by time. Until a
   // schedule is published there are no live talks, so the curated AGENDA shows.
   const liveTalks = (await getSessionizeAgenda()).filter(
@@ -174,7 +174,7 @@ export async function Agenda() {
           The day, <span className="brand-gradient-text">hour by hour</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          Six community sessions through the day, our Cloud Hour round-table and
+          Six community sessions through the day, our CloudHour round-table and
           speaker AMA, then networking and drinks to round it off.
         </p>
       </div>
