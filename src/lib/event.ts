@@ -89,7 +89,7 @@ export const HIGHLIGHTS: readonly HighlightItem[] = [
   {
     title: "Optional evening",
     description:
-      "Keep the conversation going after the sessions with an optional, relaxed evening get-together.",
+      "Keep the conversation going with an optional evening of pétanque, food and drinks.",
   },
 ] as const;
 
@@ -187,7 +187,7 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "18:00",
     title: "Evening social",
     description:
-      "Wind down with the community over food and drinks. Optional, and usually the best part of the day.",
+      "Wind down over pétanque, food and drinks with the community. Optional, and usually the best part of the day.",
     kind: "social",
   },
 ] as const;
@@ -234,7 +234,11 @@ export const PRICING = {
   socialAddon: {
     label: "Evening social",
     price: 80,
-    description: "Optional dinner and drinks with the community after the sessions.",
+    description: "Pétanque, food and drinks with the community after the sessions.",
+    venue: "Boulebar",
+    url: "https://www.boulebar.dk/petanque",
+    // The venue/plan isn't locked yet; UI shows a "to be confirmed" note.
+    confirmed: false,
   },
   tiers: [
     {

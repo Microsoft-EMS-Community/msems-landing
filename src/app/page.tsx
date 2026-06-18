@@ -14,6 +14,7 @@ import { Agenda } from "@/components/agenda";
 import { Speakers } from "@/components/speakers";
 import { Venue } from "@/components/venue";
 import { Pricing } from "@/components/pricing";
+import { SocialEvening } from "@/components/social-evening";
 import { Team } from "@/components/team";
 import { Countdown } from "@/components/countdown";
 import { NotifyForm } from "@/components/notify-form";
@@ -310,6 +311,9 @@ export default async function Home() {
 
       {/* ---------- Tickets / Pricing ---------- */}
       <Pricing />
+
+      {/* ---------- Evening social (optional add-on) ---------- */}
+      <SocialEvening />
 
       {/* ---------- Call for Speakers ---------- */}
       <section id="cfs" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
