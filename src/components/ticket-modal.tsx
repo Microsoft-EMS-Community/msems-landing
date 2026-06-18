@@ -5,9 +5,10 @@ import { X } from "lucide-react";
 import { EVENT } from "@/lib/event";
 
 const SHOP_URL = "https://shop.weeztix.com/51630dc4-8c23-11ed-aa54-6a57c78572ab";
-// Fallback height if the shop doesn't post a resize message; sized to fit the
-// first step so there's no inner scrollbar, the whole modal scrolls instead.
-const DEFAULT_HEIGHT = 1450;
+// Fallback height if the shop doesn't post a resize message; sized close to the
+// ticket step so there's little empty space. Auto-height overrides this when the
+// shop's iframe-resizer messages come through.
+const DEFAULT_HEIGHT = 1240;
 
 interface TicketModalProps {
   open: boolean;
@@ -47,12 +48,17 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
         return;
       }
       const data = e.data as unknown;
-      let h: unknown;
+      let h: number | undefined;
       if (typeof data === "number") h = data;
-      else if (data && typeof data === "object") {
+      else if (typeof data === "string" && data.startsWith("[iFrameSizer]")) {
+        // iframe-resizer v4 format: "[iFrameSizer]<id>:<height>:<width>:..."
+        const parsed = Number(data.replace("[iFrameSizer]", "").split(":")[1]);
+        if (!Number.isNaN(parsed)) h = parsed;
+      } else if (data && typeof data === "object") {
         const o = data as Record<string, unknown>;
         const payload = o.payload as Record<string, unknown> | undefined;
-        h = o.height ?? o.frameHeight ?? o.iframeHeight ?? payload?.height;
+        const cand = o.height ?? o.frameHeight ?? o.iframeHeight ?? payload?.height;
+        if (typeof cand === "number") h = cand;
       }
       if (typeof h === "number" && h > 300 && h < 8000) setHeight(Math.ceil(h));
     }
