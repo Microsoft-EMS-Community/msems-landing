@@ -8,7 +8,8 @@ const isDev = process.env.NODE_ENV !== "production";
 // stays strict. cloudflareinsights is allowed for Cloudflare Web Analytics.
 // The embedded ticket shop (/tickets) is Weeztix, powered by OpenTicket, so
 // both *.weeztix.com and *.openticket.tech need allowlisting.
-const ticketing = "https://*.weeztix.com https://*.openticket.tech";
+const ticketing =
+  "https://*.weeztix.com https://*.openticket.tech https://tweaks.s3.amazonaws.com";
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
