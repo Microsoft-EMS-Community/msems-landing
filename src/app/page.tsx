@@ -138,7 +138,7 @@ export default async function Home() {
                 Open to everyone.
               </p>
               <p className="mx-auto mt-4 max-w-xl text-balance text-base font-medium text-foreground/85 lg:mx-0">
-                Tired of AI? Meet real people, without their agents.
+                Need a break from AI? Meet real people, without the agents.
               </p>
 
               {/* Date / location chips */}
