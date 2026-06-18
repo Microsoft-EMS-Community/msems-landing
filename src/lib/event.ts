@@ -82,7 +82,7 @@ export const HIGHLIGHTS: readonly HighlightItem[] = [
       "You don't need to be on the Discord to join. Anyone working with or curious about the Microsoft EMS stack is welcome.",
   },
   {
-    title: "Independent, no agenda",
+    title: "Independent & vendor-neutral",
     description:
       "Not-for-profit, community-run and sponsor-free. No booths, no badge scans, no 'quick word from our partners', just honest, real-world takes on what works and what doesn't.",
   },
