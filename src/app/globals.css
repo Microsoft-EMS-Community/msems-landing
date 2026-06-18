@@ -330,6 +330,16 @@
   .bird-fly { display: none; }
 }
 
+/* Brief glow drawing the eye to the signup form when the early bird is caught */
+@keyframes signup-flash {
+  0% { box-shadow: 0 0 0 0 rgba(255, 46, 136, 0); }
+  18% { box-shadow: 0 0 0 5px rgba(255, 46, 136, 0.5); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 46, 136, 0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .signup-flash { animation: signup-flash 2.2s ease-out; }
+}
+
 /* Pointer spotlight — soft brand glow following the cursor (set via JS vars) */
 .pointer-glow {
   position: fixed;

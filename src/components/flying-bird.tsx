@@ -18,6 +18,17 @@ export function FlyingBird() {
     timer.current = window.setTimeout(() => setShow(false), 6000);
   }
 
+  // Briefly glow the signup form so it's clear where to act.
+  function flashSignup() {
+    setShow(false);
+    const el = document.getElementById("signup-top");
+    if (!el) return;
+    el.classList.remove("signup-flash");
+    void el.offsetWidth; // restart the animation on repeat clicks
+    el.classList.add("signup-flash");
+    window.setTimeout(() => el.classList.remove("signup-flash"), 2300);
+  }
+
   return (
     <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden" aria-hidden>
       <button
@@ -59,7 +70,7 @@ export function FlyingBird() {
       {show && (
         <a
           href="#signup-top"
-          onClick={() => setShow(false)}
+          onClick={flashSignup}
           className="pointer-events-auto fixed left-1/2 top-28 z-[60] inline-flex -translate-x-1/2 items-center gap-2 rounded-full brand-gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-2xl"
         >
           <Ticket className="size-4" />

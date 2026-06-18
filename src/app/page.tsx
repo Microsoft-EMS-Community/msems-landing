@@ -190,7 +190,7 @@ export default async function Home() {
               <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-center backdrop-blur-sm sm:p-8">
                 <Countdown targetISO={EVENT.startsAtISO} />
 
-                <div id="signup-top" className="mt-7 scroll-mt-24">
+                <div id="signup-top" className="mt-7 scroll-mt-24 rounded-2xl">
                   <p className="mb-3 text-balance text-base font-semibold text-foreground">
                     Seats are limited, get notified first
                   </p>
