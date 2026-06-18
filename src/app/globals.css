@@ -330,6 +330,15 @@
   .bird-fly { display: none; }
 }
 
+/* Perched mascot: a gentle bob (held still for reduced-motion) */
+@keyframes bird-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bird-bob { animation: bird-bob 3s ease-in-out infinite; }
+}
+
 /* Brief glow drawing the eye to the signup form when the early bird is caught */
 @keyframes signup-flash {
   0% { box-shadow: 0 0 0 0 rgba(255, 46, 136, 0); }
