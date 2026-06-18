@@ -11,7 +11,7 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'self'",
-  "img-src 'self' data: blob: https://cdn.discordapp.com",
+  "img-src 'self' data: blob: https://cdn.discordapp.com https://sessionize.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://static.cloudflareinsights.com`,
@@ -39,6 +39,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.discordapp.com" },
+      { protocol: "https", hostname: "sessionize.com" },
     ],
   },
   async headers() {

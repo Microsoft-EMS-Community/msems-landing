@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SPEAKERS, EVENT } from "@/lib/event";
+import { getSessionizeSpeakers } from "@/lib/sessionize";
 
 function initials(name: string): string {
   return name
@@ -11,8 +12,11 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
-export function Speakers() {
-  const hasSpeakers = SPEAKERS.length > 0;
+export async function Speakers() {
+  // Live from Sessionize when published; otherwise the manual fallback list.
+  const live = await getSessionizeSpeakers();
+  const speakers = live.length > 0 ? live : SPEAKERS;
+  const hasSpeakers = speakers.length > 0;
 
   return (
     <section
@@ -32,7 +36,7 @@ export function Speakers() {
 
       {hasSpeakers ? (
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SPEAKERS.map((speaker) => (
+          {speakers.map((speaker) => (
             <div
               key={speaker.name}
               className="reveal flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
@@ -45,6 +49,7 @@ export function Speakers() {
                     width={96}
                     height={96}
                     className="size-24 rounded-full object-cover"
+                    unoptimized
                   />
                 ) : (
                   <span

@@ -27,6 +27,8 @@ export const EVENT = {
   // Call for Speakers (Sessionize). Set cfsOpen to false once submissions close.
   cfsUrl: "https://sessionize.com/microsoft-ems-community-summit/",
   cfsOpen: true,
+  // Sessionize JSON API (read-only, public). Powers the Speakers section.
+  sessionizeSpeakersApi: "https://sessionize.com/api/v2/3zmvdvh1/view/Speakers",
 } as const;
 
 /**
