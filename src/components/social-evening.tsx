@@ -31,14 +31,19 @@ export function SocialEvening() {
               Plans are still being finalised, so the venue may change.
             </p>
           )}
-          <p className="mt-6 text-sm text-muted-foreground">
-            Optional add-on. Add it to your ticket for{" "}
-            <span className="font-semibold text-foreground">
-              +{currency}
-              {socialAddon.price}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center rounded-full border border-violet-400/40 bg-violet-400/15 px-2.5 py-0.5 text-xs font-medium text-violet-200">
+              Optional add-on
             </span>
-            .
-          </p>
+            <span className="text-sm text-muted-foreground">
+              Add it to your ticket for{" "}
+              <span className="font-semibold text-foreground">
+                +{currency}
+                {socialAddon.price}
+              </span>
+              .
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
