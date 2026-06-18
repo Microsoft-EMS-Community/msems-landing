@@ -39,20 +39,10 @@ export function SocialEvening() {
               Plans are still being finalised, so the venue may change.
             </p>
           )}
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <a
-              href={socialAddon.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10"
-            >
-              See {socialAddon.venue} →
-            </a>
-            <span className="text-sm text-muted-foreground">
-              Add it to your ticket for +{currency}
-              {socialAddon.price}.
-            </span>
-          </div>
+          <p className="mt-6 text-sm text-muted-foreground">
+            Add it to your ticket for +{currency}
+            {socialAddon.price}.
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
