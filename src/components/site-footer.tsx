@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { COMMUNITY, EVENT } from "@/lib/event";
 
@@ -71,6 +72,14 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
         <p className="mt-4 max-w-2xl text-xs leading-relaxed text-muted-foreground">
           Not affiliated with, endorsed by, or sponsored by Microsoft. Microsoft
           and product names are trademarks of the Microsoft group of companies.
+        </p>
+        <p className="mt-4 text-xs">
+          <Link
+            href="/policies"
+            className="text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+          >
+            Tickets, refunds &amp; privacy policy
+          </Link>
         </p>
         <div className="mt-6 border-t border-white/5 pt-6">
           <div className="flex flex-wrap items-center justify-between gap-3">

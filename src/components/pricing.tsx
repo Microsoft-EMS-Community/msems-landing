@@ -100,7 +100,15 @@ export function Pricing() {
       <p className="mx-auto mt-6 max-w-xl text-center text-xs text-muted-foreground">
         {socialAddon.description}{" "}
         {!PRICING.pricesFinal && <span>{PRICING.note}</span>} This is a
-        not-for-profit, community-run event powered by {EVENT.venue}.
+        not-for-profit, community-run event powered by {EVENT.venue}. Tickets are
+        sold via Weeztix; see our{" "}
+        <a
+          href="/policies"
+          className="underline underline-offset-2 hover:text-foreground"
+        >
+          ticket terms &amp; refund policy
+        </a>
+        .
       </p>
 
       <p className="mx-auto mt-6 max-w-md text-balance text-center text-sm text-muted-foreground">
