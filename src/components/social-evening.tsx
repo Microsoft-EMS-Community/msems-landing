@@ -21,7 +21,7 @@ export function SocialEvening() {
         <div>
           <Badge
             variant="secondary"
-            className="border border-brand-purple/30 bg-brand-purple/10 text-xs font-medium text-brand-purple"
+            className="border border-violet-400/40 bg-violet-400/15 text-xs font-medium text-violet-200"
           >
             Optional add-on · +{currency}
             {socialAddon.price}
