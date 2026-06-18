@@ -16,7 +16,7 @@ interface TravelTip {
   icon: typeof Plane;
   title: string;
   body: string;
-  link?: { href: string; label: string };
+  links?: ReadonlyArray<{ href: string; label: string }>;
 }
 
 const TRAVEL: readonly TravelTip[] = [
@@ -28,11 +28,17 @@ const TRAVEL: readonly TravelTip[] = [
   {
     icon: Train,
     title: "Metro & train",
-    body: "The driverless Metro runs around the clock from the airport into Copenhagen, and the S-train reaches Kongens Lyngby, a short ride from the venue. Visiting from abroad? Buy tickets in the DOT Rejsebillet app.",
-    link: {
-      href: "https://apps.apple.com/dk/app/rejsebillet/id1664432486",
-      label: "Get the Rejsebillet app",
-    },
+    body: "The driverless Metro runs around the clock from the airport into Copenhagen, and the S-train reaches Kongens Lyngby, a short ride from the venue. Visiting from abroad? Grab the Rejsekort app to buy tickets.",
+    links: [
+      {
+        href: "https://apps.apple.com/dk/app/rejsekort/id6469603787",
+        label: "App Store",
+      },
+      {
+        href: "https://play.google.com/store/apps/details?id=dk.rejsekort.digitalrejsekort",
+        label: "Google Play",
+      },
+    ],
   },
   {
     icon: Bike,
@@ -94,7 +100,7 @@ export default function VenuePage() {
             Getting there
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {TRAVEL.map(({ icon: Icon, title, body, link }) => (
+            {TRAVEL.map(({ icon: Icon, title, body, links }) => (
               <div
                 key={title}
                 className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-6"
@@ -106,15 +112,20 @@ export default function VenuePage() {
                 <p className="mt-1 flex-1 text-sm leading-relaxed text-muted-foreground">
                   {body}
                 </p>
-                {link && (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-block text-sm font-medium text-brand-pink underline underline-offset-4 transition-colors hover:text-brand-purple"
-                  >
-                    {link.label} →
-                  </a>
+                {links && links.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+                    {links.map((l) => (
+                      <a
+                        key={l.href}
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block text-sm font-medium text-brand-pink underline underline-offset-4 transition-colors hover:text-brand-purple"
+                      >
+                        {l.label} →
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
             ))}
