@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CopyButton } from "@/components/copy-button";
 import { AnnounceBuilder } from "@/components/announce-builder";
+import { getSessionizeSpeakers } from "@/lib/sessionize";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,7 +39,8 @@ const GUIDANCE: ReadonlyArray<{ title: string; body: string }> = [
   },
 ];
 
-export default function SharePage() {
+export default async function SharePage() {
+  const speakers = await getSessionizeSpeakers();
   return (
     <main className="flex-1">
       <SiteHeader />
@@ -150,7 +152,7 @@ export default function SharePage() {
             reveal card. The website link is baked in.
           </p>
           <div className="mt-6">
-            <AnnounceBuilder />
+            <AnnounceBuilder speakers={speakers} />
           </div>
         </div>
       </section>

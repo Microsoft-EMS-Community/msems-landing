@@ -3,20 +3,31 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { Speaker } from "@/lib/event";
 
 const inputClass =
   "h-11 w-full rounded-xl border border-white/15 bg-white/5 px-4 text-sm text-foreground outline-none focus:border-brand-pink/60";
 
 /**
- * Team tool: type a speaker + session, upload their photo, and download a
- * ready-to-post announcement card. The card is rendered server-side (so it
- * matches the other graphics) and previewed live as you type.
+ * Team tool: pick a speaker from Sessionize (or type one), tweak the session,
+ * optionally upload a photo, and download a ready-to-post announcement card.
+ * The card is rendered server-side (so it matches the other graphics) and
+ * previewed live.
  */
-export function AnnounceBuilder() {
+export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
   const [name, setName] = useState("");
   const [topic, setTopic] = useState("");
-  const [photo, setPhoto] = useState<string | null>(null); // uploaded data URL
+  const [photo, setPhoto] = useState<string | null>(null); // data or https URL
   const [photoName, setPhotoName] = useState("");
+
+  function onPickSpeaker(e: React.ChangeEvent<HTMLSelectElement>) {
+    const speaker = speakers[Number(e.target.value)];
+    if (!speaker) return;
+    setName(speaker.name);
+    setTopic(speaker.session ?? "");
+    setPhoto(speaker.photo ?? null);
+    setPhotoName(speaker.photo ? `${speaker.name} (Sessionize)` : "");
+  }
   const [preview, setPreview] = useState<string | null>(null); // object URL
   const [busy, setBusy] = useState(false);
   const objUrl = useRef<string | null>(null);
@@ -66,6 +77,25 @@ export function AnnounceBuilder() {
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
       <div className="flex w-full flex-col gap-3 lg:max-w-xs">
+        {speakers.length > 0 && (
+          <label className="text-sm font-medium">
+            Pick from Sessionize
+            <select
+              defaultValue=""
+              onChange={onPickSpeaker}
+              className={`mt-1.5 ${inputClass}`}
+            >
+              <option value="" disabled>
+                Choose a speaker…
+              </option>
+              {speakers.map((s, i) => (
+                <option key={s.name} value={i}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="text-sm font-medium">
           Speaker name
           <input
