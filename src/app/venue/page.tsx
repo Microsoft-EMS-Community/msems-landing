@@ -143,9 +143,9 @@ export default function VenuePage() {
             Where to stay
           </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            We are arranging discounted rates with hotels near the venue.
-            Booking details and codes will be shared here and with registered
-            attendees.
+            We are arranging discounted rates with hotels in the heart of
+            Copenhagen. Booking details and codes will be shared here and with
+            registered attendees.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             {[1, 2, 3].map((i) => (
