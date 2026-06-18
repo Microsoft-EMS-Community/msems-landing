@@ -62,7 +62,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             <span className="text-foreground/80">Organiser:</span> sky made
             simple ApS (legal entity)
           </p>
-          <p>CVR 43434527 · VAT DK43434527</p>
+          <p>VAT DK43434527</p>
           <p>Owner: Jonas Bøgvad</p>
           <p>Contact: {EVENT.contactEmail}</p>
         </div>
