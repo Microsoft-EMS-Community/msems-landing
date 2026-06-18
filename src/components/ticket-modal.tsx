@@ -12,15 +12,16 @@ interface TicketModalProps {
 }
 
 /**
- * Popout ticket shop. The shop is a plain iframe (loads on shop.weeztix.com,
- * same-origin to itself, no parent CORS). The shop runs the iframe-resizer
- * child, so we attach its parent and use heightCalculationMethod "lowestElement"
- * to size the iframe to the real content (no trailing whitespace), letting the
- * whole modal scroll as one.
+ * Popout ticket shop. Plain iframe (loads on shop.weeztix.com, same-origin to
+ * itself, no parent CORS). The shop runs the iframe-resizer child, so we attach
+ * its parent on load (when the shop is ready, so the handshake succeeds) with
+ * heightCalculationMethod "lowestElement" to size to real content. A viewport
+ * min-height keeps it from collapsing if resizing is slow/unavailable.
  */
 export function TicketModal({ open, onClose }: TicketModalProps) {
   const [mounted, setMounted] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const attached = useRef(false);
 
   useEffect(() => {
     if (!open) return;
@@ -38,28 +39,20 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
     };
   }, [open, onClose]);
 
-  // Attach iframe-resizer once the iframe is mounted, so it auto-sizes to the
-  // shop's actual content height.
-  useEffect(() => {
-    if (!mounted) return;
+  function handleLoad() {
+    if (attached.current) return;
     const el = iframeRef.current;
     if (!el) return;
-    let cancelled = false;
+    attached.current = true;
     import("iframe-resizer/js/iframeResizer")
       .then(({ default: iframeResize }) => {
-        if (!cancelled) {
-          iframeResize(
-            { checkOrigin: false, heightCalculationMethod: "lowestElement", log: false },
-            el,
-          );
-        }
+        iframeResize(
+          { checkOrigin: false, heightCalculationMethod: "lowestElement", log: false },
+          el,
+        );
       })
       .catch(() => {});
-    return () => {
-      cancelled = true;
-      (el as unknown as { iFrameResizer?: { close: () => void } }).iFrameResizer?.close?.();
-    };
-  }, [mounted]);
+  }
 
   if (!mounted) return null;
 
@@ -93,7 +86,8 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
             src={SHOP_URL}
             title="Ticket shop"
             allow="payment"
-            style={{ minHeight: 600 }}
+            onLoad={handleLoad}
+            style={{ minHeight: "80vh" }}
             className="w-full rounded-xl bg-background"
           />
           <p className="mt-3 text-center text-xs text-muted-foreground">
