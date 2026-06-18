@@ -121,7 +121,8 @@ export interface AgendaItem {
   /** End time, shown as a range for multi-session blocks. */
   readonly endTime?: string;
   readonly title: string;
-  readonly description: string;
+  /** Optional blurb; session placeholders stay title-only until confirmed. */
+  readonly description?: string;
   readonly kind: AgendaKind;
   /** Number of talks in this block (renders a "N sessions" badge). */
   readonly sessions?: number;
@@ -152,7 +153,6 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "09:25",
     endTime: "10:15",
     title: "Session 1",
-    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
   },
   {
@@ -166,7 +166,6 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "10:20",
     endTime: "11:10",
     title: "Session 2",
-    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
   },
   {
@@ -180,7 +179,6 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "11:35",
     endTime: "12:25",
     title: "Session 3",
-    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
   },
   {
@@ -194,7 +192,6 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "13:25",
     endTime: "14:15",
     title: "Session 4",
-    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
   },
   {
@@ -208,7 +205,6 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "14:20",
     endTime: "15:10",
     title: "Session 5",
-    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
   },
   {

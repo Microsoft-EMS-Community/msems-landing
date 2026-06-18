@@ -7,7 +7,6 @@ import {
   Sparkles,
   ArrowLeftRight,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { AGENDA, type AgendaItem, type AgendaKind } from "@/lib/event";
 import { getSessionizeAgenda } from "@/lib/sessionize";
 
@@ -21,10 +20,7 @@ function to12h(time: string): string {
   return m === "00" ? `${hour} ${ampm}` : `${hour}:${m} ${ampm}`;
 }
 
-const KIND_META: Record<
-  AgendaKind,
-  { label: string; icon: typeof Coffee }
-> = {
+const KIND_META: Record<AgendaKind, { label: string; icon: typeof Coffee }> = {
   registration: { label: "Arrival", icon: Coffee },
   welcome: { label: "Welcome", icon: Hand },
   sessions: { label: "Session", icon: Mic },
@@ -35,10 +31,92 @@ const KIND_META: Record<
   closing: { label: "Closing", icon: Hand },
 };
 
+// Short connective moments render as slim one-line rows, not full cards.
+const COMPACT: ReadonlySet<AgendaKind> = new Set(["changeover", "break"]);
+
+function timeRange(item: AgendaItem): string {
+  return item.endTime
+    ? `${to12h(item.time)} - ${to12h(item.endTime)}`
+    : to12h(item.time);
+}
+
+function CompactRow({ item }: { item: AgendaItem }) {
+  const { icon: Icon } = KIND_META[item.kind];
+  return (
+    <li className="reveal flex items-center gap-2.5 py-1 pl-2 text-xs text-muted-foreground">
+      <Icon className="size-3.5 shrink-0 text-muted-foreground/70" />
+      <span className="shrink-0 tabular-nums">{to12h(item.time)}</span>
+      <span className="h-px flex-1 bg-white/5" />
+      <span className="shrink-0">{item.title}</span>
+    </li>
+  );
+}
+
+function FullRow({ item }: { item: AgendaItem }) {
+  const { icon: Icon } = KIND_META[item.kind];
+  return (
+    <li
+      className={`reveal flex gap-3 rounded-xl border p-3 transition-colors ${
+        item.featured
+          ? "border-brand-pink/30 bg-brand-pink/[0.06]"
+          : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
+      }`}
+    >
+      <span
+        className={`grid size-9 shrink-0 place-items-center rounded-xl border ${
+          item.featured
+            ? "border-transparent brand-gradient-bg text-white"
+            : "border-white/10 bg-card text-brand-pink"
+        }`}
+      >
+        <Icon className="size-4" />
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs font-semibold tabular-nums text-foreground/90">
+            {timeRange(item)}
+          </span>
+          {item.featured && (
+            <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-medium text-brand-pink">
+              <Sparkles className="size-3" />
+              Signature
+            </span>
+          )}
+        </div>
+        <h3 className="text-sm font-semibold leading-tight">{item.title}</h3>
+        {item.description && (
+          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+            {item.description}
+          </p>
+        )}
+      </div>
+    </li>
+  );
+}
+
+function Column({ label, items }: { label: string; items: AgendaItem[] }) {
+  return (
+    <div>
+      <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-pink/80">
+        {label}
+      </h3>
+      <ol className="space-y-2">
+        {items.map((item) =>
+          COMPACT.has(item.kind) ? (
+            <CompactRow key={`${item.time}-${item.title}`} item={item} />
+          ) : (
+            <FullRow key={`${item.time}-${item.title}`} item={item} />
+          ),
+        )}
+      </ol>
+    </div>
+  );
+}
+
 export async function Agenda() {
-  // Merge: keep the curated fixed anchors (doors, lunch, CloudHour, social)
-  // and slot the live Sessionize talks between them by time. Until a schedule
-  // is published there are no live talks, so the full curated AGENDA shows.
+  // Merge: keep the curated fixed anchors (registration, breaks, Cloud Hour,
+  // etc.) and slot the live Sessionize talks between them by time. Until a
+  // schedule is published there are no live talks, so the curated AGENDA shows.
   const liveTalks = (await getSessionizeAgenda()).filter(
     (i) => i.kind === "sessions",
   );
@@ -47,6 +125,11 @@ export async function Agenda() {
     liveTalks.length > 0
       ? [...anchors, ...liveTalks].sort((a, b) => a.time.localeCompare(b.time))
       : AGENDA;
+
+  // Split the day into two columns at lunchtime so it fits a screen.
+  const morning = items.filter((i) => i.time < "12:25");
+  const afternoon = items.filter((i) => i.time >= "12:25");
+
   const note =
     liveTalks.length > 0
       ? "Talks confirmed via Sessionize. Times shown in local time and may change."
@@ -55,7 +138,7 @@ export async function Agenda() {
   return (
     <section
       id="agenda"
-      className="mx-auto max-w-3xl scroll-mt-20 px-4 pb-20 sm:px-6"
+      className="mx-auto max-w-4xl scroll-mt-20 px-4 pb-20 sm:px-6"
     >
       <div className="text-center">
         <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
@@ -68,67 +151,10 @@ export async function Agenda() {
         </p>
       </div>
 
-      <ol className="relative mt-12 space-y-4 before:absolute before:left-[1.4rem] before:top-2 before:bottom-2 before:hidden before:w-px before:bg-white/10 sm:before:block">
-        {items.map((item) => {
-          const { label, icon: Icon } = KIND_META[item.kind];
-          return (
-            <li
-              key={`${item.time}-${item.title}`}
-              className="reveal relative flex gap-4"
-            >
-              <span
-                className={`relative z-10 hidden size-12 shrink-0 place-items-center rounded-2xl border sm:grid ${
-                  item.featured
-                    ? "border-transparent brand-gradient-bg text-white"
-                    : "border-white/10 bg-card text-brand-pink"
-                }`}
-              >
-                <Icon className="size-5" />
-              </span>
-
-              <div
-                className={`flex-1 rounded-2xl border p-4 transition-colors ${
-                  item.featured
-                    ? "border-brand-pink/30 bg-brand-pink/[0.06]"
-                    : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <span className="text-sm font-semibold tabular-nums text-foreground">
-                    {item.endTime
-                      ? `${to12h(item.time)} - ${to12h(item.endTime)}`
-                      : to12h(item.time)}
-                  </span>
-                  {item.sessions ? (
-                    <Badge
-                      variant="secondary"
-                      className="shrink-0 border border-brand-pink/30 bg-brand-pink/10 text-xs font-medium text-brand-pink"
-                    >
-                      {item.sessions} sessions
-                    </Badge>
-                  ) : item.featured ? (
-                    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-brand-pink">
-                      <Sparkles className="size-3" />
-                      Community signature
-                    </span>
-                  ) : (
-                    <Badge
-                      variant="secondary"
-                      className="shrink-0 border border-white/10 bg-white/5 text-xs font-normal"
-                    >
-                      {label}
-                    </Badge>
-                  )}
-                </div>
-                <h3 className="mt-2 font-semibold">{item.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  {item.description}
-                </p>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+      <div className="mt-12 grid gap-x-8 gap-y-10 md:grid-cols-2">
+        <Column label="Morning" items={morning} />
+        <Column label="Afternoon" items={afternoon} />
+      </div>
 
       {note && (
         <p className="mt-8 text-center text-xs text-muted-foreground">{note}</p>
