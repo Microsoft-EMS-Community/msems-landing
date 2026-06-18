@@ -267,7 +267,7 @@ export default async function Home() {
             works and what doesn&apos;t. It&apos;s not-for-profit, community-run
             and open to everyone, so you don&apos;t need to be on the Discord to
             join. Come for the sessions, leave with new contacts, straight
-            answers and a few good war stories.
+            answers and a few good stories from the field.
           </p>
           <div className="mx-auto mt-8 max-w-xl">
             <PoweredByMicrosoft variant="bar" />
@@ -280,7 +280,7 @@ export default async function Home() {
               height={18}
               className="rounded-[3px]"
             />
-            Microsoft MVPs in the room
+            Microsoft MVPs &amp; MCTs in the room
           </div>
         </div>
       </section>
