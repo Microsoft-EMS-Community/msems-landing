@@ -137,7 +137,7 @@ export default async function Home() {
                 Microsoft Defender, hosted at {EVENT.venue}, {EVENT.venueArea}.
                 Open to everyone.
               </p>
-              <p className="mx-auto mt-4 max-w-xl text-balance text-base font-medium text-foreground/85 lg:mx-0">
+              <p className="mx-auto mt-4 max-w-xl text-balance text-base italic text-muted-foreground lg:mx-0">
                 Need a break from AI? Meet real people, without the agents.
               </p>
 
@@ -190,12 +190,12 @@ export default async function Home() {
 
             {/* Right: action card */}
             <div className="rise-in">
-              <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-center backdrop-blur-sm sm:p-8">
+              <div className="relative rounded-3xl border border-white/10 bg-background/70 p-6 text-center shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
                 <Countdown targetISO={EVENT.startsAtISO} />
 
                 <div id="signup-top" className="mt-7 scroll-mt-24 rounded-2xl">
                   <p className="mb-3 text-balance text-base font-semibold text-foreground">
-                    Seats are limited, get notified first
+                    Be first when seats open
                   </p>
                   <NotifyForm />
                   <p className="mt-3 text-sm text-muted-foreground">
