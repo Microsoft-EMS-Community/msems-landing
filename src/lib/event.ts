@@ -333,6 +333,8 @@ export interface TeamMember {
   readonly role: TeamRole;
   /** Microsoft MVP awardee (renders the MVP badge). */
   readonly mvp?: boolean;
+  /** Microsoft Certified Trainer (renders the MCT badge). */
+  readonly mct?: boolean;
   /** Part of the summit organising team (gets an "Event team" badge). */
   readonly eventTeam?: boolean;
   /** Full LinkedIn profile URL; renders a LinkedIn link when set. */
@@ -388,6 +390,7 @@ export const TEAM: readonly TeamMember[] = [
     handle: "badfish64",
     role: "contributor",
     photo: "/team/effie-antoniadi.png",
+    mct: true,
     eventTeam: true,
     country: "Greece",
     linkedin: "https://www.linkedin.com/in/eantoniadi/",

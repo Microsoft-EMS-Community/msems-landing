@@ -130,6 +130,15 @@ function MemberCard({ member }: { member: TeamMember }) {
               className="rounded-[3px]"
             />
           )}
+          {member.mct && (
+            <Image
+              src="/mct-badge.png"
+              alt="Microsoft Certified Trainer"
+              title="Microsoft Certified Trainer"
+              width={16}
+              height={16}
+            />
+          )}
         </div>
       </div>
 

@@ -278,8 +278,8 @@ export default async function Home() {
               <Image
                 src="/mvp-badge.png"
                 alt="Microsoft MVP"
-                width={28}
-                height={28}
+                width={40}
+                height={40}
                 className="rounded-[3px]"
               />
               Microsoft MVPs
@@ -288,8 +288,8 @@ export default async function Home() {
               <Image
                 src="/mct-badge.png"
                 alt="Microsoft Certified Trainer"
-                width={28}
-                height={28}
+                width={40}
+                height={40}
               />
               Microsoft Certified Trainers
             </span>
