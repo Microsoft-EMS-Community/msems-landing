@@ -1,5 +1,3 @@
-import { PRICING, allInPrice } from "@/lib/event";
-
 // A ticket-styled visual of where a ticket goes, to show the event runs at
 // cost. Percentages are an approximate split, not exact accounting.
 const SLICES: ReadonlyArray<{ label: string; pct: number; color: string }> = [
@@ -11,25 +9,19 @@ const SLICES: ReadonlyArray<{ label: string; pct: number; color: string }> = [
 ];
 
 export function TicketBreakdown() {
-  const price = `${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}`;
-
   return (
     <div className="relative mx-auto mt-12 max-w-2xl rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
       {/* Ticket head */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-brand-pink/80">
-            Admit one
-          </p>
-          <p className="mt-1 text-lg font-bold leading-tight">Your ticket</p>
-          <p className="text-xs text-muted-foreground">
-            Run at cost, here&apos;s where it goes
-          </p>
-        </div>
-        <div className="shrink-0 text-right">
-          <p className="text-2xl font-bold tracking-tight">{price}</p>
-          <p className="text-[11px] text-muted-foreground">early bird, all in</p>
-        </div>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-brand-pink/80">
+          Admit one
+        </p>
+        <p className="mt-1 text-lg font-bold leading-tight">
+          Where your ticket goes
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Run at cost, the same split whichever ticket you pick
+        </p>
       </div>
 
       {/* Perforated tear (the ticket notches) */}
