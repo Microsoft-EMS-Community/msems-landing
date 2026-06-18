@@ -469,7 +469,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "Why is there an early bird and standard price?",
     answer:
-      "The event is run at cost, so the price only ever covers the day. Early bird is a small thank-you for booking early, and it helps us plan and pay the venue and catering deposits up front. Standard is the regular price once the early seats are gone. Either way it goes straight into running the event, never profit.",
+      "The event is run at cost, so the price only ever covers the day. Microsoft kindly provides the venue, but we pay for catering, drinks and the rest, so early bird is a small thank-you for booking early that helps us pay those costs up front. Standard is the regular price once the early seats are gone. Either way it goes straight into running the event, never profit.",
   },
   {
     question: "Where exactly is it?",
