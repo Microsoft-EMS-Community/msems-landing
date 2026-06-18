@@ -108,13 +108,14 @@ export function Pricing() {
         not-for-profit, community-run event powered by {EVENT.venue}.
       </p>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mx-auto mt-6 max-w-md text-balance text-center text-sm text-muted-foreground">
         Need sign-off?{" "}
         <a
           href="/convince"
           className="font-medium text-brand-pink underline underline-offset-4 transition-colors hover:text-brand-purple"
         >
-          Convince your boss with a ready-made letter →
+          Convince your boss with a{" "}
+          <span className="whitespace-nowrap">ready-made letter →</span>
         </a>
       </p>
     </section>
