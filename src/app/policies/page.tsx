@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const WEEZTIX_TERMS = "https://weeztix.com/ticket-buyer-terms";
 
 const PROVIDERS: ReadonlyArray<{ name: string; use: string; region: string }> = [
-  { name: "Vercel", use: "Website hosting", region: "US / EU" },
+  { name: "Vercel", use: "Website hosting", region: "EU" },
   { name: "Cloudflare", use: "Content delivery & cookieless analytics", region: "Global (US)" },
   { name: "Supabase", use: "Game leaderboards", region: "EU" },
   { name: "Weeztix", use: "Ticketing", region: "EU (Netherlands)" },
