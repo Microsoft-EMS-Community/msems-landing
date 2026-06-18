@@ -55,7 +55,9 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
         </div>
 
         <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-          An independent, community-run event, run on a not-for-profit basis.
+          An independent, community-run event. A legal entity handles
+          ticketing, payouts and VAT, and the event is run at cost, not for
+          profit.
         </p>
         <div className="mt-4 space-y-0.5 text-xs text-muted-foreground">
           <p>
