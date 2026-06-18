@@ -168,7 +168,7 @@ export default async function Home() {
                 <Countdown targetISO={EVENT.startsAtISO} />
 
                 <div id="signup-top" className="mt-7 scroll-mt-24">
-                  <p className="mb-3 text-base font-semibold text-foreground">
+                  <p className="mb-3 text-balance text-base font-semibold text-foreground">
                     Seats are limited, get notified first
                   </p>
                   <NotifyForm />
