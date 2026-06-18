@@ -56,10 +56,10 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
 
         <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
           This is an independent, community-run event, organised on a
-          not-for-profit basis by sky made simple ApS, owned by Jonas Bøgvad.
-          The Microsoft EMS Community is not directly affiliated with, endorsed
-          by, or sponsored by Microsoft. Microsoft and product names are
-          trademarks of the Microsoft group of companies.
+          not-for-profit basis by sky made simple ApS. The Microsoft EMS
+          Community is not directly affiliated with, endorsed by, or sponsored
+          by Microsoft. Microsoft and product names are trademarks of the
+          Microsoft group of companies.
         </p>
         <div className="mt-6 border-t border-white/5 pt-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
