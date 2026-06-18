@@ -1,15 +1,10 @@
 import { Check, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TicketButton } from "@/components/ticket-button";
-import { EVENT, PRICING } from "@/lib/event";
+import { EVENT, PRICING, allInPrice } from "@/lib/event";
 
 export function Pricing() {
-  const { currency, socialAddon, serviceFeePerTicket, transactionFeeRate } =
-    PRICING;
-
-  // Headline price = the real all-in total: ticket + service fee + 3.5% on top.
-  const allIn = (price: number) =>
-    ((price + serviceFeePerTicket) * (1 + transactionFeeRate)).toFixed(2);
+  const { currency, socialAddon } = PRICING;
 
   return (
     <section
@@ -59,12 +54,12 @@ export function Pricing() {
             <div className="mt-5 flex items-baseline gap-1.5">
               <span className="text-5xl font-bold tracking-tight">
                 {currency}
-                {allIn(tier.price)}
+                {allInPrice(tier.price)}
               </span>
               <span className="text-sm text-muted-foreground">/ ticket</span>
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              All in · includes VAT and all booking fees
+              Includes VAT and all booking fees
             </p>
 
             <div className="my-6 h-px bg-white/10" />

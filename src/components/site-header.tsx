@@ -5,7 +5,7 @@ import { NotifyNavButton } from "@/components/notify-nav-button";
 import { MobileNav } from "@/components/mobile-nav";
 import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
-import { PRICING } from "@/lib/event";
+import { PRICING, allInPrice } from "@/lib/event";
 
 export function SiteHeader() {
   return (
@@ -17,7 +17,7 @@ export function SiteHeader() {
       >
         <Ticket className="size-3.5 shrink-0 sm:size-4" />
         Early bird tickets, only {PRICING.currency}
-        {PRICING.tiers[0].price}
+        {allInPrice(PRICING.tiers[0].price)}
         <span className="hidden opacity-80 sm:inline">· On sale now</span>
       </Link>
 

@@ -20,7 +20,6 @@ export const EVENT = {
   venueAddress: "Kanalvej 7, 2800 Kongens Lyngby",
   mapUrl:
     "https://www.google.com/maps/search/?api=1&query=Microsoft%20Kanalvej%207%202800%20Kongens%20Lyngby",
-  feeLabel: "From €35",
   feeNote:
     "The small fee covers lunch, drinks and beverages for the day. An optional evening social can be added on.",
   discordInvite: "https://aka.ms/M365EMSDiscord",
@@ -329,6 +328,14 @@ export const PRICING = {
     },
   ] satisfies readonly PricingTier[],
 } as const;
+
+/** The real all-in price a buyer pays: ticket + service fee + transaction %. */
+export function allInPrice(price: number): string {
+  return (
+    (price + PRICING.serviceFeePerTicket) *
+    (1 + PRICING.transactionFeeRate)
+  ).toFixed(2);
+}
 
 export type TeamRole = "moderator" | "contributor";
 

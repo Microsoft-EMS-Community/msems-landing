@@ -48,6 +48,7 @@ import {
   TOPICS,
   FAQS,
   PRICING,
+  allInPrice,
   SITE_URL,
 } from "@/lib/event";
 import { getDiscordStats, formatCount } from "@/lib/discord";
@@ -56,7 +57,11 @@ const FACTS = [
   { icon: CalendarDays, label: "Date", value: EVENT.dateLabel },
   { icon: Clock, label: "Time", value: EVENT.timeLabel },
   { icon: MapPin, label: "Venue", value: `${EVENT.venue}, ${EVENT.venueArea}` },
-  { icon: Ticket, label: "Fee", value: EVENT.feeLabel },
+  {
+    icon: Ticket,
+    label: "Fee",
+    value: `From ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}`,
+  },
 ] as const;
 
 export default async function Home() {
@@ -94,7 +99,7 @@ export default async function Home() {
     },
     offers: {
       "@type": "Offer",
-      price: String(PRICING.tiers[0].price),
+      price: allInPrice(PRICING.tiers[0].price),
       priceCurrency: "EUR",
       availability: "https://schema.org/PreOrder",
       url: SITE_URL,
@@ -154,7 +159,7 @@ export default async function Home() {
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
                   <Ticket className="size-4 text-brand-purple" />
                   Early bird {PRICING.currency}
-                  {PRICING.tiers[0].price}
+                  {allInPrice(PRICING.tiers[0].price)}
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
                   <Languages className="size-4 text-brand-teal" />
@@ -200,7 +205,7 @@ export default async function Home() {
                   <TicketButton className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90" />
                   <p className="mt-3 text-sm text-muted-foreground">
                     From {PRICING.currency}
-                    {PRICING.tiers[0].price} · or{" "}
+                    {allInPrice(PRICING.tiers[0].price)} · or{" "}
                     <a
                       href={EVENT.discordInvite}
                       target="_blank"

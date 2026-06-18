@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TicketWidget } from "@/components/ticket-widget";
 import { Button } from "@/components/ui/button";
-import { EVENT, PRICING } from "@/lib/event";
+import { EVENT, PRICING, allInPrice } from "@/lib/event";
 
 export const metadata: Metadata = {
   title: "Tickets | Microsoft EMS Community Summit",
@@ -26,7 +26,7 @@ export default function TicketsPage() {
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
             {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}. From{" "}
             {PRICING.currency}
-            {PRICING.tiers[0].price}. Seats are limited.
+            {allInPrice(PRICING.tiers[0].price)}. Seats are limited.
           </p>
         </div>
 

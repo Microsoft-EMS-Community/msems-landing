@@ -4,7 +4,7 @@ import { ArrowLeft, Briefcase, CalendarDays, MapPin, Ticket } from "lucide-react
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CopyButton } from "@/components/copy-button";
-import { EVENT, PRICING, SITE_URL } from "@/lib/event";
+import { EVENT, PRICING, allInPrice, SITE_URL } from "@/lib/event";
 
 export const metadata: Metadata = {
   title: "Convince your boss | Microsoft EMS Community Summit",
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "A ready-made letter to help you get sign-off to attend the Microsoft EMS Community Summit.",
 };
 
-const earlyBird = `${PRICING.currency}${PRICING.tiers[0].price}`;
+const earlyBird = `${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}`;
 
 const LETTER = `Hi [Manager],
 
