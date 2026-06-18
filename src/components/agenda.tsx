@@ -3,6 +3,16 @@ import { Badge } from "@/components/ui/badge";
 import { AGENDA, AGENDA_NOTE, type AgendaItem, type AgendaKind } from "@/lib/event";
 import { getSessionizeAgenda } from "@/lib/sessionize";
 
+/** "08:30" -> "8:30 AM", "17:00" -> "5 PM" (drops :00 on whole hours). */
+function to12h(time: string): string {
+  const [h, m = "00"] = time.split(":");
+  let hour = parseInt(h, 10);
+  if (Number.isNaN(hour)) return time;
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return m === "00" ? `${hour} ${ampm}` : `${hour}:${m} ${ampm}`;
+}
+
 const KIND_META: Record<
   AgendaKind,
   { label: string; icon: typeof Coffee }
@@ -74,8 +84,10 @@ export async function Agenda() {
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
-                  <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
-                    {item.endTime ? `${item.time}–${item.endTime}` : item.time}
+                  <span className="text-sm font-semibold tabular-nums text-foreground">
+                    {item.endTime
+                      ? `${to12h(item.time)} - ${to12h(item.endTime)}`
+                      : to12h(item.time)}
                   </span>
                   {item.sessions ? (
                     <Badge
