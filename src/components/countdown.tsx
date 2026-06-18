@@ -56,7 +56,7 @@ export function Countdown({ targetISO }: CountdownProps) {
           <div className="font-mono text-2xl font-bold tabular-nums sm:text-4xl">
             {timeLeft ? String(timeLeft[key]).padStart(2, "0") : "--"}
           </div>
-          <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+          <div className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground sm:text-xs sm:tracking-widest">
             {label}
           </div>
         </div>
