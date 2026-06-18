@@ -6,6 +6,7 @@ import {
   Users,
   Sparkles,
   Mic,
+  Megaphone,
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
@@ -490,6 +491,29 @@ export default async function Home() {
         </p>
       </section>
 
+      {/* ---------- Spread the word ---------- */}
+      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+        <div className="flex flex-col items-center gap-5 rounded-3xl border border-brand-pink/20 bg-brand-pink/[0.05] px-6 py-12 text-center sm:px-10">
+          <span className="grid size-12 place-items-center rounded-2xl brand-gradient-bg">
+            <Megaphone className="size-6 text-white" />
+          </span>
+          <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
+            This event grows when you share it
+          </h2>
+          <p className="max-w-xl text-muted-foreground">
+            Word of mouth is everything for a community event. Grab a ready-made
+            post and a share graphic, it only takes 30 seconds.
+          </p>
+          <a
+            href="/share"
+            className="sheen inline-flex items-center gap-2 rounded-xl brand-gradient-bg px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          >
+            <Megaphone className="size-4" />
+            Spread the word
+          </a>
+        </div>
+      </section>
+
       {/* ---------- Final CTA with notify form ---------- */}
       <section
         id="notify"
@@ -521,14 +545,7 @@ export default async function Home() {
             >
               Join the server
             </a>{" "}
-            and hit Interested on the event. Or{" "}
-            <a
-              href="/share"
-              className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
-            >
-              help spread the word
-            </a>
-            .
+            and hit Interested on the event.
           </p>
         </div>
       </section>
