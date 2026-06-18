@@ -138,6 +138,10 @@ export default async function Home() {
                   <MapPin className="size-4 text-brand-pink" />
                   {EVENT.venue}, {EVENT.venueArea}
                 </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                  <Ticket className="size-4 text-brand-purple" />
+                  {EVENT.feeLabel}
+                </span>
               </div>
 
               {/* Live community proof */}
