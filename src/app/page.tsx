@@ -188,15 +188,15 @@ export default async function Home() {
                     <span className="grid size-9 shrink-0 place-items-center rounded-lg brand-gradient-bg">
                       <Mic className="size-4 text-white" />
                     </span>
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1 text-left">
                       <p className="flex items-center gap-1.5 text-sm font-semibold">
-                        <span className="relative flex size-2">
+                        <span className="relative flex size-2 shrink-0">
                           <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-teal opacity-75" />
                           <span className="relative inline-flex size-2 rounded-full bg-brand-teal" />
                         </span>
                         Call for Speakers is open
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         Got a talk in you? Submit a session.
                       </p>
                     </div>
