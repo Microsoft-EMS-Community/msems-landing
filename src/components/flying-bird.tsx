@@ -30,13 +30,15 @@ function Bird({
       {/* little tuft */}
       <path d="M47 14 q3 -8 8 -4 q-3 3 -4 8 z" fill={`url(#${gradId})`} />
       {/* cheek blush */}
-      <circle cx="43" cy="33" r="3.4" fill="#ff5fa2" opacity="0.55" />
-      {/* eye */}
+      <circle cx="43" cy="34" r="3.8" fill="#ff5fa2" opacity="0.6" />
+      {/* eye (looking up + bright, happy) */}
       <circle cx="52" cy="26" r="5" fill="#fff" />
-      <circle cx="53.4" cy="26.4" r="2.6" fill="#0f0a1e" />
-      <circle cx="52.3" cy="25.2" r="1" fill="#fff" />
+      <circle cx="53" cy="25.4" r="2.6" fill="#0f0a1e" />
+      <circle cx="53.9" cy="24.3" r="1.3" fill="#fff" />
+      {/* smile */}
+      <path d="M45 35 q4 4 8.5 1.2" stroke="#0f0a1e" strokeWidth="1.5" strokeLinecap="round" fill="none" />
       {/* beak */}
-      <path d="M61 25 L70 28.5 L61 32 Z" fill="#f59e0b" />
+      <path d="M61 24 L70 28 L61 31 Z" fill="#f59e0b" />
       {/* flapping wing */}
       <path className={flap ? "bird-flap" : undefined} d="M28 36 Q40 10 56 22 Q40 30 28 40 Z" fill={`url(#${gradId})`} />
     </svg>
@@ -52,12 +54,22 @@ function Bird({
 export function FlyingBird() {
   const [show, setShow] = useState(false);
   const [perched, setPerched] = useState(false);
+  const [bubble, setBubble] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const timer = useRef<number | null>(null);
+  const announced = useRef(false);
 
-  // Perch the bird once the hero is scrolled past.
+  // Perch the bird once the hero is scrolled past, and give a one-time wave.
   useEffect(() => {
-    const onScroll = () => setPerched(window.scrollY > window.innerHeight * 0.6);
+    const onScroll = () => {
+      const past = window.scrollY > window.innerHeight * 0.6;
+      setPerched(past);
+      if (past && !announced.current) {
+        announced.current = true;
+        setBubble(true);
+        window.setTimeout(() => setBubble(false), 4500);
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -117,7 +129,17 @@ export function FlyingBird() {
       {/* Perched mascot — appears after the hero, dismissible */}
       {perched && !dismissed && (
         <div className="fixed bottom-4 right-4 z-40">
-          <div className="bird-bob relative">
+          <div className="bird-bob group relative">
+            {/* Speech bubble: auto-shows once on landing, and on hover */}
+            <button
+              type="button"
+              onClick={flashSignup}
+              className={`absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-2xl border border-white/10 bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground shadow-lg backdrop-blur transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 ${
+                bubble ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            >
+              Psst! Get notified →
+            </button>
             <button
               type="button"
               onClick={flashSignup}
@@ -125,7 +147,7 @@ export function FlyingBird() {
               title="Get notified"
               className="block w-14 cursor-pointer drop-shadow-[0_8px_18px_rgba(168,85,247,0.45)] transition-transform hover:scale-105 sm:w-16"
             >
-              <Bird gradId="birdGradPerch" />
+              <Bird flap gradId="birdGradPerch" />
             </button>
             <button
               type="button"
