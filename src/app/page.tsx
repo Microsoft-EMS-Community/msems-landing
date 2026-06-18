@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
-import { CopenhagenSkyline } from "@/components/copenhagen-skyline";
+import { HeroPhotoBackdrop } from "@/components/hero-photo-backdrop";
 import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
 import { Speakers } from "@/components/speakers";
@@ -108,8 +108,8 @@ export default async function Home() {
 
       {/* ---------- Hero ---------- */}
       <section className="relative overflow-hidden">
+        <HeroPhotoBackdrop />
         <AuroraBackground />
-        <CopenhagenSkyline />
         <FlyingBird />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">

@@ -330,22 +330,6 @@
   .bird-fly { display: none; }
 }
 
-/* Layered Copenhagen skyline — each layer pans one tile width, at its own speed */
-.skyline-layer {
-  background-repeat: repeat-x;
-  background-position-y: bottom;
-}
-@keyframes skyline-pan {
-  from { background-position-x: 0; }
-  to { background-position-x: var(--skyline-shift); }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .skyline-layer {
-    animation: skyline-pan linear infinite;
-    will-change: background-position;
-  }
-}
-
 /* Pointer spotlight — soft brand glow following the cursor (set via JS vars) */
 .pointer-glow {
   position: fixed;
