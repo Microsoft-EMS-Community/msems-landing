@@ -4,6 +4,7 @@ import { Download, ArrowLeft, Hash, Megaphone } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CopyButton } from "@/components/copy-button";
+import { AnnounceBuilder } from "@/components/announce-builder";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -125,6 +126,31 @@ export default function SharePage() {
                 card.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Speaker announcement builder (for the team) */}
+      <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+        <div className="rounded-2xl border border-brand-pink/20 bg-white/[0.03] p-6 sm:p-8">
+          <div className="flex items-center gap-2">
+            <Megaphone className="size-4 text-brand-pink" />
+            <h2 className="text-2xl font-bold tracking-tight">
+              Announce a speaker
+            </h2>
+            <Badge
+              variant="secondary"
+              className="border border-white/10 bg-white/5 text-xs font-normal"
+            >
+              For the team
+            </Badge>
+          </div>
+          <p className="mt-2 text-muted-foreground">
+            Type the speaker and their session to generate a ready-to-post
+            reveal card. The website link is baked in.
+          </p>
+          <div className="mt-6">
+            <AnnounceBuilder />
           </div>
         </div>
       </section>
