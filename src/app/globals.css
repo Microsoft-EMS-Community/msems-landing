@@ -315,29 +315,29 @@
   0%, 100% { transform: rotate(-20deg); }
   50% { transform: rotate(30deg); }
 }
+/* The big screen-crossing flight is the only motion suppressed for
+   reduced-motion users; the perched mascot stays gently alive (tiny, in place). */
 @media (prefers-reduced-motion: no-preference) {
   .bird-fly {
     animation: bird-fly 18s ease-in-out infinite;
     will-change: transform;
   }
-  .bird-flap {
-    transform-box: fill-box;
-    transform-origin: 0% 100%;
-    animation: bird-flap 0.4s ease-in-out infinite;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .bird-fly { display: none; }
 }
+.bird-flap {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  animation: bird-flap 0.4s ease-in-out infinite;
+}
 
-/* Perched mascot: a gentle bob (held still for reduced-motion) */
+/* Perched mascot: a gentle bob */
 @keyframes bird-bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
-@media (prefers-reduced-motion: no-preference) {
-  .bird-bob { animation: bird-bob 3s ease-in-out infinite; }
-}
+.bird-bob { animation: bird-bob 3s ease-in-out infinite; }
 
 /* Brief glow drawing the eye to the signup form when the early bird is caught */
 @keyframes signup-flash {
