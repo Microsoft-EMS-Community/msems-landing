@@ -76,7 +76,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
         <p className="mt-4 text-xs">
           <Link
             href="/policies"
-            className="text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+            className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Tickets, refunds &amp; privacy policy
           </Link>
