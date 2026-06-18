@@ -190,7 +190,7 @@ export default async function Home() {
 
             {/* Right: action card */}
             <div className="rise-in">
-              <div className="relative rounded-3xl border border-white/10 bg-background/70 p-6 text-center shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
+              <div className="relative rounded-3xl border border-white/10 bg-background/55 p-6 text-center shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
                 <Countdown targetISO={EVENT.startsAtISO} />
 
                 <div id="signup-top" className="mt-7 scroll-mt-24 rounded-2xl">
