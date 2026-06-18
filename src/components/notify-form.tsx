@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { Check, Loader2, ArrowRight } from "lucide-react";
+import { Check, Loader2, ArrowRight, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EVENT, SIGNUP } from "@/lib/event";
 import { burstConfetti } from "@/lib/confetti";
@@ -110,21 +110,32 @@ function InlineNotifyForm() {
 
   if (status === "success") {
     return (
-      <div className="mx-auto flex w-full max-w-md items-start gap-2.5 rounded-2xl border border-brand-teal/30 bg-brand-teal/10 px-5 py-4 text-left text-sm">
-        <Check className="mt-0.5 size-4 shrink-0 text-brand-teal" />
-        <span>
-          You&apos;re on the list! We&apos;ll email you the moment registration
-          opens. While you wait,{" "}
+      <div className="mx-auto w-full max-w-md rounded-2xl border border-brand-teal/30 bg-brand-teal/10 p-5 text-center text-sm">
+        <p className="flex items-center justify-center gap-2 font-medium">
+          <Check className="size-4 shrink-0 text-brand-teal" />
+          You&apos;re on the list!
+        </p>
+        <p className="mt-1 text-muted-foreground">
+          We&apos;ll email you the moment registration opens. Now help us fill
+          the room.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+          <a
+            href="/share"
+            className="sheen inline-flex items-center gap-2 rounded-xl brand-gradient-bg px-4 py-2 font-semibold text-white transition-opacity hover:opacity-90"
+          >
+            <Megaphone className="size-4" />
+            Spread the word
+          </a>
           <a
             href={EVENT.discordInvite}
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap font-medium underline underline-offset-2 hover:text-foreground"
+            className="font-medium underline underline-offset-2 hover:text-foreground"
           >
-            come say hi on Discord
+            or say hi on Discord
           </a>
-          .
-        </span>
+        </div>
       </div>
     );
   }
