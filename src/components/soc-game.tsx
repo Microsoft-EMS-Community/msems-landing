@@ -11,7 +11,7 @@ import { MEDALS } from "@/lib/medals";
  * in; the player picks the right response before a breach meter fills up.
  */
 
-type Action = "isolate" | "reset" | "block" | "dismiss" | "escalate";
+type Action = "isolate" | "reset" | "block" | "dismiss";
 type Severity = "high" | "med" | "low";
 
 interface Scenario {
@@ -40,31 +40,32 @@ const ACTIONS: { key: Action; label: string }[] = [
   { key: "reset", label: "Reset creds" },
   { key: "block", label: "Block source" },
   { key: "dismiss", label: "Dismiss" },
-  { key: "escalate", label: "Escalate" },
 ];
 
 // Each scenario maps to exactly one correct action; the detail telegraphs it.
-// isolate = malware/ransomware on a single endpoint; reset = identity/account
-// compromise; block = an external source (sender/IP/URL/domain); dismiss =
-// known-benign/approved; escalate = confirmed, network-wide incident for IR.
+// isolate = malware on an endpoint; reset = identity/account compromise;
+// block = an external source (sender/IP/URL/domain); dismiss = known-benign.
 const SCENARIOS: readonly Scenario[] = [
   // isolate — contain a compromised endpoint
   { sev: "high", title: "Ransomware on a device", detail: "Mass file encryption + shadow-copy deletion on DESKTOP-12", correct: "isolate" },
   { sev: "high", title: "Credential dumper found", detail: "Defender caught Mimikatz running on FINANCE-PC", correct: "isolate" },
   { sev: "med", title: "Malware executing", detail: "Word spawned PowerShell pulling a payload on HR-04", correct: "isolate" },
   { sev: "med", title: "Beacon from one host", detail: "Cobalt Strike process active on LAPTOP-07", correct: "isolate" },
+  { sev: "high", title: "C2 beacon to APT infra", detail: "A host is beaconing to known nation-state command infrastructure", correct: "isolate" },
 
   // reset — revoke an identity/account compromise
   { sev: "high", title: "Impossible-travel sign-in", detail: "jonas@ signed in from Oslo then Lagos 7 min apart", correct: "reset" },
   { sev: "high", title: "Stolen token replay", detail: "A valid session token is being reused from a new ASN", correct: "reset" },
   { sev: "high", title: "Rogue MFA method added", detail: "An unknown device registered an authenticator on effie@", correct: "reset" },
   { sev: "med", title: "Malicious inbox rule", detail: "Account is auto-forwarding all mail to an external address", correct: "reset" },
+  { sev: "high", title: "Rogue Global Admin", detail: "An unknown session just granted an account Global Admin", correct: "reset" },
 
   // block — cut off an external source
   { sev: "high", title: "Phishing wave", detail: "20 users reported the same credential-harvest sender", correct: "block" },
   { sev: "med", title: "Password spray", detail: "600 failed sign-ins from 5.188.x.x in 4 min", correct: "block" },
   { sev: "med", title: "Typosquat clicks", detail: "SmartScreen logging repeat clicks to micros0ft-secure.com", correct: "block" },
   { sev: "low", title: "New C2 domain to block", detail: "Threat-intel feed lists a fresh malware C2 domain for the blocklist", correct: "block" },
+  { sev: "high", title: "Trade-secret upload", detail: "A tagged trade-secret file is being uploaded to an external site", correct: "block" },
 
   // dismiss — known-benign / approved
   { sev: "low", title: "Scheduled EICAR test", detail: "The SecOps scanner running its daily test signature", correct: "dismiss" },
@@ -72,27 +73,19 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "low", title: "Whitelisted vuln scan", detail: "Approved scanner tripping the usual port-scan alerts", correct: "dismiss" },
   { sev: "low", title: "Backup service account", detail: "Expected sign-in from the known backup server", correct: "dismiss" },
 
-  // escalate — confirmed, network-wide incident for the IR team
-  { sev: "high", title: "Confirmed C2 to nation-state", detail: "Multiple hosts beaconing to known APT infrastructure", correct: "escalate" },
-  { sev: "high", title: "Network-wide encryption", detail: "Ransom note dropped, many file shares encrypting at once", correct: "escalate" },
-  { sev: "high", title: "Active intrusion spreading", detail: "Attacker pivoting across 9 servers in real time, call IR", correct: "escalate" },
-
   // The people behind it (playful, fictional gags)
   { sev: "high", title: "Jonas reused his password", detail: "Impossible-travel sign-in on jonasb, yet again", correct: "reset" },
   { sev: "high", title: "Effie clicked the phish", detail: "Creds harvested from effie@ after a convincing lure", correct: "reset" },
   { sev: "med", title: "Joël's token got lifted", detail: "Session token stolen on the conference Wi-Fi", correct: "reset" },
   { sev: "high", title: "Jay skipped DMARC", detail: "No p=reject, so spoofed CEO mail is landing in inboxes", correct: "block" },
-  { sev: "med", title: "Sebastian left RDP open", detail: "One IP brute-forcing his exposed host", correct: "block" },
+  { sev: "med", title: "Sebastian's RDP brute-forced", detail: "A single IP is hammering the login on his exposed box", correct: "block" },
   { sev: "med", title: "ToastedTy found a USB", detail: "Mystery USB detonating malware on his laptop", correct: "isolate" },
   { sev: "low", title: "Phil scheduled this", detail: "Sanctioned maintenance during the approved change window", correct: "dismiss" },
   { sev: "low", title: "Sven's backup job", detail: "Known backup service account doing its nightly run", correct: "dismiss" },
-  { sev: "high", title: "Nicklas called it", detail: "He confirmed a breach spreading across the lab, hand it off", correct: "escalate" },
 
   // Intune & Entra / Conditional Access
   { sev: "high", title: "Entra risky user: high", detail: "Atypical travel + anonymous IP flagged on m.olsen@", correct: "reset" },
   { sev: "high", title: "PRT token theft", detail: "Primary Refresh Token lifted from an Entra-joined laptop", correct: "reset" },
-  { sev: "high", title: "Admin MFA policy off", detail: "Someone disabled the 'Require MFA for admins' CA policy", correct: "escalate" },
-  { sev: "high", title: "Privilege escalation in progress", detail: "An attacker just granted itself Global Admin, declare incident", correct: "escalate" },
   { sev: "med", title: "Intune device rooted", detail: "A managed laptop reports rooted + malware indicators", correct: "isolate" },
   { sev: "med", title: "Tenant password spray", detail: "Legacy-auth spray hitting Exchange Online from one IP", correct: "block" },
   { sev: "low", title: "Report-only CA policy", detail: "A report-only Conditional Access rule logged a would-block", correct: "dismiss" },
@@ -107,7 +100,6 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "high", title: "Purview DLP: PII leak", detail: "5,000 customer PII records being emailed to a personal Gmail", correct: "block" },
   { sev: "med", title: "DLP: card data pasted", detail: "Credit-card numbers pasted into an external web form", correct: "block" },
   { sev: "low", title: "DLP false positive", detail: "Pattern matched a card number but it's an internal order ID", correct: "dismiss" },
-  { sev: "high", title: "DLP: trade-secret theft", detail: "Confirmed bulk export of a tagged trade-secret document", correct: "escalate" },
 ];
 
 const SHIFT_MS = 100_000;
