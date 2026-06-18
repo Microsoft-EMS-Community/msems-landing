@@ -190,10 +190,10 @@ export default async function Home() {
                     </span>
                     <div className="min-w-0 flex-1 text-left">
                       <p className="text-sm font-semibold">
-                        Call for Speakers is open
+                        Call for Speakers
                       </p>
                       <p className="mt-0.5 text-xs text-muted-foreground">
-                        Got a talk in you? Submit a session.
+                        Open now, submit a session.
                       </p>
                     </div>
                     <a
