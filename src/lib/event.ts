@@ -20,7 +20,7 @@ export const EVENT = {
   venueAddress: "Kanalvej 7, 2800 Kongens Lyngby",
   mapUrl:
     "https://www.google.com/maps/search/?api=1&query=Microsoft%20Kanalvej%207%202800%20Kongens%20Lyngby",
-  feeLabel: "From €30",
+  feeLabel: "From €35",
   feeNote:
     "The small fee covers lunch, drinks and beverages for the day. An optional evening social can be added on.",
   discordInvite: "https://aka.ms/M365EMSDiscord",
@@ -285,7 +285,7 @@ export interface PricingTier {
  */
 export const PRICING = {
   currency: "€",
-  pricesFinal: false,
+  pricesFinal: true,
   note: "Indicative pricing, not final yet. Exact prices are confirmed when registration opens.",
   totalSeats: 64,
   socialAddon: {
@@ -301,7 +301,7 @@ export const PRICING = {
     {
       id: "early-bird",
       name: "Early bird",
-      price: 30,
+      price: 35,
       seatsLabel: "First 25 seats",
       badge: "Only 25 available",
       featured: true,
@@ -314,7 +314,7 @@ export const PRICING = {
     {
       id: "standard",
       name: "Standard",
-      price: 40,
+      price: 45,
       seatsLabel: "Seats 26 to 64",
       features: [
         "Full day of sessions",
@@ -453,7 +453,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "How much does it cost?",
     answer:
-      "It's a not-for-profit event, priced to cover costs only. Early-bird tickets start at €30 and standard tickets are €40, both including the full day, sessions, lunch and drinks. An optional evening social can be added on. Prices are indicative and confirmed when registration opens. See the Tickets section for the full breakdown.",
+      "It's a not-for-profit event, priced to cover costs only. Early-bird tickets are €35 and standard tickets are €45 (incl. VAT), both including the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.",
   },
   {
     question: "Where exactly is it?",

@@ -58,7 +58,9 @@ export function Pricing() {
                 {currency}
                 {tier.price}
               </span>
-              <span className="text-sm text-muted-foreground">/ ticket</span>
+              <span className="text-sm text-muted-foreground">
+                / ticket · incl. VAT
+              </span>
             </div>
             <p className="mt-1.5 text-sm text-muted-foreground">
               {tier.seatsLabel}
