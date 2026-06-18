@@ -10,6 +10,7 @@ import {
   Languages,
   ShieldCheck,
 } from "lucide-react";
+import Image from "next/image";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
 import { HeroPhotoBackdrop } from "@/components/hero-photo-backdrop";
@@ -270,6 +271,16 @@ export default async function Home() {
           </p>
           <div className="mx-auto mt-8 max-w-xl">
             <PoweredByMicrosoft variant="bar" />
+          </div>
+          <div className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-muted-foreground backdrop-blur-sm">
+            <Image
+              src="/mvp-badge.png"
+              alt="Microsoft MVP"
+              width={18}
+              height={18}
+              className="rounded-[3px]"
+            />
+            Microsoft MVPs in the room
           </div>
         </div>
       </section>
