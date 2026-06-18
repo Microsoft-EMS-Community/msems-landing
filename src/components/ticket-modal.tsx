@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Script from "next/script";
 import { X } from "lucide-react";
 import { EVENT } from "@/lib/event";
 
@@ -62,13 +61,12 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
           </button>
         </div>
 
-        <div className="min-h-[560px]">
-          <div id="shop-frame" data-url={SHOP_URL} style={{ maxWidth: 600, margin: "0 auto" }} />
-          <Script
-            src="https://shop.weeztix.com/build/integrate.js"
-            strategy="afterInteractive"
-          />
-        </div>
+        <iframe
+          src={SHOP_URL}
+          title="Ticket shop"
+          allow="payment"
+          className="mx-auto block h-[72vh] w-full max-w-[600px] rounded-xl bg-white"
+        />
 
         <p className="mt-3 text-center text-xs text-muted-foreground">
           Trouble loading?{" "}
