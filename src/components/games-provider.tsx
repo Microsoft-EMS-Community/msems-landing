@@ -78,6 +78,37 @@ interface LauncherProps {
   onOpen?: () => void;
   /** Visible label; pass null for an icon-only button. */
   label?: string | null;
+  /** Override the leading icon (e.g. the gradient gamepad). */
+  icon?: ReactNode;
+}
+
+/** Gamepad glyph stroked with the brand gradient (for the play launchers). */
+export function GamepadGradient({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="url(#emsPad)"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="emsPad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#ff2e88" />
+          <stop offset="50%" stopColor="#7c3aed" />
+          <stop offset="100%" stopColor="#06b6d4" />
+        </linearGradient>
+      </defs>
+      <line x1="6" x2="10" y1="11" y2="11" />
+      <line x1="8" x2="8" y1="9" y2="13" />
+      <line x1="15" x2="15.01" y1="12" y2="12" />
+      <line x1="18" x2="18.01" y1="10" y2="10" />
+      <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.544-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />
+    </svg>
+  );
 }
 
 const defaultLauncherClass =
@@ -88,6 +119,7 @@ export function GamesLauncher({
   className,
   onOpen,
   label = "Play a game",
+  icon,
 }: LauncherProps) {
   const { openChooser } = useGames();
   return (
@@ -100,7 +132,7 @@ export function GamesLauncher({
       }}
       className={className ?? defaultLauncherClass}
     >
-      <Gamepad2 className="size-4" />
+      {icon ?? <Gamepad2 className="size-4" />}
       {label}
     </button>
   );

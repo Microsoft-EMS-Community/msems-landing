@@ -270,19 +270,15 @@
   }
 }
 
-/* Game launcher: gradient chip with a soft brand glow so it reads as "play me" */
-@keyframes game-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-brand-purple) 0%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 16px 2px color-mix(in oklch, var(--color-brand-purple) 55%, transparent);
-  }
+/* Game launcher: the gradient gamepad gives a playful wiggle now and then */
+@keyframes game-wiggle {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  91% { transform: rotate(-12deg); }
+  94% { transform: rotate(10deg); }
+  97% { transform: rotate(-5deg); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .game-pulse {
-    animation: game-pulse 2.6s ease-in-out infinite;
-  }
+  .game-wiggle { animation: game-wiggle 4.5s ease-in-out infinite; transform-origin: center; }
 }
 
 /* Scroll progress bar (top, brand gradient) — pure CSS scroll-driven */

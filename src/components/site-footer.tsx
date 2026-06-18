@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { GamesLauncher } from "@/components/games-provider";
+import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { LeaderboardPreview } from "@/components/leaderboard-preview";
 import { COMMUNITY, EVENT } from "@/lib/event";
 
@@ -67,7 +67,10 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             <p className="text-xs text-muted-foreground">
               © {EVENT.dateLabel.split(", ").pop()} {COMMUNITY.name}.
             </p>
-            <GamesLauncher className="game-pulse inline-flex items-center gap-2 rounded-full brand-gradient-bg px-3.5 py-1.5 text-sm font-medium text-white transition-transform hover:scale-105" />
+            <GamesLauncher
+              icon={<GamepadGradient className="game-wiggle size-4" />}
+              className="inline-flex items-center gap-2 text-sm font-medium brand-gradient-text transition-opacity hover:opacity-80"
+            />
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NotifyNavButton } from "@/components/notify-nav-button";
 import { MobileNav } from "@/components/mobile-nav";
-import { GamesLauncher } from "@/components/games-provider";
+import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
 
 export function SiteHeader() {
@@ -36,7 +36,8 @@ export function SiteHeader() {
 
           <GamesLauncher
             label={null}
-            className="game-pulse hidden size-9 items-center justify-center rounded-lg brand-gradient-bg text-white transition-transform hover:scale-105 md:inline-flex"
+            icon={<GamepadGradient className="game-wiggle size-5" />}
+            className="hidden size-9 items-center justify-center rounded-lg transition-colors hover:bg-white/5 md:inline-flex"
           />
 
           <div className="hidden md:block">
