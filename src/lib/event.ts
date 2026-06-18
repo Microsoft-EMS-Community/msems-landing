@@ -290,6 +290,9 @@ export const PRICING = {
   pricesFinal: true,
   note: "Indicative pricing, not final yet. Exact prices are confirmed when registration opens.",
   totalSeats: 64,
+  // Fees added by the ticket shop at checkout, on top of the ticket price.
+  serviceFeePerTicket: 1,
+  transactionFeeRate: 0.035,
   socialAddon: {
     label: "Evening social",
     price: 80,

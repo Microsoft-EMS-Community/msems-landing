@@ -4,7 +4,12 @@ import { TicketButton } from "@/components/ticket-button";
 import { EVENT, PRICING } from "@/lib/event";
 
 export function Pricing() {
-  const { currency, socialAddon } = PRICING;
+  const { currency, socialAddon, serviceFeePerTicket, transactionFeeRate } =
+    PRICING;
+
+  // The real total a buyer pays at checkout: ticket + service fee + 3.5% on top.
+  const allIn = (price: number) =>
+    ((price + serviceFeePerTicket) * (1 + transactionFeeRate)).toFixed(2);
 
   return (
     <section
@@ -62,6 +67,12 @@ export function Pricing() {
             </div>
             <p className="mt-1.5 text-sm text-muted-foreground">
               {tier.seatsLabel}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {currency}
+              {allIn(tier.price)} total at checkout · incl. {currency}
+              {serviceFeePerTicket} service +{" "}
+              {Math.round(transactionFeeRate * 1000) / 10}% fee
             </p>
 
             <div className="my-6 h-px bg-white/10" />
