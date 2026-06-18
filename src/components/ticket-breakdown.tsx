@@ -66,11 +66,6 @@ export function TicketBreakdown() {
           </li>
         ))}
       </ul>
-
-      <p className="mt-5 text-xs text-muted-foreground">
-        Microsoft kindly provides the venue. Anything left over goes back into
-        the day, like extra snacks and fruit, never profit.
-      </p>
     </div>
   );
 }
