@@ -235,7 +235,7 @@ export const AGENDA: readonly AgendaItem[] = [
   {
     time: "16:35",
     endTime: "17:00",
-    title: "Networking & drinks",
+    title: "Networking",
     description: "Wind down with drinks and good conversation to close the day.",
     kind: "social",
   },

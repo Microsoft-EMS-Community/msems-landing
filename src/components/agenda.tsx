@@ -143,25 +143,21 @@ function Column({ label, items }: { label: string; items: AgendaItem[] }) {
 }
 
 export async function Agenda() {
-  // Merge: keep the curated fixed anchors (registration, breaks, CloudHour,
-  // etc.) and slot the live Sessionize talks between them by time. Until a
-  // schedule is published there are no live talks, so the curated AGENDA shows.
-  const liveTalks = (await getSessionizeAgenda()).filter(
-    (i) => i.kind === "sessions",
-  );
-  const anchors = AGENDA.filter((a) => a.kind !== "sessions");
+  // Sessionize (the published grid) is the source of truth once a schedule
+  // exists. Append the site-only optional evening social. Until the grid is
+  // published the curated AGENDA is the fallback.
+  const live = await getSessionizeAgenda();
+  const evening = AGENDA.find((a) => a.optional);
   const items: readonly AgendaItem[] =
-    liveTalks.length > 0
-      ? [...anchors, ...liveTalks].sort((a, b) => a.time.localeCompare(b.time))
-      : AGENDA;
+    live.length > 0 ? (evening ? [...live, evening] : live) : AGENDA;
 
   // Split the day into two balanced columns: morning closes with lunch.
   const morning = items.filter((i) => i.time <= "12:25");
   const afternoon = items.filter((i) => i.time > "12:25");
 
   const note =
-    liveTalks.length > 0
-      ? "Talks confirmed via Sessionize. Times shown in local time and may change."
+    live.length > 0
+      ? "Schedule via Sessionize. Times are local and may change."
       : null;
 
   return (
