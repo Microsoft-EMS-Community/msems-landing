@@ -36,8 +36,8 @@ const TRAVEL: readonly TravelTip[] = [
   },
   {
     icon: Bike,
-    title: "On foot or by bike",
-    body: "Copenhagen is famously flat, compact and bike-friendly. City bikes and e-scooters are everywhere, and most of the centre is a pleasant walk.",
+    title: "Around the city",
+    body: "Take the Metro and train to reach the venue. When you're winding down in town, Copenhagen is flat, compact and famously bike-friendly, with city bikes and e-scooters everywhere and a centre made for walking.",
   },
 ];
 

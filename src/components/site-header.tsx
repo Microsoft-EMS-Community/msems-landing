@@ -1,13 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Ticket } from "lucide-react";
 import { NotifyNavButton } from "@/components/notify-nav-button";
 import { MobileNav } from "@/components/mobile-nav";
 import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
+import { PRICING } from "@/lib/event";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-background/70 backdrop-blur-xl">
+      {/* Announcement strip — part of the sticky header, so it follows. */}
+      <Link
+        href="/#tickets"
+        className="flex items-center justify-center gap-2 brand-gradient-bg px-4 py-1.5 text-center text-xs font-medium text-white transition-opacity hover:opacity-90 sm:text-sm"
+      >
+        <Ticket className="size-3.5 shrink-0 sm:size-4" />
+        Early bird tickets, only {PRICING.currency}
+        {PRICING.tiers[0].price}
+        <span className="hidden opacity-80 sm:inline">· Get notified</span>
+      </Link>
+
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5">
           <Image

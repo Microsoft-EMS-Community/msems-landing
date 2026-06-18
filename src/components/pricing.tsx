@@ -107,6 +107,16 @@ export function Pricing() {
         {!PRICING.pricesFinal && <span>{PRICING.note}</span>} This is a
         not-for-profit, community-run event powered by {EVENT.venue}.
       </p>
+
+      <p className="mt-6 text-center text-sm text-muted-foreground">
+        Need sign-off?{" "}
+        <a
+          href="/convince"
+          className="font-medium text-brand-pink underline underline-offset-4 transition-colors hover:text-brand-purple"
+        >
+          Convince your boss with a ready-made letter →
+        </a>
+      </p>
     </section>
   );
 }
