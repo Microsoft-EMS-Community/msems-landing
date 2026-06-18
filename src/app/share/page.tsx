@@ -90,6 +90,40 @@ export default async function SharePage() {
         </Card>
       </section>
 
+      {/* "I'm attending" card */}
+      <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-balance text-2xl font-bold tracking-tight">
+            Tell everyone you&apos;re going
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            Post the &quot;I&apos;m attending, are you?&quot; card to your feed.
+            It is a 1080x1080 PNG, ready to share as-is.
+          </p>
+          <div className="mt-6 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+            <div className="w-full max-w-xs shrink-0 overflow-hidden rounded-2xl border border-white/10">
+              {/* Generated at /attending-card (1080x1080 PNG). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/attending-card"
+                alt="I'm attending the Microsoft EMS Community Summit card"
+                width={1080}
+                height={1080}
+                className="h-auto w-full"
+              />
+            </div>
+            <Button
+              render={<a href="/attending-card" download="msems-attending.png" />}
+              size="lg"
+              className="brand-gradient-bg border-0 text-white hover:opacity-90"
+            >
+              <Download className="size-4" />
+              Download card
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Speaker card */}
       <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
