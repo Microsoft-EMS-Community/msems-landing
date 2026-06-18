@@ -31,7 +31,7 @@ export async function Speakers() {
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           {hasSpeakers
             ? "The voices behind this year's sessions."
-            : "The lineup is being confirmed now. It lands here as speakers are announced."}
+            : "Expect 7 to 12 community speakers across the day. The lineup is being confirmed now and lands here as it firms up."}
         </p>
       </div>
 

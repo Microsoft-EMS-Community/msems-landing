@@ -142,7 +142,7 @@ export default async function SpeakersPage() {
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             {hasSpeakers
               ? "The voices behind this year's sessions, and what they're bringing to the day."
-              : "The lineup is being confirmed now. Here is where it lands, complete with sessions, as speakers are announced."}
+              : "Expect 7 to 12 community speakers across the day. The lineup is being confirmed now and lands here, complete with sessions, as it firms up."}
           </p>
         </div>
 
