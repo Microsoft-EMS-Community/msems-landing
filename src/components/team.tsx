@@ -10,6 +10,13 @@ function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
+const FLAGS: Record<string, string> = {
+  Denmark: "🇩🇰",
+  Netherlands: "🇳🇱",
+  Greece: "🇬🇷",
+  England: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+};
+
 function initials(name: string): string {
   return name
     .split(" ")
@@ -55,6 +62,11 @@ function MemberCard({ member }: { member: TeamMember }) {
           >
             {member.name}
           </span>
+          {member.country && FLAGS[member.country] && (
+            <span title={member.country} aria-label={member.country}>
+              {FLAGS[member.country]}
+            </span>
+          )}
           {member.mvp && (
             <Image
               src="/mvp-badge.png"

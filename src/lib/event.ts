@@ -276,6 +276,8 @@ export interface TeamMember {
   readonly linkedin?: string;
   /** Photo path in /public; falls back to initials avatar when unset. */
   readonly photo?: string;
+  /** Country (full name) for the flag, e.g. "Denmark". */
+  readonly country?: string;
 }
 
 export const TEAM: readonly TeamMember[] = [
@@ -285,6 +287,7 @@ export const TEAM: readonly TeamMember[] = [
     handle: "katos.",
     role: "moderator",
     photo: "/team/philip-marsh.jpg",
+    country: "England",
     linkedin: "https://www.linkedin.com/in/marshsecurity/",
   },
   {
@@ -293,6 +296,7 @@ export const TEAM: readonly TeamMember[] = [
     role: "moderator",
     photo: "/team/joel-prins.jpg",
     eventTeam: true,
+    country: "Netherlands",
     linkedin: "https://www.linkedin.com/in/jo%C3%ABl-prins-4b4655aa/",
   },
   {
@@ -302,6 +306,7 @@ export const TEAM: readonly TeamMember[] = [
     photo: "/team/jonas-bogvad.jpg",
     mvp: true,
     eventTeam: true,
+    country: "Denmark",
     linkedin: "https://www.linkedin.com/in/jonasbogvad/",
   },
   {
@@ -311,6 +316,7 @@ export const TEAM: readonly TeamMember[] = [
     photo: "/team/jay-kerai.jpg",
     mvp: true,
     eventTeam: true,
+    country: "England",
     linkedin: "https://www.linkedin.com/in/jay-kerai-cyber/",
   },
   // Contributors
@@ -320,6 +326,7 @@ export const TEAM: readonly TeamMember[] = [
     role: "contributor",
     photo: "/team/effie-antoniadi.png",
     eventTeam: true,
+    country: "Greece",
     linkedin: "https://www.linkedin.com/in/eantoniadi/",
   },
   {
@@ -329,6 +336,7 @@ export const TEAM: readonly TeamMember[] = [
     photo: "/team/sebastian.jpg",
     mvp: true,
     eventTeam: true,
+    country: "Denmark",
     linkedin: "https://www.linkedin.com/in/sebastian-markdanner/",
   },
   {
@@ -337,6 +345,7 @@ export const TEAM: readonly TeamMember[] = [
     role: "contributor",
     photo: "/team/nicklas-olsen.jpg",
     mvp: true,
+    country: "Denmark",
     linkedin: "https://www.linkedin.com/in/nicklas-o-40337b205/",
   },
   {
@@ -344,6 +353,7 @@ export const TEAM: readonly TeamMember[] = [
     handle: "falc0n123",
     role: "contributor",
     photo: "/team/sven-visser.jpg",
+    country: "Netherlands",
     linkedin: "https://www.linkedin.com/in/sven-visser-36904649/",
   },
   {
@@ -351,9 +361,10 @@ export const TEAM: readonly TeamMember[] = [
     role: "contributor",
     photo: "/team/christian-frohn.jpg",
     mvp: true,
+    country: "Denmark",
     linkedin: "https://www.linkedin.com/in/frohn/",
   },
-  { name: "ToastedTy", handle: "toastedty", role: "contributor" },
+  { name: "ToastedTy", handle: "toastedty", role: "contributor", country: "England" },
 ] as const;
 
 export interface FaqItem {
