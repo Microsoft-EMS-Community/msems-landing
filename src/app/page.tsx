@@ -9,8 +9,10 @@ import {
   Megaphone,
   Languages,
   ShieldCheck,
+  ArrowRight,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { AuroraBackground } from "@/components/aurora-background";
 import { FlyingBird } from "@/components/flying-bird";
 import { HeroPhotoBackdrop } from "@/components/hero-photo-backdrop";
@@ -22,7 +24,6 @@ import { Pricing } from "@/components/pricing";
 import { SocialEvening } from "@/components/social-evening";
 import { Team } from "@/components/team";
 import { Countdown } from "@/components/countdown";
-import { NotifyForm } from "@/components/notify-form";
 import { PoweredByMicrosoft } from "@/components/powered-by-microsoft";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -195,11 +196,20 @@ export default async function Home() {
 
                 <div id="signup-top" className="mt-7 scroll-mt-24 rounded-2xl">
                   <p className="mb-3 text-balance text-base font-semibold text-foreground">
-                    Be first when seats open
+                    Tickets are on sale, seats are limited
                   </p>
-                  <NotifyForm />
+                  <Button
+                    render={<Link href="/tickets" />}
+                    size="lg"
+                    className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90"
+                  >
+                    <Ticket className="size-4" />
+                    Get your ticket
+                    <ArrowRight className="size-4" />
+                  </Button>
                   <p className="mt-3 text-sm text-muted-foreground">
-                    Or{" "}
+                    From {PRICING.currency}
+                    {PRICING.tiers[0].price} · or{" "}
                     <a
                       href={EVENT.discordInvite}
                       target="_blank"
@@ -568,14 +578,21 @@ export default async function Home() {
             style={{ animationDelay: "-6s" }}
           />
           <h2 className="relative mx-auto max-w-2xl text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-            Save the date, {EVENT.dateLabel}
+            Get your ticket
           </h2>
           <p className="relative mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-            {EVENT.feeNote} Seats are limited, so leave your email and be first
-            in line when registration opens.
+            {EVENT.feeNote} Seats are limited, so grab yours while they last.
           </p>
-          <div className="relative mx-auto mt-8 max-w-md">
-            <NotifyForm />
+          <div className="relative mx-auto mt-8 flex justify-center">
+            <Button
+              render={<Link href="/tickets" />}
+              size="lg"
+              className="sheen brand-gradient-bg border-0 px-8 text-base text-white hover:opacity-90"
+            >
+              <Ticket className="size-4" />
+              Get your ticket
+              <ArrowRight className="size-4" />
+            </Button>
           </div>
           <p className="relative mt-4 text-sm text-muted-foreground">
             Prefer Discord?{" "}

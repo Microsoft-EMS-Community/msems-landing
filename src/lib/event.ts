@@ -29,7 +29,7 @@ export const EVENT = {
   ticketsUrl: "https://shop.weeztix.com/51630dc4-8c23-11ed-aa54-6a57c78572ab",
   githubUrl: "https://github.com/Microsoft-EMS-Community",
   contactEmail: "hello@msems.community",
-  status: "Save the date",
+  status: "Tickets on sale",
   // Call for Speakers (Sessionize). Set cfsOpen to false once submissions close.
   cfsUrl: "https://sessionize.com/microsoft-ems-community-summit/",
   cfsOpen: true,

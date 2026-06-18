@@ -1,9 +1,9 @@
 import { Check, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { EVENT, SIGNUP, PRICING } from "@/lib/event";
+import { EVENT, PRICING } from "@/lib/event";
 
-const signupHref = SIGNUP.externalUrl ?? SIGNUP.anchor;
+const ticketsHref = "/tickets";
 
 export function Pricing() {
   const { currency, socialAddon } = PRICING;
@@ -89,7 +89,7 @@ export function Pricing() {
             </ul>
 
             <Button
-              render={<a href={signupHref} />}
+              render={<a href={ticketsHref} />}
               size="lg"
               className={
                 tier.featured
@@ -98,7 +98,7 @@ export function Pricing() {
               }
               variant={tier.featured ? "default" : "outline"}
             >
-              Get notified when seats open
+              Get tickets
             </Button>
           </div>
         ))}

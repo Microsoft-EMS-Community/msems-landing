@@ -6,16 +6,19 @@ const isDev = process.env.NODE_ENV !== "production";
 // bootstrap/hydration scripts and React inline styles (no nonce middleware).
 // 'unsafe-eval' is only added in dev (React Refresh needs it); production
 // stays strict. cloudflareinsights is allowed for Cloudflare Web Analytics.
+// shop.weeztix.com is allowed for the official ticket-shop embed (/tickets):
+// integrate.js builds an iframe that loads the shop on its own origin.
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'self'",
+  "frame-src 'self' https://shop.weeztix.com",
   "img-src 'self' data: blob: https://cdn.discordapp.com https://sessionize.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://static.cloudflareinsights.com`,
-  "connect-src 'self' https://cloudflareinsights.com",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://static.cloudflareinsights.com https://shop.weeztix.com`,
+  "connect-src 'self' https://cloudflareinsights.com https://shop.weeztix.com",
   "form-action 'self' https://*.list-manage.com",
   "upgrade-insecure-requests",
 ].join("; ");
