@@ -46,6 +46,12 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             >
               GitHub
             </a>
+            <Link
+              href="/policies"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Policies
+            </Link>
             <a
               href={`mailto:${EVENT.contactEmail}`}
               className="text-muted-foreground transition-colors hover:text-foreground"
@@ -55,32 +61,20 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
           </div>
         </div>
 
-        <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-          An independent, community-run event. A legal entity handles
-          ticketing, payouts and VAT, and the event is run at cost, not for
-          profit.
-        </p>
-        <div className="mt-4 space-y-0.5 text-xs text-muted-foreground">
+        <div className="mt-8 max-w-2xl space-y-2 text-xs leading-relaxed text-muted-foreground">
           <p>
-            <span className="text-foreground/80">Organiser:</span> sky made
-            simple ApS (legal entity)
+            An independent, community-run event, run at cost, not for profit.
+            Organised by{" "}
+            <span className="text-foreground/80">sky made simple ApS</span>,
+            which handles ticketing, payouts and VAT.
           </p>
-          <p>VAT ID: DK43434527</p>
-          <p>Owner: Jonas Bøgvad</p>
-          <p>Contact: {EVENT.contactEmail}</p>
+          <p>VAT ID DK43434527 · Owner Jonas Bøgvad · {EVENT.contactEmail}</p>
+          <p>
+            Not affiliated with, endorsed by, or sponsored by Microsoft.
+            Microsoft and product names are trademarks of the Microsoft group of
+            companies.
+          </p>
         </div>
-        <p className="mt-4 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-          Not affiliated with, endorsed by, or sponsored by Microsoft. Microsoft
-          and product names are trademarks of the Microsoft group of companies.
-        </p>
-        <p className="mt-4 text-xs">
-          <Link
-            href="/policies"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Tickets, refunds &amp; privacy policy
-          </Link>
-        </p>
         <div className="mt-6 border-t border-white/5 pt-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs text-muted-foreground">
