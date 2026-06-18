@@ -1,6 +1,7 @@
 import { Check, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TicketButton } from "@/components/ticket-button";
+import { TicketBreakdown } from "@/components/ticket-breakdown";
 import { EVENT, PRICING, allInPrice } from "@/lib/event";
 
 export function Pricing() {
@@ -96,6 +97,8 @@ export function Pricing() {
           </div>
         ))}
       </div>
+
+      <TicketBreakdown />
 
       <p className="mx-auto mt-6 max-w-xl text-center text-xs text-muted-foreground">
         {socialAddon.description}{" "}
