@@ -1,6 +1,7 @@
 import { Coffee, Hand, Mic, Users, PartyPopper, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AGENDA, AGENDA_NOTE, type AgendaKind } from "@/lib/event";
+import { AGENDA, AGENDA_NOTE, type AgendaItem, type AgendaKind } from "@/lib/event";
+import { getSessionizeAgenda } from "@/lib/sessionize";
 
 const KIND_META: Record<
   AgendaKind,
@@ -15,7 +16,13 @@ const KIND_META: Record<
   closing: { label: "Closing", icon: Hand },
 };
 
-export function Agenda() {
+export async function Agenda() {
+  // Use the live Sessionize schedule once it's published; otherwise the
+  // hand-curated running order.
+  const live = await getSessionizeAgenda();
+  const items: readonly AgendaItem[] = live.length > 0 ? live : AGENDA;
+  const note = live.length > 0 ? "Times shown in local time. Subject to change." : AGENDA_NOTE;
+
   return (
     <section
       id="agenda"
@@ -32,7 +39,7 @@ export function Agenda() {
       </div>
 
       <ol className="relative mt-12 space-y-4 before:absolute before:left-[1.4rem] before:top-2 before:bottom-2 before:w-px before:bg-white/10">
-        {AGENDA.map((item) => {
+        {items.map((item) => {
           const { label, icon: Icon } = KIND_META[item.kind];
           return (
             <li
@@ -92,7 +99,7 @@ export function Agenda() {
       </ol>
 
       <p className="mt-8 text-center text-xs text-muted-foreground">
-        {AGENDA_NOTE}
+        {note}
       </p>
     </section>
   );
