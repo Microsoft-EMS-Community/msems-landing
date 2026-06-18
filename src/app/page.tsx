@@ -169,7 +169,7 @@ export default async function Home() {
 
                 <div id="signup-top" className="mt-7 scroll-mt-24">
                   <p className="mb-3 text-base font-semibold text-foreground">
-                    Get notified when registration opens
+                    Seats are limited, get notified first
                   </p>
                   <NotifyForm />
                   <p className="mt-3 text-sm text-muted-foreground">
