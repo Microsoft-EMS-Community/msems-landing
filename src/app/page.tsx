@@ -261,11 +261,12 @@ export default async function Home() {
             <span className="brand-gradient-text">In one room.</span>
           </h2>
           <p className="mt-5 text-balance text-lg text-muted-foreground">
-            We&apos;re taking the community offline for a full day of sessions,
-            debate and good company. It&apos;s a not-for-profit, community-run
-            event, open to everyone who cares about the Microsoft Enterprise
-            Mobility + Security stack. You don&apos;t need to be on the Discord
-            to join us.
+            For one day, the whole community comes offline: real-world takes on
+            the Microsoft EMS stack from the people who actually run it, what
+            works and what doesn&apos;t. It&apos;s not-for-profit, community-run
+            and open to everyone, so you don&apos;t need to be on the Discord to
+            join. Come for the sessions, leave with new contacts, straight
+            answers and a few good war stories.
           </p>
           <div className="mx-auto mt-8 max-w-xl">
             <PoweredByMicrosoft variant="bar" />

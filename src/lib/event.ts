@@ -74,7 +74,7 @@ export const HIGHLIGHTS: readonly HighlightItem[] = [
   {
     title: "A full day of sessions",
     description:
-      "Community-led talks and deep dives across Intune, Entra ID, Microsoft Defender XDR and the wider EMS stack.",
+      "Community-led talks and deep dives across Intune, Entra ID and Microsoft Defender XDR, with real-world takeaways you can put to use the next morning.",
   },
   {
     title: "Open to everyone",
