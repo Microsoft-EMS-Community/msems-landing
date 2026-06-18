@@ -10,12 +10,61 @@ function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
-const FLAGS: Record<string, string> = {
-  Denmark: "🇩🇰",
-  Netherlands: "🇳🇱",
-  Greece: "🇬🇷",
-  England: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-};
+// Inline SVG flags — emoji flags don't render on Windows, so we draw them.
+function Flag({ country }: { country: string }) {
+  const cls = "inline-block h-3.5 w-5 shrink-0 rounded-[2px] ring-1 ring-black/15";
+  switch (country) {
+    case "Denmark":
+      return (
+        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={cls} role="img" aria-label="Denmark">
+          <rect width="28" height="20" fill="#c8102e" />
+          <rect y="8" width="28" height="4" fill="#fff" />
+          <rect x="9" width="4" height="20" fill="#fff" />
+        </svg>
+      );
+    case "Netherlands":
+      return (
+        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={cls} role="img" aria-label="Netherlands">
+          <rect width="28" height="20" fill="#21468b" />
+          <rect width="28" height="13.34" fill="#fff" />
+          <rect width="28" height="6.67" fill="#ae1c28" />
+        </svg>
+      );
+    case "Greece":
+      return (
+        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={cls} role="img" aria-label="Greece">
+          <rect width="28" height="20" fill="#0d5eaf" />
+          <rect y="2.22" width="28" height="2.22" fill="#fff" />
+          <rect y="6.67" width="28" height="2.22" fill="#fff" />
+          <rect y="11.11" width="28" height="2.22" fill="#fff" />
+          <rect y="15.56" width="28" height="2.22" fill="#fff" />
+          <rect width="11.11" height="11.11" fill="#0d5eaf" />
+          <rect x="4.45" width="2.22" height="11.11" fill="#fff" />
+          <rect y="4.45" width="11.11" height="2.22" fill="#fff" />
+        </svg>
+      );
+    case "United Kingdom":
+      return (
+        <svg viewBox="0 0 60 30" preserveAspectRatio="none" className={cls} role="img" aria-label="United Kingdom">
+          <clipPath id="uk-s">
+            <path d="M0,0 v30 h60 v-30 z" />
+          </clipPath>
+          <clipPath id="uk-t">
+            <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
+          </clipPath>
+          <g clipPath="url(#uk-s)">
+            <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
+            <path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#uk-t)" stroke="#c8102e" strokeWidth="4" />
+            <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
+            <path d="M30,0 v30 M0,15 h60" stroke="#c8102e" strokeWidth="6" />
+          </g>
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
 
 function initials(name: string): string {
   return name
@@ -62,11 +111,7 @@ function MemberCard({ member }: { member: TeamMember }) {
           >
             {member.name}
           </span>
-          {member.country && FLAGS[member.country] && (
-            <span title={member.country} aria-label={member.country}>
-              {FLAGS[member.country]}
-            </span>
-          )}
+          {member.country && <Flag country={member.country} />}
           {member.mvp && (
             <Image
               src="/mvp-badge.png"

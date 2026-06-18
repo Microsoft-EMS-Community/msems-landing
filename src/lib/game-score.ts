@@ -49,19 +49,23 @@ export interface SubmitConfig<Prev> {
   message: (ctx: MessageCtx) => string;
 }
 
-/** Standard suffix: best-stands / current place (+ medal + dethrone). */
+/** Standard suffix: shows the player's current place (with medal/dethrone). */
 export function resultTail(ctx: MessageCtx): string {
-  if (!ctx.improved && ctx.hasPrev) return " - best still stands";
-  if (ctx.rank >= 1) {
-    const m = medal(ctx.rank); // "" outside the podium
-    let tail = ` ${m ? `${m} ` : ""}now #${ctx.rank}`;
+  const m = medal(ctx.rank); // "" outside the podium
+  const place = ctx.rank >= 1 ? `${m ? `${m} ` : ""}#${ctx.rank}` : "";
+
+  if (ctx.improved) {
+    if (!place) return ctx.hasPrev ? " - new personal best" : "";
+    let tail = ` now ${place}`;
     if (ctx.rank === 1 && ctx.passedName) {
       tail += `, passed ${ctx.passedName}`;
     }
     return tail;
   }
-  if (ctx.improved && ctx.hasPrev) return " - new personal best";
-  return "";
+
+  // Played but didn't beat their stored best — still show where they stand.
+  if (!place) return ctx.hasPrev ? " - best still stands" : "";
+  return ` - still ${place}`;
 }
 
 /** Keep-best upsert by discord_id + podium-aware Discord announcement. */

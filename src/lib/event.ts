@@ -287,7 +287,7 @@ export const TEAM: readonly TeamMember[] = [
     handle: "katos.",
     role: "moderator",
     photo: "/team/philip-marsh.jpg",
-    country: "England",
+    country: "United Kingdom",
     linkedin: "https://www.linkedin.com/in/marshsecurity/",
   },
   {
@@ -316,7 +316,7 @@ export const TEAM: readonly TeamMember[] = [
     photo: "/team/jay-kerai.jpg",
     mvp: true,
     eventTeam: true,
-    country: "England",
+    country: "United Kingdom",
     linkedin: "https://www.linkedin.com/in/jay-kerai-cyber/",
   },
   // Contributors
@@ -364,7 +364,7 @@ export const TEAM: readonly TeamMember[] = [
     country: "Denmark",
     linkedin: "https://www.linkedin.com/in/frohn/",
   },
-  { name: "ToastedTy", handle: "toastedty", role: "contributor", country: "England" },
+  { name: "ToastedTy", handle: "toastedty", role: "contributor", country: "United Kingdom" },
 ] as const;
 
 export interface FaqItem {

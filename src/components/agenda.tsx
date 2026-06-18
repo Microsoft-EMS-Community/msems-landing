@@ -1,6 +1,6 @@
 import { Coffee, Hand, Mic, Users, PartyPopper, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AGENDA, AGENDA_NOTE, type AgendaItem, type AgendaKind } from "@/lib/event";
+import { AGENDA, type AgendaItem, type AgendaKind } from "@/lib/event";
 import { getSessionizeAgenda } from "@/lib/sessionize";
 
 /** "08:30" -> "8:30 AM", "17:00" -> "5 PM" (drops :00 on whole hours). */
@@ -41,7 +41,7 @@ export async function Agenda() {
   const note =
     liveTalks.length > 0
       ? "Talks confirmed via Sessionize. Times shown in local time and may change."
-      : AGENDA_NOTE;
+      : null;
 
   return (
     <section
@@ -120,9 +120,9 @@ export async function Agenda() {
         })}
       </ol>
 
-      <p className="mt-8 text-center text-xs text-muted-foreground">
-        {note}
-      </p>
+      {note && (
+        <p className="mt-8 text-center text-xs text-muted-foreground">{note}</p>
+      )}
     </section>
   );
 }
