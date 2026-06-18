@@ -16,8 +16,8 @@ export function TicketBreakdown() {
       {/* Perforated tear: notches biting in from both edges + a dotted line */}
       <div className="relative -mx-6 my-6 sm:-mx-8">
         <div className="mx-3 border-t-[3px] border-dotted border-white/25" />
-        <span className="absolute left-0 top-0 size-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background ring-1 ring-inset ring-white/10" />
-        <span className="absolute right-0 top-0 size-6 -translate-y-1/2 translate-x-1/2 rounded-full bg-background ring-1 ring-inset ring-white/10" />
+        <span className="absolute left-0 top-0 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background" />
+        <span className="absolute right-0 top-0 size-5 -translate-y-1/2 translate-x-1/2 rounded-full bg-background" />
       </div>
 
       {/* The split */}
