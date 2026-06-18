@@ -473,13 +473,12 @@ export const FAQS: readonly FaqItem[] = [
   },
   {
     question: "Where exactly is it?",
-    answer:
-      "At Microsoft, near Copenhagen. The location is confirmed; the full address and travel details will be shared with registered attendees closer to the date.",
+    answer: `At ${EVENT.venue}, ${EVENT.venueAddress}, ${EVENT.venueArea}. Check the venue page for the map, how to get there and where to stay.`,
   },
   {
     question: "What about the agenda and speakers?",
     answer:
-      "The program is being finalized and the Call for Speakers is now open on Sessionize, so if you'd like to present, submit your session via the Call for Speakers section. The full agenda will be published here once it's locked in.",
+      "The hour-by-hour running order is already on this page, and we're confirming speakers as the Call for Speakers wraps up. If you'd like to present, submit a session via the Call for Speakers section.",
   },
   {
     question: "How do I get a seat?",
