@@ -184,24 +184,31 @@ export default async function Home() {
                     </a>
                     .
                   </p>
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    <span className="inline-flex items-center gap-1.5 font-medium text-brand-teal">
-                      <span className="relative flex size-2">
-                        <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-teal opacity-75" />
-                        <span className="relative inline-flex size-2 rounded-full bg-brand-teal" />
-                      </span>
-                      Call for Speakers is open
-                    </span>{" "}
-                    ·{" "}
+                  <div className="mt-4 flex items-center gap-3 rounded-xl border border-brand-teal/30 bg-brand-teal/[0.06] p-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-lg brand-gradient-bg">
+                      <Mic className="size-4 text-white" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="flex items-center gap-1.5 text-sm font-semibold">
+                        <span className="relative flex size-2">
+                          <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-teal opacity-75" />
+                          <span className="relative inline-flex size-2 rounded-full bg-brand-teal" />
+                        </span>
+                        Call for Speakers is open
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Got a talk in you? Submit a session.
+                      </p>
+                    </div>
                     <a
                       href={EVENT.cfsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+                      className="sheen shrink-0 whitespace-nowrap rounded-lg brand-gradient-bg px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
                     >
-                      submit a session
+                      Submit
                     </a>
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>
