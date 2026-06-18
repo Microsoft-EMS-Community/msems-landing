@@ -35,7 +35,7 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav className="hidden items-center gap-6 lg:flex">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
@@ -50,14 +50,14 @@ export function SiteHeader() {
           <GamesLauncher
             label={null}
             icon={<GamepadGradient className="game-wiggle size-5" />}
-            className="hidden size-9 items-center justify-center rounded-lg transition-colors hover:bg-white/5 md:inline-flex"
+            className="hidden size-9 items-center justify-center rounded-lg transition-colors hover:bg-white/5 lg:inline-flex"
           />
 
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <NotifyNavButton />
           </div>
 
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <MobileNav />
           </div>
         </div>
