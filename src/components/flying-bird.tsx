@@ -58,12 +58,12 @@ export function FlyingBird() {
 
       {show && (
         <a
-          href="#tickets"
+          href="#signup-top"
           onClick={() => setShow(false)}
           className="pointer-events-auto fixed left-1/2 top-28 z-[60] inline-flex -translate-x-1/2 items-center gap-2 rounded-full brand-gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-2xl"
         >
           <Ticket className="size-4" />
-          You caught the early bird! Snag the early-bird rate →
+          You caught the early bird! Get notified before seats fly →
         </a>
       )}
     </div>
