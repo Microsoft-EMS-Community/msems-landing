@@ -5,8 +5,9 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 
-// A 1080x1080 "speaker announcement" card for the team. Fillable via query
-// params: ?name=&topic=&photo= (photo can be a /public path or an https URL).
+// A 1080x1080 "speaker announcement" card for the team.
+//  - GET  ?name=&topic=&photo=  (photo = /public path or https URL)
+//  - POST { name, topic, photo } (photo can also be an uploaded data: URL)
 export const dynamic = "force-dynamic";
 
 function MicrosoftMark() {
@@ -20,9 +21,10 @@ function MicrosoftMark() {
   );
 }
 
-/** Resolve a photo param to something satori can render, or null. */
+/** Resolve a photo value to something satori can render, or null. */
 async function resolvePhoto(photo: string | null): Promise<string | null> {
   if (!photo) return null;
+  if (photo.startsWith("data:image/")) return photo;
   if (photo.startsWith("https://") || photo.startsWith("http://")) return photo;
   if (photo.startsWith("/")) {
     try {
@@ -37,11 +39,10 @@ async function resolvePhoto(photo: string | null): Promise<string | null> {
   return null;
 }
 
-export async function GET(request: NextRequest) {
-  const sp = request.nextUrl.searchParams;
-  const name = (sp.get("name") || "Speaker name").slice(0, 40);
-  const topic = (sp.get("topic") || "").slice(0, 90);
-  const photoSrc = await resolvePhoto(sp.get("photo"));
+async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | null) {
+  const name = (nameRaw || "Speaker name").slice(0, 40);
+  const topic = (topicRaw || "").slice(0, 90);
+  const photoSrc = await resolvePhoto(photoRaw);
 
   const logoBytes = await readFile(join(process.cwd(), "public", "logo.png"));
   const logoSrc = `data:image/png;base64,${logoBytes.toString("base64")}`;
@@ -67,7 +68,6 @@ export async function GET(request: NextRequest) {
         <div style={{ position: "absolute", top: -160, left: -120, width: 520, height: 520, borderRadius: "50%", background: "#ff2e88", opacity: 0.32, filter: "blur(120px)" }} />
         <div style={{ position: "absolute", bottom: -180, right: -120, width: 520, height: 520, borderRadius: "50%", background: "#06b6d4", opacity: 0.28, filter: "blur(120px)" }} />
 
-        {/* Top: logo + community + announcement pill */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,7 +81,6 @@ export async function GET(request: NextRequest) {
           </div>
         </div>
 
-        {/* Center: photo ring + name + topic */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22 }}>
           <div style={{ display: "flex", width: 248, height: 248, borderRadius: "50%", padding: 6, background: "linear-gradient(135deg, #ff2e88, #a855f7 50%, #22d3ee)" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", background: "#120c22", color: "#8b93a7", fontSize: 20, letterSpacing: 3, textTransform: "uppercase" }}>
@@ -103,7 +102,6 @@ export async function GET(request: NextRequest) {
           ) : null}
         </div>
 
-        {/* Bottom: date + venue, powered-by + link */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%" }}>
           <div style={{ display: "flex", fontSize: 26, color: "#94a3b8" }}>
             {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}
@@ -120,4 +118,28 @@ export async function GET(request: NextRequest) {
     ),
     { width: 1080, height: 1080 },
   );
+}
+
+export async function GET(request: NextRequest) {
+  const sp = request.nextUrl.searchParams;
+  return renderCard(sp.get("name") ?? "", sp.get("topic") ?? "", sp.get("photo"));
+}
+
+interface AnnounceBody {
+  name?: unknown;
+  topic?: unknown;
+  photo?: unknown;
+}
+
+export async function POST(request: Request) {
+  let body: AnnounceBody;
+  try {
+    body = (await request.json()) as AnnounceBody;
+  } catch {
+    body = {};
+  }
+  const name = typeof body.name === "string" ? body.name : "";
+  const topic = typeof body.topic === "string" ? body.topic : "";
+  const photo = typeof body.photo === "string" ? body.photo : null;
+  return renderCard(name, topic, photo);
 }

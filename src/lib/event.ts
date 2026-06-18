@@ -186,6 +186,24 @@ export const AGENDA: readonly AgendaItem[] = [
   },
 ] as const;
 
+export interface Speaker {
+  readonly name: string;
+  /** Role and/or company, e.g. "Microsoft MVP". */
+  readonly title?: string;
+  /** Session title. */
+  readonly session?: string;
+  /** Photo path in /public, e.g. /speakers/jane-doe.jpg. */
+  readonly photo?: string;
+  readonly linkedin?: string;
+}
+
+/**
+ * Confirmed speakers. Fill this in as the Call for Speakers results land;
+ * the Speakers section shows a "coming soon" state while it's empty.
+ * Put speaker photos in /public/speakers and reference them here.
+ */
+export const SPEAKERS: readonly Speaker[] = [];
+
 export interface PricingTier {
   readonly id: string;
   readonly name: string;

@@ -10,6 +10,7 @@ import {
 import { AuroraBackground } from "@/components/aurora-background";
 import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
+import { Speakers } from "@/components/speakers";
 import { Pricing } from "@/components/pricing";
 import { Team } from "@/components/team";
 import { Countdown } from "@/components/countdown";
@@ -288,11 +289,14 @@ export default async function Home() {
       {/* ---------- Agenda ---------- */}
       <Agenda />
 
+      {/* ---------- Speakers ---------- */}
+      <Speakers />
+
       {/* ---------- Tickets / Pricing ---------- */}
       <Pricing />
 
       {/* ---------- Call for Speakers ---------- */}
-      <section id="speakers" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
+      <section id="cfs" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         <Card className="relative overflow-hidden border-white/10 bg-white/[0.03]">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-purple/20 blur-[100px]" />
           <CardContent className="relative flex flex-col items-center gap-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">

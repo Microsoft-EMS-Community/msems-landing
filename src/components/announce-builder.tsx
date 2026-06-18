@@ -1,27 +1,67 @@
 "use client";
 
-import { useState } from "react";
-import { Download } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Download, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const inputClass =
   "h-11 w-full rounded-xl border border-white/15 bg-white/5 px-4 text-sm text-foreground outline-none focus:border-brand-pink/60";
 
 /**
- * A small builder for the team: type a speaker's name + session (and optionally
- * a photo path/URL) and get a finished announcement card to download.
+ * Team tool: type a speaker + session, upload their photo, and download a
+ * ready-to-post announcement card. The card is rendered server-side (so it
+ * matches the other graphics) and previewed live as you type.
  */
 export function AnnounceBuilder() {
   const [name, setName] = useState("");
   const [topic, setTopic] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState<string | null>(null); // uploaded data URL
+  const [photoName, setPhotoName] = useState("");
+  const [preview, setPreview] = useState<string | null>(null); // object URL
+  const [busy, setBusy] = useState(false);
+  const objUrl = useRef<string | null>(null);
 
-  const params = new URLSearchParams();
-  if (name.trim()) params.set("name", name.trim());
-  if (topic.trim()) params.set("topic", topic.trim());
-  if (photo.trim()) params.set("photo", photo.trim());
-  const query = params.toString();
-  const url = `/announce-card${query ? `?${query}` : ""}`;
+  function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPhoto(typeof reader.result === "string" ? reader.result : null);
+      setPhotoName(file.name);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Re-render the card shortly after any change (debounced).
+  useEffect(() => {
+    const id = setTimeout(async () => {
+      setBusy(true);
+      try {
+        const res = await fetch("/announce-card", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, topic, photo }),
+        });
+        if (res.ok) {
+          const blob = await res.blob();
+          if (objUrl.current) URL.revokeObjectURL(objUrl.current);
+          objUrl.current = URL.createObjectURL(blob);
+          setPreview(objUrl.current);
+        }
+      } catch {
+        // best-effort preview
+      } finally {
+        setBusy(false);
+      }
+    }, 500);
+    return () => clearTimeout(id);
+  }, [name, topic, photo]);
+
+  useEffect(() => {
+    return () => {
+      if (objUrl.current) URL.revokeObjectURL(objUrl.current);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
@@ -46,21 +86,32 @@ export function AnnounceBuilder() {
             className={`mt-1.5 ${inputClass}`}
           />
         </label>
-        <label className="text-sm font-medium">
-          Photo <span className="text-muted-foreground">(optional)</span>
+
+        <span className="text-sm font-medium">Speaker photo</span>
+        <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/10">
+          <ImagePlus className="size-4" />
+          {photoName ? "Change photo" : "Upload a photo"}
           <input
-            value={photo}
-            onChange={(e) => setPhoto(e.target.value)}
-            placeholder="/team/jay-kerai.jpg or an https URL"
-            className={`mt-1.5 ${inputClass}`}
+            type="file"
+            accept="image/*"
+            onChange={onFile}
+            className="hidden"
           />
-          <span className="mt-1 block text-xs text-muted-foreground">
-            Use a team photo path like /team/jay-kerai.jpg, or paste an image
-            URL. Leave blank to add the photo in Canva later.
-          </span>
         </label>
+        {photoName && (
+          <span className="truncate text-xs text-muted-foreground">
+            {photoName}
+          </span>
+        )}
+
         <Button
-          render={<a href={url} download="msems-speaker-announcement.png" />}
+          render={
+            <a
+              href={preview ?? "#"}
+              download="msems-speaker-announcement.png"
+              aria-disabled={!preview}
+            />
+          }
           className="brand-gradient-bg border-0 text-white hover:opacity-90"
         >
           <Download className="size-4" />
@@ -68,16 +119,26 @@ export function AnnounceBuilder() {
         </Button>
       </div>
 
-      <div className="w-full flex-1 overflow-hidden rounded-2xl border border-white/10">
-        {/* Live preview of the generated card. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={url}
-          alt="Speaker announcement preview"
-          width={1080}
-          height={1080}
-          className="h-auto w-full"
-        />
+      <div className="relative w-full flex-1 overflow-hidden rounded-2xl border border-white/10">
+        {preview ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={preview}
+            alt="Speaker announcement preview"
+            width={1080}
+            height={1080}
+            className="h-auto w-full"
+          />
+        ) : (
+          <div className="grid aspect-square place-items-center text-sm text-muted-foreground">
+            Fill in the details to preview
+          </div>
+        )}
+        {busy && (
+          <span className="absolute right-3 top-3 rounded-full bg-black/50 px-2 py-1 text-xs text-white">
+            Updating…
+          </span>
+        )}
       </div>
     </div>
   );
