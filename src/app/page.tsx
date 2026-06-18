@@ -184,25 +184,27 @@ export default async function Home() {
                     </a>
                     .
                   </p>
-                  <div className="mt-4 flex items-center gap-3 rounded-xl border border-brand-teal/30 bg-brand-teal/[0.06] p-3">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-lg brand-gradient-bg">
-                      <Mic className="size-4 text-white" />
-                    </span>
-                    <div className="min-w-0 flex-1 text-left">
-                      <p className="text-sm font-semibold">
-                        Call for Speakers
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        Open now, submit a session.
-                      </p>
+                  <div className="mt-4 flex flex-col gap-3 rounded-xl border border-brand-teal/30 bg-brand-teal/[0.06] p-3 sm:flex-row sm:items-center">
+                    <div className="flex flex-1 items-center gap-3 text-left">
+                      <span className="grid size-9 shrink-0 place-items-center rounded-lg brand-gradient-bg">
+                        <Mic className="size-4 text-white" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold">
+                          Call for Speakers is open
+                        </p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          Got a talk in you? Submit a session.
+                        </p>
+                      </div>
                     </div>
                     <a
                       href={EVENT.cfsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="sheen shrink-0 whitespace-nowrap rounded-lg brand-gradient-bg px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                      className="sheen w-full shrink-0 whitespace-nowrap rounded-lg brand-gradient-bg px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90 sm:w-auto"
                     >
-                      Submit
+                      Submit a session
                     </a>
                   </div>
                 </div>
