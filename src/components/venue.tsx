@@ -50,6 +50,10 @@ export function Venue() {
           bike-friendly cities around. Come for the sessions, stay for the
           harbour, the food and Tivoli.
         </p>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+          Flying in? Copenhagen Airport (CPH) is a short metro or train ride
+          away. Travel and hotel tips will follow for registered attendees.
+        </p>
       </div>
 
       <div className="mt-10 grid auto-rows-[190px] grid-cols-2 gap-4 lg:grid-cols-4">
