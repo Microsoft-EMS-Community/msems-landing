@@ -272,15 +272,27 @@ export default async function Home() {
           <div className="mx-auto mt-8 max-w-xl">
             <PoweredByMicrosoft variant="bar" />
           </div>
-          <div className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-muted-foreground backdrop-blur-sm">
-            <Image
-              src="/mvp-badge.png"
-              alt="Microsoft MVP"
-              width={18}
-              height={18}
-              className="rounded-[3px]"
-            />
-            Microsoft MVPs &amp; MCTs in the room
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
+            <span className="text-muted-foreground/80">In the room:</span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+              <Image
+                src="/mvp-badge.png"
+                alt="Microsoft MVP"
+                width={18}
+                height={18}
+                className="rounded-[3px]"
+              />
+              Microsoft MVPs
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+              <Image
+                src="/mct-badge.png"
+                alt="Microsoft Certified Trainer"
+                width={18}
+                height={18}
+              />
+              Microsoft Certified Trainers
+            </span>
           </div>
         </div>
       </section>
