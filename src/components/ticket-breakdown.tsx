@@ -1,4 +1,3 @@
-import { Ticket } from "lucide-react";
 import { PRICING, allInPrice } from "@/lib/event";
 
 // A ticket-styled visual of where a ticket goes, to show the event runs at
@@ -17,20 +16,18 @@ export function TicketBreakdown() {
   return (
     <div className="relative mx-auto mt-12 max-w-2xl rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
       {/* Ticket head */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl brand-gradient-bg">
-            <Ticket className="size-5 text-white" />
-          </span>
-          <div>
-            <p className="font-bold leading-tight">Your ticket</p>
-            <p className="text-xs text-muted-foreground">
-              Run at cost, here&apos;s where it goes
-            </p>
-          </div>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-brand-pink/80">
+            Admit one
+          </p>
+          <p className="mt-1 text-lg font-bold leading-tight">Your ticket</p>
+          <p className="text-xs text-muted-foreground">
+            Run at cost, here&apos;s where it goes
+          </p>
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-xl font-bold tracking-tight">{price}</p>
+          <p className="text-2xl font-bold tracking-tight">{price}</p>
           <p className="text-[11px] text-muted-foreground">early bird, all in</p>
         </div>
       </div>
