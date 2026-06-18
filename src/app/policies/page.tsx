@@ -14,6 +14,15 @@ export const metadata: Metadata = {
 
 const WEEZTIX_TERMS = "https://weeztix.com/ticket-buyer-terms";
 
+const PROVIDERS: ReadonlyArray<{ name: string; use: string; region: string }> = [
+  { name: "Vercel", use: "Website hosting", region: "US / EU" },
+  { name: "Cloudflare", use: "Content delivery & cookieless analytics", region: "Global (US)" },
+  { name: "Supabase", use: "Game leaderboards", region: "EU" },
+  { name: "Weeztix", use: "Ticketing", region: "EU (Netherlands)" },
+  { name: "Discord", use: "Optional game sign-in", region: "US" },
+  { name: "Microsoft Denmark", use: "Venue guest list", region: "EU" },
+];
+
 export default function PoliciesPage() {
   return (
     <main className="flex-1">
@@ -119,10 +128,29 @@ export default function PoliciesPage() {
               <p>
                 To run the site and the event we rely on a few trusted
                 providers, who process data only to deliver their service:
-                Vercel (hosting), Supabase (database for the game leaderboards),
-                Cloudflare (content delivery and cookieless analytics), Weeztix
-                (ticketing) and Discord (optional game sign-in).
               </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-white/10 text-foreground/80">
+                      <th className="py-2 pr-4 font-medium">Provider</th>
+                      <th className="py-2 pr-4 font-medium">Used for</th>
+                      <th className="py-2 font-medium">Data location</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {PROVIDERS.map((p) => (
+                      <tr key={p.name} className="border-b border-white/5">
+                        <td className="py-2 pr-4 font-medium text-foreground/90">
+                          {p.name}
+                        </td>
+                        <td className="py-2 pr-4">{p.use}</td>
+                        <td className="py-2 whitespace-nowrap">{p.region}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <p>
                 Some of these providers are based in the US, so your data may be
                 processed outside the EU/EEA. Where that happens it&apos;s under
