@@ -66,9 +66,11 @@ function MemberCard({ member }: { member: TeamMember }) {
             />
           )}
         </div>
-        <div className="truncate text-sm text-muted-foreground">
-          @{member.handle}
-        </div>
+        {member.handle && (
+          <div className="truncate text-sm text-muted-foreground">
+            @{member.handle}
+          </div>
+        )}
       </div>
 
       {member.linkedin && (

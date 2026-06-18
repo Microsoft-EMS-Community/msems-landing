@@ -265,7 +265,8 @@ export type TeamRole = "moderator" | "contributor";
 
 export interface TeamMember {
   readonly name: string;
-  readonly handle: string;
+  /** Discord handle, shown as @handle when set. */
+  readonly handle?: string;
   readonly role: TeamRole;
   /** Microsoft MVP awardee (renders the MVP badge). */
   readonly mvp?: boolean;
@@ -344,6 +345,13 @@ export const TEAM: readonly TeamMember[] = [
     role: "contributor",
     photo: "/team/sven-visser.jpg",
     linkedin: "https://www.linkedin.com/in/sven-visser-36904649/",
+  },
+  {
+    name: "Christian Frohn",
+    role: "contributor",
+    photo: "/team/christian-frohn.jpg",
+    mvp: true,
+    linkedin: "https://www.linkedin.com/in/frohn/",
   },
   { name: "ToastedTy", handle: "toastedty", role: "contributor" },
 ] as const;
