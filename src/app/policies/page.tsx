@@ -16,7 +16,7 @@ const WEEZTIX_TERMS = "https://weeztix.com/ticket-buyer-terms";
 
 const PROVIDERS: ReadonlyArray<{ name: string; use: string; region: string }> = [
   { name: "Vercel", use: "Website hosting", region: "EU" },
-  { name: "Cloudflare", use: "Content delivery & cookieless analytics", region: "Global (US)" },
+  { name: "Cloudflare", use: "Content delivery & cookieless analytics", region: "Global (nearest edge)" },
   { name: "Supabase", use: "Game leaderboards", region: "EU" },
   { name: "Weeztix", use: "Ticketing", region: "EU (Netherlands)" },
   { name: "Microsoft Denmark", use: "Venue guest list", region: "EU" },
