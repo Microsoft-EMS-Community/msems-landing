@@ -51,10 +51,22 @@ A full day of sessions, our CloudHour round-table & speaker AMA, and an evening 
     note: "Casual heads-up to drop in a chat or thread.",
     body: `Heads up 👋 The Microsoft EMS Community is hosting a Summit on ${EVENT.dateLabel} at ${EVENT.venue}, ${EVENT.venueArea}. A full day of sessions, our CloudHour round-table & speaker AMA, and an evening social. Not-for-profit and open to everyone, seats are limited. Save the date:`,
   },
+  {
+    id: "cfs",
+    platform: "Call for Speakers",
+    note: "Recruit speakers. Links straight to the submission form.",
+    body: `📣 Call for Speakers is open for the Microsoft EMS Community Summit!
+
+Got a talk in you? We're after honest, real-world sessions on Intune, Entra ID and Microsoft Defender XDR, from the people who actually run this stuff.
+
+${EVENT.dateLabel} · ${EVENT.venue}, ${EVENT.venueArea}. Not-for-profit and community-run. Submit your session 👇`,
+  },
 ] as const;
 
 /** Builds the full post text including link and hashtags. */
 export function buildPostText(post: SharePost): string {
   const tags = post.id === "general" ? "" : `\n\n${HASHTAGS.join(" ")}`;
-  return `${post.body}\n\n${SHARE_LINK}${tags}`;
+  // The CFS post links straight to the submission form, not the site.
+  const link = post.id === "cfs" ? EVENT.cfsUrl : SHARE_LINK;
+  return `${post.body}\n\n${link}${tags}`;
 }
