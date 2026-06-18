@@ -128,6 +128,8 @@ export interface AgendaItem {
   readonly sessions?: number;
   /** Highlights a signature moment of the day. */
   readonly featured?: boolean;
+  /** Marks an add-on outside the core day (renders an "Optional" tag). */
+  readonly optional?: boolean;
 }
 
 export const AGENDA_NOTE =
@@ -236,6 +238,14 @@ export const AGENDA: readonly AgendaItem[] = [
     title: "Networking & drinks",
     description: "Wind down with drinks and good conversation to close the day.",
     kind: "social",
+  },
+  {
+    time: "18:00",
+    title: "Evening social",
+    description:
+      "Keep the day going with pétanque, food and drinks nearby. Plans being finalised.",
+    kind: "social",
+    optional: true,
   },
 ] as const;
 

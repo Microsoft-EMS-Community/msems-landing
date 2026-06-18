@@ -57,11 +57,13 @@ function timeRange(item: AgendaItem): string {
     : to12h(item.time);
 }
 
+/** Slim row for changeovers and short breaks — a dot on the rail + a one-liner. */
 function CompactRow({ item }: { item: AgendaItem }) {
-  const { icon: Icon } = KIND_META[item.kind];
   return (
-    <li className="reveal flex items-center gap-2.5 py-1 pl-2 text-xs text-muted-foreground">
-      <Icon className="size-3.5 shrink-0 text-muted-foreground/70" />
+    <li className="reveal flex items-center gap-3 text-xs text-muted-foreground">
+      <span className="relative z-10 flex w-9 shrink-0 justify-center">
+        <span className="size-2 rounded-full bg-white/25 ring-4 ring-background" />
+      </span>
       <span className="shrink-0 tabular-nums">{to12h(item.time)}</span>
       <span className="h-px flex-1 bg-white/5" />
       <span className="shrink-0">{item.title}</span>
@@ -69,18 +71,13 @@ function CompactRow({ item }: { item: AgendaItem }) {
   );
 }
 
+/** Full card for sessions and key moments — an icon node on the rail + a card. */
 function FullRow({ item }: { item: AgendaItem }) {
   const { icon: Icon } = KIND_META[item.kind];
   return (
-    <li
-      className={`reveal flex gap-3 rounded-xl border p-3 transition-colors ${
-        item.featured
-          ? "border-brand-pink/30 bg-brand-pink/[0.06]"
-          : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
-      }`}
-    >
+    <li className="reveal flex gap-3">
       <span
-        className={`grid size-9 shrink-0 place-items-center rounded-xl border ${
+        className={`relative z-10 mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl border ${
           item.featured
             ? "border-transparent brand-gradient-bg text-white"
             : "border-white/10 bg-card text-brand-pink"
@@ -88,16 +85,30 @@ function FullRow({ item }: { item: AgendaItem }) {
       >
         <Icon className="size-4" />
       </span>
-      <div className="min-w-0 flex-1">
+      <div
+        className={`min-w-0 flex-1 rounded-xl border p-3 transition-colors ${
+          item.featured
+            ? "border-brand-pink/30 bg-brand-pink/[0.06]"
+            : item.optional
+              ? "border-dashed border-white/15 bg-white/[0.02]"
+              : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
+        }`}
+      >
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-semibold tabular-nums text-foreground/90">
             {timeRange(item)}
           </span>
-          {item.featured && (
+          {item.featured ? (
             <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-medium text-brand-pink">
               <Sparkles className="size-3" />
               Signature
             </span>
+          ) : (
+            item.optional && (
+              <span className="shrink-0 rounded-full border border-white/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                Optional
+              </span>
+            )
           )}
         </div>
         <h3 className="text-sm font-semibold leading-tight">{item.title}</h3>
@@ -117,7 +128,8 @@ function Column({ label, items }: { label: string; items: AgendaItem[] }) {
       <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-pink/80">
         {label}
       </h3>
-      <ol className="space-y-2">
+      {/* Faint vertical rail running through the icon nodes (left gutter). */}
+      <ol className="relative space-y-2 before:absolute before:bottom-3 before:left-[17px] before:top-3 before:w-px before:bg-white/10">
         {items.map((item) =>
           isCompact(item) ? (
             <CompactRow key={`${item.time}-${item.title}`} item={item} />
