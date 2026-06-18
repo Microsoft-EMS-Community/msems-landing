@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { ChevronRight, Gamepad2, ShieldCheck, X, Zap } from "lucide-react";
+import { ChevronRight, Gamepad2, ShieldCheck, Trophy, X, Zap } from "lucide-react";
 
 interface GamesChooserProps {
   onPick: (game: "memory" | "patch" | "soc") => void;
@@ -85,6 +85,14 @@ export function GamesChooser({ onPick, onClose }: GamesChooserProps) {
             </button>
           ))}
         </div>
+
+        <a
+          href="/leaderboard"
+          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Trophy className="size-4 text-brand-pink" />
+          View the leaderboards
+        </a>
       </div>
     </div>
   );

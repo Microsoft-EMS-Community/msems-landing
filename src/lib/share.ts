@@ -1,11 +1,7 @@
-import { EVENT } from "./event";
+import { EVENT, SITE_URL } from "./event";
 
-/**
- * The link people should include when they share. Uses the Discord/notify
- * link today (guaranteed to work). Swap to the public site URL once the
- * domain is live.
- */
-export const SHARE_LINK = EVENT.discordInvite;
+/** The link people include when they share: the public event site. */
+export const SHARE_LINK = SITE_URL;
 
 export const HASHTAGS: readonly string[] = [
   "#MSEMS",

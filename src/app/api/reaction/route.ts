@@ -48,7 +48,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   try {
-    const { improved } = await submitScore<PrevReaction>({
+    const { improved, rank } = await submitScore<PrevReaction>({
       user,
       table: "reactions",
       order: REACTION_ORDER,
@@ -58,7 +58,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       message: (ctx) =>
         `⚡ <@${user.id}> ${!ctx.hasPrev ? "clocked" : ctx.improved ? "improved to" : "played"} **${ms} ms** in Patch the Threat${resultTail(ctx)}`,
     });
-    return NextResponse.json({ ok: true, improved });
+    return NextResponse.json({ ok: true, improved, rank });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Could not save time." },

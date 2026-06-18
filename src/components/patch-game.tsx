@@ -36,6 +36,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
   const [board, setBoard] = useState<Reaction[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [improved, setImproved] = useState(true);
+  const [rank, setRank] = useState(0);
 
   const timerRef = useRef<number | null>(null);
   const showAtRef = useRef<number>(0);
@@ -100,8 +101,9 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
           body: JSON.stringify({ ms: avg }),
         });
         if (res.ok) {
-          const data: { improved?: boolean } = await res.json();
+          const data: { improved?: boolean; rank?: number } = await res.json();
           setImproved(data.improved !== false);
+          setRank(typeof data.rank === "number" ? data.rank : 0);
           setSubmitted(true);
           await loadBoard();
         }
@@ -119,6 +121,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
     setTooSoon(false);
     setSubmitted(false);
     setImproved(true);
+    setRank(0);
     setStarted(true);
     armNextTarget();
   }
@@ -271,15 +274,24 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
         ) : phase === "done" ? (
           <>
             <div className="mt-4 rounded-xl border border-amber-400/40 bg-amber-400/10 p-4 text-center text-sm">
-              <div className="text-4xl">⚡</div>
+              <div className="text-4xl">
+                {rank >= 1 && rank <= 3 ? MEDALS[rank - 1] : "⚡"}
+              </div>
               <p className="mt-1 font-semibold text-amber-300">
                 {avg} ms average
               </p>
+              {submitted && rank >= 1 && (
+                <p className="mt-1 font-medium text-foreground">
+                  {rank === 1
+                    ? "You're #1 on the leaderboard!"
+                    : `You're #${rank} on the leaderboard`}
+                </p>
+              )}
               <p className="mt-1 text-muted-foreground">
                 {!submitted
                   ? "Saving your time…"
                   : improved
-                    ? `Saved to the leaderboard as ${user?.username ?? "you"}.`
+                    ? `Saved as ${user?.username ?? "you"}.`
                     : "Not your best run, so your top time stands."}
               </p>
             </div>

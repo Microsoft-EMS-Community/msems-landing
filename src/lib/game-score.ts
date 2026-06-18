@@ -67,9 +67,9 @@ export function resultTail(ctx: MessageCtx): string {
 /** Keep-best upsert by discord_id + podium-aware Discord announcement. */
 export async function submitScore<Prev>(
   cfg: SubmitConfig<Prev>,
-): Promise<{ improved: boolean }> {
+): Promise<{ improved: boolean; rank: number }> {
   // No DB configured: accept so the UI still works in local/dev.
-  if (!supabaseUrl || !serviceKey) return { improved: true };
+  if (!supabaseUrl || !serviceKey) return { improved: true, rank: 0 };
 
   const base = `${supabaseUrl}/rest/v1/${cfg.table}`;
   const idFilter = `discord_id=eq.${encodeURIComponent(cfg.user.id)}`;
@@ -117,12 +117,9 @@ export async function submitScore<Prev>(
     improved = false;
   }
 
-  // The player's exact rank (top 100), so we can announce their place.
-  let rank = 0;
-  if (improved) {
-    const standings = await topStandings(cfg.table, cfg.order, 100);
-    rank = standings.findIndex((s) => s.discord_id === cfg.user.id) + 1;
-  }
+  // The player's current rank (top 100), for the win screen + announcement.
+  const standings = await topStandings(cfg.table, cfg.order, 100);
+  const rank = standings.findIndex((s) => s.discord_id === cfg.user.id) + 1;
 
   const webhook = process.env.DISCORD_WEBHOOK_URL;
   if (webhook) {
@@ -147,5 +144,5 @@ export async function submitScore<Prev>(
     }
   }
 
-  return { improved };
+  return { improved, rank };
 }

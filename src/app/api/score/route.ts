@@ -56,7 +56,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   try {
-    const { improved } = await submitScore<PrevScore>({
+    const { improved, rank } = await submitScore<PrevScore>({
       user,
       table: "scores",
       order: MEMORY_ORDER,
@@ -67,7 +67,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       message: (ctx) =>
         `🎮 <@${user.id}> ${!ctx.hasPrev ? "scored" : ctx.improved ? "improved to" : "played"} **${moves} moves** · ${formatScoreTime(time)} in the MS EMS memory game${resultTail(ctx)}`,
     });
-    return NextResponse.json({ ok: true, improved });
+    return NextResponse.json({ ok: true, improved, rank });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Could not save score." },

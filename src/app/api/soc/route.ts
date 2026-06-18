@@ -45,7 +45,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   try {
-    const { improved } = await submitScore<PrevSoc>({
+    const { improved, rank } = await submitScore<PrevSoc>({
       user,
       table: "soc_scores",
       order: SOC_ORDER,
@@ -55,7 +55,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       message: (ctx) =>
         `🛡️ <@${user.id}> ${!ctx.hasPrev ? "scored" : ctx.improved ? "improved to" : "logged"} **${score} pts** in Defender SOC${resultTail(ctx)}`,
     });
-    return NextResponse.json({ ok: true, improved });
+    return NextResponse.json({ ok: true, improved, rank });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Could not save score." },

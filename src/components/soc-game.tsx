@@ -155,6 +155,7 @@ export function SocGame({ onClose }: { onClose: () => void }) {
   const [board, setBoard] = useState<SocScore[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [improved, setImproved] = useState(true);
+  const [rank, setRank] = useState(0);
 
   const game = useRef({ alerts: [] as Alert[], breach: 0, score: 0, streak: 0 });
   const startRef = useRef(0);
@@ -249,8 +250,9 @@ export function SocGame({ onClose }: { onClose: () => void }) {
           body: JSON.stringify({ score: finalScore }),
         });
         if (res.ok) {
-          const data: { improved?: boolean } = await res.json();
+          const data: { improved?: boolean; rank?: number } = await res.json();
           setImproved(data.improved !== false);
+          setRank(typeof data.rank === "number" ? data.rank : 0);
           setSubmitted(true);
           await loadBoard();
         }
@@ -276,6 +278,7 @@ export function SocGame({ onClose }: { onClose: () => void }) {
     setResult(null);
     setSubmitted(false);
     setImproved(true);
+    setRank(0);
     setPhase("playing");
   }
 
@@ -458,11 +461,18 @@ export function SocGame({ onClose }: { onClose: () => void }) {
               <p className="mt-1 font-mono text-2xl font-bold text-amber-300">
                 {score} pts
               </p>
+              {submitted && rank >= 1 && (
+                <p className="mt-1 font-medium text-foreground">
+                  {rank === 1
+                    ? "Top analyst, you're #1!"
+                    : `You're #${rank} on the leaderboard`}
+                </p>
+              )}
               <p className="mt-1 text-sm text-muted-foreground">
                 {!submitted
                   ? "Saving your score…"
                   : improved
-                    ? `Saved to the leaderboard as ${user?.username ?? "you"}.`
+                    ? `Saved as ${user?.username ?? "you"}.`
                     : "Not your best shift, so your top score stands."}
               </p>
             </div>
