@@ -1,14 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { EVENT } from "@/lib/event";
 
 const SHOP_URL = "https://shop.weeztix.com/51630dc4-8c23-11ed-aa54-6a57c78572ab";
-// Fallback height if the shop doesn't post a resize message; sized close to the
-// ticket step so there's little empty space. Auto-height overrides this when the
-// shop's iframe-resizer messages come through.
-const DEFAULT_HEIGHT = 1240;
 
 interface TicketModalProps {
   open: boolean;
@@ -17,13 +13,14 @@ interface TicketModalProps {
 
 /**
  * Popout ticket shop. The shop is a plain iframe (loads on shop.weeztix.com,
- * same-origin to itself, no parent CORS). The iframe auto-sizes to the shop's
- * content height when it posts a resize message, so the whole modal scrolls as
- * one rather than a small scrollbox inside it.
+ * same-origin to itself, no parent CORS). The shop runs the iframe-resizer
+ * child, so we attach its parent and use heightCalculationMethod "lowestElement"
+ * to size the iframe to the real content (no trailing whitespace), letting the
+ * whole modal scroll as one.
  */
 export function TicketModal({ open, onClose }: TicketModalProps) {
   const [mounted, setMounted] = useState(false);
-  const [height, setHeight] = useState(DEFAULT_HEIGHT);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -41,30 +38,28 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
     };
   }, [open, onClose]);
 
-  // Auto-size the iframe from the shop's resize messages (best-effort).
+  // Attach iframe-resizer once the iframe is mounted, so it auto-sizes to the
+  // shop's actual content height.
   useEffect(() => {
-    function onMessage(e: MessageEvent) {
-      if (!/(weeztix\.com|openticket\.tech)$/.test(new URL(e.origin).hostname)) {
-        return;
-      }
-      const data = e.data as unknown;
-      let h: number | undefined;
-      if (typeof data === "number") h = data;
-      else if (typeof data === "string" && data.startsWith("[iFrameSizer]")) {
-        // iframe-resizer v4 format: "[iFrameSizer]<id>:<height>:<width>:..."
-        const parsed = Number(data.replace("[iFrameSizer]", "").split(":")[1]);
-        if (!Number.isNaN(parsed)) h = parsed;
-      } else if (data && typeof data === "object") {
-        const o = data as Record<string, unknown>;
-        const payload = o.payload as Record<string, unknown> | undefined;
-        const cand = o.height ?? o.frameHeight ?? o.iframeHeight ?? payload?.height;
-        if (typeof cand === "number") h = cand;
-      }
-      if (typeof h === "number" && h > 300 && h < 8000) setHeight(Math.ceil(h));
-    }
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  }, []);
+    if (!mounted) return;
+    const el = iframeRef.current;
+    if (!el) return;
+    let cancelled = false;
+    import("iframe-resizer/js/iframeResizer")
+      .then(({ default: iframeResize }) => {
+        if (!cancelled) {
+          iframeResize(
+            { checkOrigin: false, heightCalculationMethod: "lowestElement", log: false },
+            el,
+          );
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+      (el as unknown as { iFrameResizer?: { close: () => void } }).iFrameResizer?.close?.();
+    };
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -94,10 +89,11 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
 
         <div className="p-3 sm:p-4">
           <iframe
+            ref={iframeRef}
             src={SHOP_URL}
             title="Ticket shop"
             allow="payment"
-            style={{ height }}
+            style={{ minHeight: 600 }}
             className="w-full rounded-xl bg-background"
           />
           <p className="mt-3 text-center text-xs text-muted-foreground">
