@@ -58,7 +58,7 @@ export async function Agenda() {
         </p>
       </div>
 
-      <ol className="relative mt-12 space-y-4 before:absolute before:left-[1.4rem] before:top-2 before:bottom-2 before:w-px before:bg-white/10">
+      <ol className="relative mt-12 space-y-4 before:absolute before:left-[1.4rem] before:top-2 before:bottom-2 before:hidden before:w-px before:bg-white/10 sm:before:block">
         {items.map((item) => {
           const { label, icon: Icon } = KIND_META[item.kind];
           return (
@@ -67,7 +67,7 @@ export async function Agenda() {
               className="reveal relative flex gap-4"
             >
               <span
-                className={`relative z-10 grid size-12 shrink-0 place-items-center rounded-2xl border ${
+                className={`relative z-10 hidden size-12 shrink-0 place-items-center rounded-2xl border sm:grid ${
                   item.featured
                     ? "border-transparent brand-gradient-bg text-white"
                     : "border-white/10 bg-card text-brand-pink"

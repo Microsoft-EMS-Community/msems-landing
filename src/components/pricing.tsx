@@ -54,7 +54,7 @@ export function Pricing() {
             </div>
 
             <div className="mt-5 flex items-baseline gap-1.5">
-              <span className="text-5xl font-bold tracking-tight">
+              <span className="brand-gradient-text text-5xl font-bold tracking-tight">
                 {currency}
                 {tier.price}
               </span>
