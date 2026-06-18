@@ -67,7 +67,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             <p className="text-xs text-muted-foreground">
               © {EVENT.dateLabel.split(", ").pop()} {COMMUNITY.name}.
             </p>
-            <GamesLauncher />
+            <GamesLauncher className="game-pulse inline-flex items-center gap-2 rounded-full brand-gradient-bg px-3.5 py-1.5 text-sm font-medium text-white transition-transform hover:scale-105" />
           </div>
         </div>
       </div>
