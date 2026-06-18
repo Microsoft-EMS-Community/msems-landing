@@ -4,8 +4,7 @@ import { Download, ArrowLeft, Hash, Megaphone } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CopyButton } from "@/components/copy-button";
-import { AnnounceBuilder } from "@/components/announce-builder";
-import { SpeakerCardPicker } from "@/components/speaker-card-picker";
+import { CardBuilder } from "@/components/card-builder";
 import { getSessionizeSpeakers } from "@/lib/sessionize";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -87,6 +86,13 @@ export default async function SharePage() {
               <Download className="size-4" />
               Download share graphic
             </Button>
+            <a
+              href="/logo.png"
+              download="msems-logo.png"
+              className="text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+            >
+              Need just the logo? Download the PNG
+            </a>
           </CardContent>
         </Card>
       </section>
@@ -132,11 +138,16 @@ export default async function SharePage() {
             Speaking at the Summit?
           </h2>
           <p className="mt-2 text-muted-foreground">
-            A 1080x1350 PNG, ready to post. Confirmed speakers can pick their
-            name for a finished card; everyone else gets a template to drop a
-            headshot into in Canva.
+            A 1080x1350 PNG. Pick your name from Sessionize, or type it and
+            upload a headshot, then download. No Canva needed.
           </p>
-          <SpeakerCardPicker speakers={speakers} />
+          <div className="mt-6">
+            <CardBuilder
+              route="/speaker-card"
+              downloadName="msems-speaker.png"
+              speakers={speakers}
+            />
+          </div>
         </div>
       </section>
 
@@ -160,7 +171,11 @@ export default async function SharePage() {
             reveal card. The website link is baked in.
           </p>
           <div className="mt-6">
-            <AnnounceBuilder speakers={speakers} />
+            <CardBuilder
+              route="/announce-card"
+              downloadName="msems-speaker-announcement.png"
+              speakers={speakers}
+            />
           </div>
         </div>
       </section>

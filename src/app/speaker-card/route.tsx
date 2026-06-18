@@ -6,8 +6,9 @@ import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 
 // A 1080x1350 "I'm speaking at" card.
-//  - No params: a generic template with a "Your photo" ring (fill in Canva).
-//  - ?name=&topic=&photo=: a personalised card (photo can be an https URL).
+//  - No name: a generic template with a "Your photo" ring (fill in Canva).
+//  - name/topic/photo (GET query or POST body, photo can be data: or https URL):
+//    a personalised card.
 export const dynamic = "force-dynamic";
 
 function MicrosoftMark() {
@@ -38,11 +39,10 @@ async function resolvePhoto(photo: string | null): Promise<string | null> {
   return null;
 }
 
-export async function GET(request: NextRequest) {
-  const sp = request.nextUrl.searchParams;
-  const name = (sp.get("name") ?? "").trim().slice(0, 40);
-  const topic = (sp.get("topic") ?? "").trim().slice(0, 90);
-  const photoSrc = await resolvePhoto(sp.get("photo"));
+async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | null) {
+  const name = nameRaw.trim().slice(0, 40);
+  const topic = topicRaw.trim().slice(0, 90);
+  const photoSrc = await resolvePhoto(photoRaw);
   const personalised = Boolean(name);
 
   const logoBytes = await readFile(join(process.cwd(), "public", "logo.png"));
@@ -69,7 +69,6 @@ export async function GET(request: NextRequest) {
         <div style={{ position: "absolute", top: -160, left: -120, width: 520, height: 520, borderRadius: "50%", background: "#ff2e88", opacity: 0.32, filter: "blur(120px)" }} />
         <div style={{ position: "absolute", bottom: -180, right: -120, width: 520, height: 520, borderRadius: "50%", background: "#06b6d4", opacity: 0.28, filter: "blur(120px)" }} />
 
-        {/* Top: logo + community */}
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logoSrc} width={56} height={56} style={{ borderRadius: 12 }} alt="" />
@@ -78,7 +77,6 @@ export async function GET(request: NextRequest) {
           </div>
         </div>
 
-        {/* Center */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
           <div style={{ display: "flex", width: 232, height: 232, borderRadius: "50%", padding: 6, background: "linear-gradient(135deg, #ff2e88, #a855f7 50%, #22d3ee)" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden", background: "#120c22", color: "#8b93a7", fontSize: 20, letterSpacing: 3, textTransform: "uppercase" }}>
@@ -121,7 +119,6 @@ export async function GET(request: NextRequest) {
           )}
         </div>
 
-        {/* Bottom */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", borderTop: "1px solid rgba(255,255,255,0.12)", paddingTop: 24, fontSize: 24 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <MicrosoftMark />
@@ -133,4 +130,28 @@ export async function GET(request: NextRequest) {
     ),
     { width: 1080, height: 1350 },
   );
+}
+
+export async function GET(request: NextRequest) {
+  const sp = request.nextUrl.searchParams;
+  return renderCard(sp.get("name") ?? "", sp.get("topic") ?? "", sp.get("photo"));
+}
+
+interface CardBody {
+  name?: unknown;
+  topic?: unknown;
+  photo?: unknown;
+}
+
+export async function POST(request: Request) {
+  let body: CardBody;
+  try {
+    body = (await request.json()) as CardBody;
+  } catch {
+    body = {};
+  }
+  const name = typeof body.name === "string" ? body.name : "";
+  const topic = typeof body.topic === "string" ? body.topic : "";
+  const photo = typeof body.photo === "string" ? body.photo : null;
+  return renderCard(name, topic, photo);
 }

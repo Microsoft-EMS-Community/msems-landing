@@ -8,17 +8,31 @@ import type { Speaker } from "@/lib/event";
 const inputClass =
   "h-11 w-full rounded-xl border border-white/15 bg-white/5 px-4 text-sm text-foreground outline-none focus:border-brand-pink/60";
 
+interface CardBuilderProps {
+  speakers?: Speaker[];
+  /** Card generator route to POST to (returns a PNG). */
+  route?: string;
+  /** Download filename. */
+  downloadName?: string;
+}
+
 /**
- * Team tool: pick a speaker from Sessionize (or type one), tweak the session,
- * optionally upload a photo, and download a ready-to-post announcement card.
- * The card is rendered server-side (so it matches the other graphics) and
- * previewed live.
+ * Builds a card (speaker self-card or team announcement): pick from Sessionize
+ * or type a name + session, optionally upload a photo, preview live, download.
+ * The card is rendered server-side at `route` so it matches the other graphics.
  */
-export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
+export function CardBuilder({
+  speakers = [],
+  route = "/announce-card",
+  downloadName = "msems-card.png",
+}: CardBuilderProps) {
   const [name, setName] = useState("");
   const [topic, setTopic] = useState("");
-  const [photo, setPhoto] = useState<string | null>(null); // data or https URL
+  const [photo, setPhoto] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const objUrl = useRef<string | null>(null);
 
   function onPickSpeaker(e: React.ChangeEvent<HTMLSelectElement>) {
     const speaker = speakers[Number(e.target.value)];
@@ -28,9 +42,6 @@ export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
     setPhoto(speaker.photo ?? null);
     setPhotoName(speaker.photo ? `${speaker.name} (Sessionize)` : "");
   }
-  const [preview, setPreview] = useState<string | null>(null); // object URL
-  const [busy, setBusy] = useState(false);
-  const objUrl = useRef<string | null>(null);
 
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -43,12 +54,11 @@ export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
     reader.readAsDataURL(file);
   }
 
-  // Re-render the card shortly after any change (debounced).
   useEffect(() => {
     const id = setTimeout(async () => {
       setBusy(true);
       try {
-        const res = await fetch("/announce-card", {
+        const res = await fetch(route, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, topic, photo }),
@@ -66,7 +76,7 @@ export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
       }
     }, 500);
     return () => clearTimeout(id);
-  }, [name, topic, photo]);
+  }, [name, topic, photo, route]);
 
   useEffect(() => {
     return () => {
@@ -117,30 +127,19 @@ export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
           />
         </label>
 
-        <span className="text-sm font-medium">Speaker photo</span>
+        <span className="text-sm font-medium">Photo</span>
         <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/10">
           <ImagePlus className="size-4" />
           {photoName ? "Change photo" : "Upload a photo"}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onFile}
-            className="hidden"
-          />
+          <input type="file" accept="image/*" onChange={onFile} className="hidden" />
         </label>
         {photoName && (
-          <span className="truncate text-xs text-muted-foreground">
-            {photoName}
-          </span>
+          <span className="truncate text-xs text-muted-foreground">{photoName}</span>
         )}
 
         <Button
           render={
-            <a
-              href={preview ?? "#"}
-              download="msems-speaker-announcement.png"
-              aria-disabled={!preview}
-            />
+            <a href={preview ?? "#"} download={downloadName} aria-disabled={!preview} />
           }
           className="brand-gradient-bg border-0 text-white hover:opacity-90"
         >
@@ -154,14 +153,14 @@ export function AnnounceBuilder({ speakers = [] }: { speakers?: Speaker[] }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview}
-            alt="Speaker announcement preview"
+            alt="Card preview"
             width={1080}
             height={1350}
             className="h-auto w-full"
           />
         ) : (
           <div className="grid aspect-[4/5] place-items-center text-sm text-muted-foreground">
-            Fill in the details to preview
+            Loading preview…
           </div>
         )}
         {busy && (
