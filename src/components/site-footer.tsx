@@ -68,7 +68,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
             <span className="text-foreground/80">sky made simple ApS</span>,
             which handles ticketing, payouts and VAT.
           </p>
-          <p>VAT ID DK43434527 · Owner Jonas Bøgvad · {EVENT.contactEmail}</p>
+          <p>VAT ID DK43434527 · Owner Jonas Bøgvad</p>
           <p>
             Not affiliated with, endorsed by, or sponsored by Microsoft.
             Microsoft and product names are trademarks of the Microsoft group of
