@@ -330,15 +330,19 @@
   .bird-fly { display: none; }
 }
 
-/* Layered Copenhagen skyline — each layer drifts at its own speed for depth */
-@keyframes skyline-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
+/* Layered Copenhagen skyline — each layer pans one tile width, at its own speed */
+.skyline-layer {
+  background-repeat: repeat-x;
+  background-position-y: bottom;
+}
+@keyframes skyline-pan {
+  from { background-position-x: 0; }
+  to { background-position-x: var(--skyline-shift); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .skyline-row {
-    animation: skyline-drift linear infinite;
-    will-change: transform;
+  .skyline-layer {
+    animation: skyline-pan linear infinite;
+    will-change: background-position;
   }
 }
 
