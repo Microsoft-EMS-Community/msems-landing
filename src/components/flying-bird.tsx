@@ -63,7 +63,7 @@ export function FlyingBird() {
           className="pointer-events-auto fixed left-1/2 top-28 z-[60] inline-flex -translate-x-1/2 items-center gap-2 rounded-full brand-gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-2xl"
         >
           <Ticket className="size-4" />
-          You caught the early bird! Grab a ticket →
+          You caught the early bird! Snag the early-bird rate →
         </a>
       )}
     </div>
