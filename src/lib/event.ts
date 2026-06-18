@@ -147,8 +147,6 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "09:00",
     endTime: "09:25",
     title: "Copilot introduction",
-    description:
-      "We kick off the day with a look at Copilot across the Microsoft stack.",
     kind: "welcome",
   },
   {

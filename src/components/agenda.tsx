@@ -174,9 +174,8 @@ export async function Agenda() {
           The day, <span className="brand-gradient-text">hour by hour</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          A Copilot kickoff, six community sessions through the day, our Cloud
-          Hour round-table and speaker AMA, then networking and drinks to round
-          it off.
+          Six community sessions through the day, our Cloud Hour round-table and
+          speaker AMA, then networking and drinks to round it off.
         </p>
       </div>
 
