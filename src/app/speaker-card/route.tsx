@@ -4,6 +4,7 @@ import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
+import { resolvePhoto } from "@/lib/card-photo";
 
 // A 1080x1350 "I'm speaking at" card.
 //  - No name: a generic template with a "Your photo" ring (fill in Canva).
@@ -20,23 +21,6 @@ function MicrosoftMark() {
       ))}
     </div>
   );
-}
-
-async function resolvePhoto(photo: string | null): Promise<string | null> {
-  if (!photo) return null;
-  if (photo.startsWith("data:image/")) return photo;
-  if (photo.startsWith("https://") || photo.startsWith("http://")) return photo;
-  if (photo.startsWith("/")) {
-    try {
-      const clean = photo.replace(/\.\.+/g, "").replace(/^\//, "");
-      const bytes = await readFile(join(process.cwd(), "public", clean));
-      const ext = clean.toLowerCase().endsWith(".png") ? "png" : "jpeg";
-      return `data:image/${ext};base64,${bytes.toString("base64")}`;
-    } catch {
-      return null;
-    }
-  }
-  return null;
 }
 
 async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | null) {
