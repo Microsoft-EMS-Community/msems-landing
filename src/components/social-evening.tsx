@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { PRICING } from "@/lib/event";
 
 const PHOTOS: ReadonlyArray<{ src: string; alt: string }> = [
@@ -19,14 +18,7 @@ export function SocialEvening() {
     >
       <div className="grid items-center gap-8 lg:grid-cols-2">
         <div>
-          <Badge
-            variant="secondary"
-            className="border border-violet-400/40 bg-violet-400/15 text-xs font-medium text-violet-200"
-          >
-            Optional add-on · +{currency}
-            {socialAddon.price}
-          </Badge>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
             Make a night of it
           </h2>
           <p className="mt-4 max-w-xl text-muted-foreground">
@@ -40,8 +32,12 @@ export function SocialEvening() {
             </p>
           )}
           <p className="mt-6 text-sm text-muted-foreground">
-            Add it to your ticket for +{currency}
-            {socialAddon.price}.
+            Optional add-on. Add it to your ticket for{" "}
+            <span className="font-semibold text-foreground">
+              +{currency}
+              {socialAddon.price}
+            </span>
+            .
           </p>
         </div>
 
