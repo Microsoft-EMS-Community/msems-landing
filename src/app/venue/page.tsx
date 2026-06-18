@@ -28,14 +28,14 @@ const TRAVEL: readonly TravelTip[] = [
   {
     icon: Train,
     title: "Metro & train",
-    body: "The driverless Metro runs around the clock from the airport into Copenhagen, and the S-train reaches Kongens Lyngby, a short ride from the venue. Visiting from abroad? Grab the Rejsekort app to buy tickets.",
+    body: "The driverless Metro runs around the clock from the airport into Copenhagen, and the S-train reaches Kongens Lyngby, a short ride from the venue. Visiting from abroad? Grab the Rejsebillet app to buy tickets.",
     links: [
       {
-        href: "https://apps.apple.com/dk/app/rejsekort/id6469603787",
+        href: "https://apps.apple.com/app/rejsebillet/id1664432486",
         label: "App Store",
       },
       {
-        href: "https://play.google.com/store/apps/details?id=dk.rejsekort.digitalrejsekort",
+        href: "https://play.google.com/store/apps/details?id=dk.rejsekort.rejsebillet",
         label: "Google Play",
       },
     ],
