@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CopyButton } from "@/components/copy-button";
 import { AnnounceBuilder } from "@/components/announce-builder";
+import { SpeakerCardPicker } from "@/components/speaker-card-picker";
 import { getSessionizeSpeakers } from "@/lib/sessionize";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -131,38 +132,11 @@ export default async function SharePage() {
             Speaking at the Summit?
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Grab your speaker card. A 1080x1080 PNG, ready to post or to drop
-            into Canva. Pop your headshot into the circle, add your name and
-            session, and share it.
+            A 1080x1080 PNG, ready to post. Confirmed speakers can pick their
+            name for a finished card; everyone else gets a template to drop a
+            headshot into in Canva.
           </p>
-          <div className="mt-6 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-            <div className="w-full max-w-xs shrink-0 overflow-hidden rounded-2xl border border-white/10">
-              {/* The speaker card is generated at /speaker-card (1080x1080 PNG). */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/speaker-card"
-                alt="I'm speaking at the Microsoft EMS Community Summit card"
-                width={1080}
-                height={1080}
-                className="h-auto w-full"
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Button
-                render={<a href="/speaker-card" download="msems-speaker.png" />}
-                size="lg"
-                className="brand-gradient-bg border-0 text-white hover:opacity-90"
-              >
-                <Download className="size-4" />
-                Download speaker card
-              </Button>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Tip: in Canva, drop your photo inside the circle and add your
-                name plus your session title. The website link is already on the
-                card.
-              </p>
-            </div>
-          </div>
+          <SpeakerCardPicker speakers={speakers} />
         </div>
       </section>
 
