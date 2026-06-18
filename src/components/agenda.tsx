@@ -1,4 +1,12 @@
-import { Coffee, Hand, Mic, Users, PartyPopper, Sparkles } from "lucide-react";
+import {
+  Coffee,
+  Hand,
+  Mic,
+  Users,
+  PartyPopper,
+  Sparkles,
+  ArrowLeftRight,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AGENDA, type AgendaItem, type AgendaKind } from "@/lib/event";
 import { getSessionizeAgenda } from "@/lib/sessionize";
@@ -19,7 +27,8 @@ const KIND_META: Record<
 > = {
   registration: { label: "Arrival", icon: Coffee },
   welcome: { label: "Welcome", icon: Hand },
-  sessions: { label: "Sessions", icon: Mic },
+  sessions: { label: "Session", icon: Mic },
+  changeover: { label: "Changeover", icon: ArrowLeftRight },
   break: { label: "Break", icon: Coffee },
   discussion: { label: "Round-table", icon: Users },
   social: { label: "Social", icon: PartyPopper },
@@ -53,8 +62,9 @@ export async function Agenda() {
           The day, <span className="brand-gradient-text">hour by hour</span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          Talks and deep dives through the day, our CloudHour round-table and
-          speaker AMA in the afternoon, and a social evening to round it off.
+          A Copilot kickoff, six community sessions through the day, our Cloud
+          Hour round-table and speaker AMA, then networking and drinks to round
+          it off.
         </p>
       </div>
 

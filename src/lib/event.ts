@@ -110,6 +110,7 @@ export type AgendaKind =
   | "registration"
   | "welcome"
   | "sessions"
+  | "changeover"
   | "break"
   | "discussion"
   | "social"
@@ -134,60 +135,110 @@ export const AGENDA_NOTE =
 export const AGENDA: readonly AgendaItem[] = [
   {
     time: "08:30",
-    title: "Doors open & coffee",
+    endTime: "09:00",
+    title: "Registration & welcome coffee",
     description: "Badge pickup, coffee and good mornings.",
     kind: "registration",
   },
   {
     time: "09:00",
-    title: "Welcome & kickoff",
-    description: "A quick hello from the community and how the day will run.",
+    endTime: "09:25",
+    title: "Copilot introduction",
+    description:
+      "We kick off the day with a look at Copilot across the Microsoft stack.",
     kind: "welcome",
   },
   {
-    time: "09:15",
-    endTime: "12:30",
-    title: "Morning sessions",
-    description:
-      "Community-led talks across Intune, Entra ID and Microsoft Defender XDR, around 45 minutes each, with a coffee break in between.",
+    time: "09:25",
+    endTime: "10:15",
+    title: "Session 1",
+    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
-    sessions: 4,
   },
   {
-    time: "12:30",
+    time: "10:15",
+    endTime: "10:20",
+    title: "Changeover",
+    description: "Quick room swap between sessions.",
+    kind: "changeover",
+  },
+  {
+    time: "10:20",
+    endTime: "11:10",
+    title: "Session 2",
+    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
+    kind: "sessions",
+  },
+  {
+    time: "11:10",
+    endTime: "11:35",
+    title: "Coffee break",
+    description: "Refuel and catch up with the room.",
+    kind: "break",
+  },
+  {
+    time: "11:35",
+    endTime: "12:25",
+    title: "Session 3",
+    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
+    kind: "sessions",
+  },
+  {
+    time: "12:25",
+    endTime: "13:25",
     title: "Lunch & networking",
     description: "Food, drinks and time to put faces to the Discord names.",
     kind: "break",
   },
   {
-    time: "13:30",
-    endTime: "15:45",
-    title: "Afternoon sessions",
-    description:
-      "More community talks, around 45 minutes each, with hands-on, real-world stories.",
+    time: "13:25",
+    endTime: "14:15",
+    title: "Session 4",
+    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
     kind: "sessions",
-    sessions: 3,
   },
   {
-    time: "15:45",
-    endTime: "16:45",
-    title: "CloudHour, live",
+    time: "14:15",
+    endTime: "14:20",
+    title: "Changeover",
+    description: "Quick room swap between sessions.",
+    kind: "changeover",
+  },
+  {
+    time: "14:20",
+    endTime: "15:10",
+    title: "Session 5",
+    description: "Community-led talk. Speaker and topic confirmed via Sessionize.",
+    kind: "sessions",
+  },
+  {
+    time: "15:10",
+    endTime: "15:40",
+    title: "Coffee break & networking",
+    description: "Coffee and connections before the final stretch.",
+    kind: "break",
+  },
+  {
+    time: "15:40",
+    endTime: "16:25",
+    title: "Cloud Hour (Session 6)",
     description:
-      "Our round-the-table discussion from Discord, in person for the first time. An open-floor AMA with the day's speakers and the community. Bring your hardest questions.",
+      "Our round-the-table discussion from Discord, live and in person. An open-floor AMA with the day's speakers and the community. Bring your hardest questions.",
     kind: "discussion",
     featured: true,
   },
   {
-    time: "16:45",
-    title: "Wrap-up & thanks",
-    description: "Closing notes and what's next for the community. The program wraps by 17:00.",
+    time: "16:25",
+    endTime: "16:35",
+    title: "Closing remarks",
+    description: "Closing notes and what's next for the community.",
     kind: "closing",
   },
   {
-    time: "18:00",
-    title: "Evening social",
-    description:
-      "Wind down over pétanque, food and drinks with the community. Optional, and usually the best part of the day.",
+    time: "16:35",
+    endTime: "17:00",
+    title: "Networking & drinks",
+    description: "Wind down with drinks and good conversation to close the day.",
     kind: "social",
   },
 ] as const;
