@@ -3,8 +3,11 @@ import { EVENT, SITE_URL } from "./event";
 /** The link people include when they share: the public event site. */
 export const SHARE_LINK = SITE_URL;
 
+/** The lead hashtag, highlighted in the UI and always first in posts. */
+export const PRIMARY_HASHTAG = "#MSEMS";
+
 export const HASHTAGS: readonly string[] = [
-  "#MSEMS",
+  PRIMARY_HASHTAG,
   "#MicrosoftSecurity",
   "#Intune",
   "#EntraID",

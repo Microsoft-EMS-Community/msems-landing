@@ -8,7 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { EVENT } from "@/lib/event";
-import { SHARE_POSTS, HASHTAGS, SHARE_LINK, buildPostText } from "@/lib/share";
+import {
+  SHARE_POSTS,
+  HASHTAGS,
+  PRIMARY_HASHTAG,
+  SHARE_LINK,
+  buildPostText,
+} from "@/lib/share";
 
 export const metadata: Metadata = {
   title: "Spread the word | Microsoft EMS Community Summit",
@@ -183,17 +189,29 @@ export default function SharePage() {
           <div className="flex items-center gap-2">
             <Hash className="size-4 text-brand-teal" />
             <h3 className="font-semibold">Suggested hashtags</h3>
+            <span className="text-sm text-muted-foreground">
+              (lead with {PRIMARY_HASHTAG})
+            </span>
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {HASHTAGS.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="border border-white/10 bg-white/5 font-normal"
-              >
-                {tag}
-              </Badge>
-            ))}
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {HASHTAGS.map((tag) =>
+              tag === PRIMARY_HASHTAG ? (
+                <Badge
+                  key={tag}
+                  className="brand-gradient-bg border-0 font-semibold text-white"
+                >
+                  {tag}
+                </Badge>
+              ) : (
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="border border-white/10 bg-white/5 font-normal"
+                >
+                  {tag}
+                </Badge>
+              ),
+            )}
           </div>
           <div className="mt-6 flex items-center gap-2 text-sm">
             <span className="text-muted-foreground">Link to share:</span>
