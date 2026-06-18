@@ -16,6 +16,9 @@ export const EVENT = {
   timeLabel: "8:30 AM to 5:00 PM",
   venue: "Microsoft",
   venueArea: "near Copenhagen",
+  venueAddress: "Kanalvej 7, 2800 Kongens Lyngby",
+  mapUrl:
+    "https://www.google.com/maps/search/?api=1&query=Microsoft%20Kanalvej%207%202800%20Kongens%20Lyngby",
   feeLabel: "From €30",
   feeNote:
     "The small fee covers lunch, drinks and beverages for the day, plus an optional evening get-together.",

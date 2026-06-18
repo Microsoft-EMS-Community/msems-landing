@@ -35,6 +35,40 @@ function Shot({
   );
 }
 
+/** The venue + Copenhagen photo collage, shared by the home teaser and /venue. */
+export function VenueGallery() {
+  return (
+    <div className="grid auto-rows-[190px] grid-cols-2 gap-4 lg:grid-cols-4">
+      <Shot
+        src="/location/microsoft.jpg"
+        alt="The Microsoft venue near Copenhagen"
+        caption="The venue, near Copenhagen"
+        className="col-span-2 row-span-2 rounded-3xl"
+        big
+      />
+      <Shot
+        src="/location/nyhavn.webp"
+        alt="Nyhavn harbour in Copenhagen"
+        caption="Nyhavn"
+        className="col-span-2 rounded-2xl"
+      />
+      <Shot
+        src="/location/microsoft-inside.jpg"
+        alt="Inside the Microsoft offices"
+        caption="Inside the venue"
+        className="col-span-1 rounded-2xl"
+      />
+      <Shot
+        src="/location/tivoli.avif"
+        alt="Tivoli Gardens in Copenhagen"
+        caption="Tivoli Gardens"
+        className="col-span-1 rounded-2xl"
+      />
+    </div>
+  );
+}
+
+/** Home-page teaser: short blurb, the gallery, and a link to the full page. */
 export function Venue() {
   return (
     <section
@@ -46,42 +80,22 @@ export function Venue() {
           Hosted in Copenhagen
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          At Microsoft, just outside Copenhagen, one of the most walkable and
-          bike-friendly cities around. Come for the sessions, stay for the
-          harbour, the food and Tivoli.
-        </p>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-          Flying in? Copenhagen Airport (CPH) is a short metro or train ride
-          away. Travel and hotel tips will follow for registered attendees.
+          At Microsoft, just outside Copenhagen. Come for the sessions, stay for
+          the city.
         </p>
       </div>
 
-      <div className="mt-10 grid auto-rows-[190px] grid-cols-2 gap-4 lg:grid-cols-4">
-        <Shot
-          src="/location/microsoft.jpg"
-          alt="The Microsoft venue near Copenhagen"
-          caption="The venue, near Copenhagen"
-          className="col-span-2 row-span-2 rounded-3xl"
-          big
-        />
-        <Shot
-          src="/location/nyhavn.webp"
-          alt="Nyhavn harbour in Copenhagen"
-          caption="Nyhavn"
-          className="col-span-2 rounded-2xl"
-        />
-        <Shot
-          src="/location/microsoft-inside.jpg"
-          alt="Inside the Microsoft offices"
-          caption="Inside the venue"
-          className="col-span-1 rounded-2xl"
-        />
-        <Shot
-          src="/location/tivoli.avif"
-          alt="Tivoli Gardens in Copenhagen"
-          caption="Tivoli Gardens"
-          className="col-span-1 rounded-2xl"
-        />
+      <div className="mt-10">
+        <VenueGallery />
+      </div>
+
+      <div className="mt-8 text-center">
+        <a
+          href="/venue"
+          className="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+        >
+          Venue, travel and where to stay →
+        </a>
       </div>
     </section>
   );
