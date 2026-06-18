@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Bike, Hotel, MapPin, Plane, Train } from "lucide-react";
+import { ArrowLeft, Bike, Car, Hotel, MapPin, Plane, Train } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { VenueGallery } from "@/components/venue";
@@ -28,7 +28,7 @@ const TRAVEL: readonly TravelTip[] = [
   {
     icon: Train,
     title: "Metro & train",
-    body: "The driverless Metro runs around the clock from the airport into Copenhagen, and the S-train reaches Kongens Lyngby, a short ride from the venue. Visiting from abroad? Grab the Rejsebillet app to buy tickets.",
+    body: "The driverless Metro runs around the clock from the airport into Copenhagen, and the S-train reaches Kongens Lyngby, a short ride from the venue. Visiting from abroad? The Rejsebillet app is the easiest way to buy tickets, just pay by card.",
     links: [
       {
         href: "https://apps.apple.com/app/rejsebillet/id1664432486",
@@ -41,9 +41,14 @@ const TRAVEL: readonly TravelTip[] = [
     ],
   },
   {
+    icon: Car,
+    title: "Taxis & Uber",
+    body: "Prefer door to door? Taxis are everywhere, and Uber is back in Copenhagen. Both are handy late at night or straight from the airport.",
+  },
+  {
     icon: Bike,
     title: "Around the city",
-    body: "Take the Metro and train to reach the venue. When you're winding down in town, Copenhagen is flat, compact and famously bike-friendly, with city bikes and e-scooters everywhere and a centre made for walking.",
+    body: "When you're winding down in town, Copenhagen is flat, compact and famously bike-friendly, with city bikes and e-scooters everywhere and a centre made for walking.",
   },
 ];
 
@@ -99,7 +104,7 @@ export default function VenuePage() {
           <h2 className="text-balance text-2xl font-bold tracking-tight">
             Getting there
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {TRAVEL.map(({ icon: Icon, title, body, links }) => (
               <div
                 key={title}
