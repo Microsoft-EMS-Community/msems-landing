@@ -44,6 +44,16 @@ export function TicketBreakdown() {
           </li>
         ))}
       </ul>
+
+      {/* Faint barcode, a little ticket flourish */}
+      <div
+        aria-hidden
+        className="mt-6 h-9 w-full opacity-[0.18]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(90deg, #fff 0 2px, transparent 2px 5px, #fff 5px 6px, transparent 6px 11px, #fff 11px 14px, transparent 14px 16px)",
+        }}
+      />
     </div>
   );
 }
