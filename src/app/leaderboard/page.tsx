@@ -143,7 +143,7 @@ export default async function LeaderboardPage() {
             Leaderboards
           </h1>
           <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-            Two ways to compete. Find the games in the footer or the menu, log
+            Three ways to compete. Find the games in the footer or the menu, log
             in with Discord, and climb the boards.
           </p>
         </div>

@@ -24,7 +24,8 @@ export function SocialEvening() {
           <p className="mt-4 max-w-xl text-muted-foreground">
             After the sessions, keep it going over pétanque, food and drinks
             with the community. We are planning the evening social at{" "}
-            {socialAddon.venue}, a relaxed boules-and-bar spot in Copenhagen.
+            {socialAddon.venue}, a relaxed boules-and-bar spot in the heart of
+            Copenhagen.
           </p>
           {!socialAddon.confirmed && (
             <p className="mt-2 text-sm text-muted-foreground">

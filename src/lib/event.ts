@@ -13,6 +13,7 @@ export const EVENT = {
   startsAtISO: "2026-09-04T08:30:00+02:00",
   endsAtISO: "2026-09-04T17:00:00+02:00",
   dateLabel: "Friday, September 4th, 2026",
+  year: 2026,
   timeLabel: "8:30 AM to 5:00 PM",
   venue: "Microsoft",
   venueArea: "near Copenhagen",
@@ -133,7 +134,7 @@ export interface AgendaItem {
 }
 
 export const AGENDA_NOTE =
-  "Provisional running order. Times and sessions will be confirmed as the program and Call for Speakers are finalised.";
+  "Provisional running order. Times and sessions will be confirmed as the programme and Call for Speakers are finalised.";
 
 export const AGENDA: readonly AgendaItem[] = [
   {
@@ -462,7 +463,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "What about the agenda and speakers?",
     answer:
-      "The program is being finalised and the Call for Speakers is now open on Sessionize, so if you'd like to present, submit your session via the Call for Speakers section. The full agenda will be published here once it's locked in.",
+      "The programme is being finalised and the Call for Speakers is now open on Sessionize, so if you'd like to present, submit your session via the Call for Speakers section. The full agenda will be published here once it's locked in.",
   },
   {
     question: "How do I get a seat?",

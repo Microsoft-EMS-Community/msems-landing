@@ -65,7 +65,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
           <LeaderboardPreview />
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs text-muted-foreground">
-              © {EVENT.dateLabel.split(", ").pop()} {COMMUNITY.name}.
+              © {EVENT.year} {COMMUNITY.name}.
             </p>
             <GamesLauncher
               icon={<GamepadGradient className="game-wiggle size-4" />}

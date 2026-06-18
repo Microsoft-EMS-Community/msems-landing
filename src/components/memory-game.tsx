@@ -418,7 +418,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
                 </span>
               </span>
               <span className="text-muted-foreground">
-                Best: {best ? `${best.moves} / ${formatTime(best.time)}` : "—"}
+                Best: {best ? `${best.moves} / ${formatTime(best.time)}` : "-"}
               </span>
             </div>
 

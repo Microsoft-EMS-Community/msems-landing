@@ -318,11 +318,11 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
               <span>
                 Last{" "}
                 <span className="font-mono font-semibold text-foreground">
-                  {lastMs !== null ? `${lastMs} ms` : "—"}
+                  {lastMs !== null ? `${lastMs} ms` : "-"}
                 </span>
               </span>
               <span className="text-muted-foreground">
-                Avg {times.length ? `${avg} ms` : "—"}
+                Avg {times.length ? `${avg} ms` : "-"}
               </span>
             </div>
 
@@ -346,7 +346,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
                     key={i}
                     type="button"
                     onClick={() => handleCell(i)}
-                    aria-label={isTarget ? "Threat — tap now" : "Empty cell"}
+                    aria-label={isTarget ? "Threat, tap now" : "Empty cell"}
                     className={`grid aspect-square place-items-center rounded-xl border transition-colors ${
                       isTarget
                         ? "animate-pulse border-red-400 bg-red-500/80 text-white"

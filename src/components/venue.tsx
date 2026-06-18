@@ -80,7 +80,7 @@ export function Venue() {
           Hosted in Copenhagen
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          At Microsoft, just outside Copenhagen. Come for the sessions, stay for
+          At Microsoft, near Copenhagen. Come for the sessions, stay for
           the city.
         </p>
       </div>

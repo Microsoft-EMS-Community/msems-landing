@@ -9,7 +9,6 @@ import { getSessionizeSpeakers } from "@/lib/sessionize";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { EVENT } from "@/lib/event";
 import {
   SHARE_POSTS,
   HASHTAGS,
@@ -284,7 +283,7 @@ export default async function SharePage() {
             className="border-white/15 bg-white/5 hover:bg-white/10"
           >
             <ArrowLeft className="size-4" />
-            Back to {EVENT.shortName}
+            Back to the Summit
           </Button>
         </div>
       </section>
