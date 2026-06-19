@@ -53,6 +53,13 @@ const TRAVEL: readonly TravelTip[] = [
   },
 ];
 
+/** Rough price level from an indicative nightly rate, so it never goes stale. */
+function priceBand(eur: number): string {
+  if (eur < 60) return "€";
+  if (eur < 150) return "€€";
+  return "€€€";
+}
+
 export default function VenuePage() {
   return (
     <main className="flex-1">
@@ -157,6 +164,13 @@ export default function VenuePage() {
               here, so book whenever suits you, no need to wait.
             </p>
           </div>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground">
+            Tip: rates often drop closer to the date, though waiting is a bit of
+            a gamble.
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground/70">
+            € budget · €€ mid-range · €€€ pricier
+          </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {HOTELS.map((hotel) => (
               <div
@@ -198,11 +212,14 @@ export default function VenuePage() {
                     <Footprints className="size-4 shrink-0 opacity-60" />
                     {hotel.social}
                   </p>
-                  <p className="mt-3 text-sm">
+                  <p className="mt-3 text-sm" title="Indicative price level">
                     <span className="font-semibold text-foreground">
-                      from &euro;{hotel.pricePerNight}
-                    </span>{" "}
-                    <span className="text-muted-foreground">/ night</span>
+                      {priceBand(hotel.pricePerNight)}
+                    </span>
+                    <span className="text-muted-foreground/30">
+                      {"€".repeat(3 - priceBand(hotel.pricePerNight).length)}
+                    </span>
+                    <span className="text-muted-foreground"> per night</span>
                   </p>
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                     <a
