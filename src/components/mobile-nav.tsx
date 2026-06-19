@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Ticket } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { GamesLauncher } from "@/components/games-provider";
+import { useTickets } from "@/components/tickets-provider";
 import { NAV_LINKS } from "@/lib/nav";
-import { SIGNUP } from "@/lib/event";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const openTickets = useTickets();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -53,18 +54,14 @@ export function MobileNav() {
 
         <div className="mt-2 px-4">
           <Button
-            render={
-              <Link
-                href={SIGNUP.externalUrl ?? "/#notify"}
-                onClick={close}
-                {...(SIGNUP.externalUrl
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-              />
-            }
+            onClick={() => {
+              close();
+              openTickets();
+            }}
             className="w-full brand-gradient-bg border-0 text-white hover:opacity-90"
           >
-            Get notified
+            <Ticket className="size-4" />
+            Get tickets
           </Button>
         </div>
 

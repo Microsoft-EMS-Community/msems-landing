@@ -9,6 +9,7 @@ interface TicketButtonProps {
   className?: string;
   variant?: "default" | "outline";
   size?: "default" | "sm" | "lg";
+  arrow?: boolean;
 }
 
 /** Opens the popout ticket shop. Styled via className like a normal Button. */
@@ -17,13 +18,14 @@ export function TicketButton({
   className,
   variant = "default",
   size = "lg",
+  arrow = true,
 }: TicketButtonProps) {
   const openTickets = useTickets();
   return (
     <Button onClick={openTickets} size={size} variant={variant} className={className}>
       <Ticket className="size-4" />
       {label}
-      <ArrowRight className="size-4" />
+      {arrow && <ArrowRight className="size-4" />}
     </Button>
   );
 }

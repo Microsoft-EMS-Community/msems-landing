@@ -131,6 +131,11 @@
   }
 }
 
+/* Handwritten accent (Caveat), for the odd playful aside */
+.font-handwriting {
+  font-family: var(--font-handwriting), cursive;
+}
+
 /* ---- MS EMS Community brand: vaporwave gradient (pink -> purple -> teal) ---- */
 @theme inline {
   --color-brand-pink: #ff2e88;

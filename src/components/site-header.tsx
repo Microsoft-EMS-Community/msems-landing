@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Ticket } from "lucide-react";
-import { NotifyNavButton } from "@/components/notify-nav-button";
+import { TicketButton } from "@/components/ticket-button";
 import { MobileNav } from "@/components/mobile-nav";
 import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
@@ -54,7 +54,12 @@ export function SiteHeader() {
           />
 
           <div className="hidden lg:block">
-            <NotifyNavButton />
+            <TicketButton
+              label="Get tickets"
+              arrow={false}
+              size="default"
+              className="sheen brand-gradient-bg border-0 text-white hover:opacity-90"
+            />
           </div>
 
           <div className="lg:hidden">

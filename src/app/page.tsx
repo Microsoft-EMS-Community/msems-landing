@@ -142,7 +142,7 @@ export default async function Home() {
                 Microsoft Defender XDR, hosted at {EVENT.venue}, {EVENT.venueArea}.
                 Open to everyone.
               </p>
-              <p className="mx-auto mt-4 max-w-xl text-balance text-base italic text-muted-foreground lg:mx-0">
+              <p className="font-handwriting mx-auto mt-4 max-w-xl text-balance text-2xl text-foreground/80 lg:mx-0">
                 Need a break from AI? Meet real people, without the agents.
               </p>
 
