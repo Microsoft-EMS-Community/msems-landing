@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { PRICING } from "@/lib/event";
+import { PRICING, allInPrice } from "@/lib/event";
 
 const PHOTOS: ReadonlyArray<{ src: string; alt: string }> = [
   { src: "/social/boulebar-1.jpg", alt: "Pétanque courts at Boulebar" },
@@ -40,7 +40,7 @@ export function SocialEvening() {
               Add it to your ticket for{" "}
               <span className="font-semibold text-foreground">
                 +{currency}
-                {socialAddon.price}
+                {allInPrice(socialAddon.price)}
               </span>
               .
             </span>

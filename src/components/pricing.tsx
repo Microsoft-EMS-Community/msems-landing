@@ -78,7 +78,7 @@ export function Pricing() {
                   {socialAddon.label}{" "}
                   <span className="font-medium text-foreground">
                     +{currency}
-                    {socialAddon.price}
+                    {allInPrice(socialAddon.price)}
                   </span>{" "}
                   (optional)
                 </span>

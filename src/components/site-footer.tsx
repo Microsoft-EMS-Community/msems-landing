@@ -64,7 +64,7 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
         <div className="mt-8 max-w-2xl space-y-2 text-xs leading-relaxed text-muted-foreground">
           <p>
             An independent, community-run event, run at cost, not for profit.
-            Organised by{" "}
+            Legal administration by{" "}
             <span className="text-foreground/80">sky made simple ApS</span>,
             which handles ticketing, payouts and VAT.
           </p>
