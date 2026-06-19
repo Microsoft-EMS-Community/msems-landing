@@ -46,3 +46,7 @@ next-env.d.ts
 .s*.png
 /screenshots/
 /pictures/
+
+# hotel source material (originals + notes; site uses copies in /public/hotels)
+/hotels/
+/*_Boulebar_*.pdf

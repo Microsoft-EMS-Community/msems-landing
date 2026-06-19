@@ -91,7 +91,7 @@ export const HIGHLIGHTS: readonly HighlightItem[] = [
   {
     title: "Optional evening",
     description:
-      "Keep the conversation going with an optional evening of pétanque, food and drinks.",
+      "Keep the conversation going with an optional evening of pétanque and a two-course dinner.",
   },
 ] as const;
 
@@ -244,7 +244,7 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "18:00",
     title: "Evening social",
     description:
-      "Keep the day going with pétanque, food and drinks in the heart of Copenhagen. Plans being finalized.",
+      "Keep the day going with pétanque and a two-course dinner in the heart of Copenhagen. Plans being finalized.",
     kind: "social",
     optional: true,
   },
@@ -295,9 +295,14 @@ export const PRICING = {
   socialAddon: {
     label: "Evening social",
     price: 80,
-    description: "Pétanque, food and drinks with the community after the sessions.",
+    description:
+      "A two-course seasonal menu (veg or meat) and pétanque with a guide, with the community after the sessions. Drinks are not included.",
     venue: "Boulebar",
     url: "https://www.boulebar.dk/petanque",
+    // Boulebar Nørregade, in the old town near Wakeup Borgergade.
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Boulebar+N%C3%B8rregade+Copenhagen",
+    // A sample of Boulebar's set menu (seasonal, so the dishes may change).
+    menuUrl: "/social/boulebar-menu.pdf",
     // The venue/plan isn't locked yet; UI shows a "to be confirmed" note.
     confirmed: false,
   },
@@ -444,6 +449,106 @@ export const TEAM: readonly TeamMember[] = [
     linkedin: "https://www.linkedin.com/in/frohn/",
   },
   { name: "ToastedTy", handle: "toastedty", role: "contributor", country: "United Kingdom" },
+] as const;
+
+export interface Hotel {
+  readonly name: string;
+  /** One-line location / vibe. */
+  readonly area: string;
+  /** Indicative public rate per night, in EUR (no negotiated discount). */
+  readonly pricePerNight: number;
+  /** Rough door-to-door trip to the venue. */
+  readonly travel: string;
+  /** Rough trip to the evening social (Boulebar). */
+  readonly social: string;
+  /** Booking link (cleaned property page, no pre-filled dates). */
+  readonly bookingUrl: string;
+  /** Google Maps directions from the hotel to the venue. */
+  readonly mapUrl: string;
+  /** Google Maps link for the hotel's own location. */
+  readonly locationUrl: string;
+  /** Exterior photo in /public. */
+  readonly photo: string;
+  /** Room / interior photo in /public. */
+  readonly roomPhoto: string;
+  /** Short discount label shown as a pink badge, e.g. "10% off". Omit if none. */
+  readonly discountLabel?: string;
+  /** Neutral info badge, e.g. "Share a room" for a hostel. Omit if none. */
+  readonly badge?: string;
+  /** Optional highlighted one-line note, e.g. why we recommend it. */
+  readonly note?: string;
+}
+
+/**
+ * Hand-picked hotels near the venue. Prices are indicative public rates
+ * (checked 19 Jun 2026) and vary by date. Order: cheapest first.
+ */
+export const HOTELS: readonly Hotel[] = [
+  {
+    name: "Next House Copenhagen",
+    area: "Budget hostel near Central Station and Tivoli",
+    pricePerNight: 31,
+    travel: "≈ 40 min to the venue by public transport",
+    social: "≈ 40 min walk to the evening social",
+    bookingUrl: "https://www.hotels.com/ho2308326528/next-house-copenhagen-denmark/",
+    mapUrl: "https://www.google.com/maps/dir/Microsoft,+Kanalvej+7,+2800+Kongens+Lyngby/Next+House+Copenhagen,+Bernstorffsgade+27,+1577+K%C3%B8benhavn",
+    locationUrl: "https://www.google.com/maps/search/?api=1&query=Next+House+Copenhagen",
+    photo: "/hotels/next-house/outside.avif",
+    roomPhoto: "/hotels/next-house/room.avif",
+    badge: "Share a room",
+  },
+  {
+    name: "Go Hotel Saga",
+    area: "Budget pick, right by Copenhagen Central Station",
+    pricePerNight: 93,
+    travel: "≈ 40 min to the venue by public transport",
+    social: "≈ 25 min walk to the evening social",
+    bookingUrl: "https://www.hotels.com/ho289582/go-hotel-saga-copenhagen-denmark/",
+    mapUrl: "https://www.google.com/maps/dir/Microsoft,+Kanalvej+7,+2800+Kongens+Lyngby/Colbj%C3%B8rnsensgade+18,+1652+K%C3%B8benhavn",
+    locationUrl: "https://www.google.com/maps/search/?api=1&query=Go+Hotel+Saga+Copenhagen",
+    photo: "/hotels/go-hotel-saga/outside.webp",
+    roomPhoto: "/hotels/go-hotel-saga/room.avif",
+    badge: "Best value",
+  },
+  {
+    name: "CABINN Copenhagen",
+    area: "Compact rooms, about a 10 min walk from the city center",
+    pricePerNight: 126,
+    travel: "≈ 45 min to the venue by public transport",
+    social: "≈ 30 min walk to the evening social",
+    bookingUrl: "https://www.hotels.com/ho1143888928/cabinn-copenhagen-copenhagen-denmark/",
+    mapUrl: "https://www.google.com/maps/dir/Microsoft,+Kanalvej+7,+2800+Kongens+Lyngby/Cabinn+Copenhagen,+Arni+Magnussons+Gade+1,+1577+K%C3%B8benhavn",
+    locationUrl: "https://www.google.com/maps/search/?api=1&query=Cabinn+Copenhagen+Arni+Magnussons+Gade",
+    photo: "/hotels/cabinn-copenhagen/outside.jpg",
+    roomPhoto: "/hotels/cabinn-copenhagen/room.avif",
+    badge: "By the harbor",
+  },
+  {
+    name: "CABINN City",
+    area: "Compact rooms in the city center, near Tivoli and the station",
+    pricePerNight: 131,
+    travel: "≈ 40 min to the venue by public transport",
+    social: "≈ 20 min walk to the evening social",
+    bookingUrl: "https://www.hotels.com/ho232525/cabinn-city-hotel-k-benhavn-danmark/",
+    mapUrl: "https://www.google.com/maps/dir/Microsoft,+Kanalvej+7,+2800+Kongens+Lyngby/Cabinn+City,+Mitchellsgade+14,+1568+K%C3%B8benhavn",
+    locationUrl: "https://www.google.com/maps/search/?api=1&query=Cabinn+City+Copenhagen",
+    photo: "/hotels/cabinn-city/outside.jpg",
+    roomPhoto: "/hotels/cabinn-city/room.jpg",
+    badge: "Most central",
+  },
+  {
+    name: "Wakeup Copenhagen Borgergade",
+    area: "Modern, in the old town near Nyhavn and Kongens Nytorv",
+    pricePerNight: 189,
+    travel: "≈ 38 min to the venue by public transport",
+    social: "≈ 15 min walk to the evening social",
+    bookingUrl: "https://www.hotels.com/ho440970/wakeup-copenhagen-borgergade-copenhagen-denmark/",
+    mapUrl: "https://www.google.com/maps/dir/Microsoft,+Kanalvej+7,+2800+Kongens+Lyngby/Wakeup+Copenhagen,+Borgergade+9,+1300+K%C3%B8benhavn",
+    locationUrl: "https://www.google.com/maps/search/?api=1&query=Wakeup+Copenhagen+Borgergade",
+    photo: "/hotels/wakeup-copenhagen/outside.webp",
+    roomPhoto: "/hotels/wakeup-copenhagen/inside.avif",
+    note: "Closest to the evening social",
+  },
 ] as const;
 
 export interface FaqItem {

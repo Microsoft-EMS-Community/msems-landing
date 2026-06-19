@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Bike, Car, Hotel, MapPin, Plane, Train } from "lucide-react";
+import { ArrowLeft, BadgePercent, Bike, Car, Footprints, MapPin, Plane, Route, Star, Train } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { VenueGallery } from "@/components/venue";
-import { EVENT } from "@/lib/event";
+import { HotelCarousel } from "@/components/hotel-carousel";
+import { EVENT, HOTELS } from "@/lib/event";
 
 export const metadata: Metadata = {
   title: "Venue & travel | Microsoft EMS Community Summit",
@@ -143,25 +144,101 @@ export default function VenuePage() {
             Where to stay
           </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            We are arranging discounted rates with hotels in the heart of
-            Copenhagen. Booking details and codes will be shared here and with
-            registered attendees.
+            A few hotels we&apos;d recommend, all an easy trip to the venue.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {[1, 2, 3].map((i) => (
+          <div className="mt-4 flex max-w-2xl items-start gap-3 rounded-2xl border border-brand-pink/25 bg-brand-pink/5 p-4 text-sm">
+            <BadgePercent className="size-5 shrink-0 text-brand-pink" />
+            <p className="text-muted-foreground">
+              <span className="font-medium text-foreground">
+                Discount codes:
+              </span>{" "}
+              we&apos;re aiming to save you around 10% at some of these hotels
+              and will post any codes here. Book whenever suits you, no need to
+              wait.
+            </p>
+          </div>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {HOTELS.map((hotel) => (
               <div
-                key={i}
-                className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6"
+                key={hotel.name}
+                className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]"
               >
-                <span className="grid size-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-muted-foreground">
-                  <Hotel className="size-5 opacity-50" />
-                </span>
-                <h3 className="mt-4 font-semibold text-muted-foreground">
-                  Partner hotel
-                </h3>
-                <p className="mt-1 text-sm text-muted-foreground/70">
-                  Discounted rate coming soon
-                </p>
+                <HotelCarousel
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  photos={[
+                    { src: hotel.photo, alt: `${hotel.name} exterior` },
+                    { src: hotel.roomPhoto, alt: `${hotel.name} room` },
+                  ]}
+                />
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-semibold">{hotel.name}</h3>
+                    <div className="flex shrink-0 flex-wrap justify-end gap-1.5">
+                      {hotel.badge && (
+                        <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                          {hotel.badge}
+                        </span>
+                      )}
+                      {hotel.discountLabel && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-brand-pink/25 bg-brand-pink/10 px-2 py-0.5 text-xs font-medium text-brand-pink">
+                          <BadgePercent className="size-3.5" />
+                          {hotel.discountLabel}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="mt-1 min-h-10 text-sm text-muted-foreground">
+                    {hotel.area}
+                  </p>
+                  {hotel.note && (
+                    <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-teal">
+                      <Star className="size-3.5 shrink-0" />
+                      {hotel.note}
+                    </p>
+                  )}
+                  <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                    <Train className="size-4 shrink-0 opacity-60" />
+                    {hotel.travel}
+                  </p>
+                  <p className="mt-1.5 flex items-center gap-2 text-sm text-muted-foreground">
+                    <Footprints className="size-4 shrink-0 opacity-60" />
+                    {hotel.social}
+                  </p>
+                  <p className="mt-3 text-sm">
+                    <span className="font-semibold text-foreground">
+                      from &euro;{hotel.pricePerNight}
+                    </span>{" "}
+                    <span className="text-muted-foreground">/ night</span>
+                  </p>
+                  <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
+                    <a
+                      href={hotel.bookingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium transition-colors hover:bg-white/10"
+                    >
+                      Book
+                    </a>
+                    <a
+                      href={hotel.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <Route className="size-4" />
+                      Route
+                    </a>
+                    <a
+                      href={hotel.locationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <MapPin className="size-4" />
+                      Location
+                    </a>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

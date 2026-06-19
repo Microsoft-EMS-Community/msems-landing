@@ -285,23 +285,24 @@ export default async function Home() {
             <PoweredByMicrosoft variant="bar" />
             <div className="text-sm text-muted-foreground">
               <span className="text-muted-foreground/80">In the room:</span>
-              <div className="mt-2 flex flex-wrap gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+              <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                <span className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-foreground">
                   <Image
                     src="/mvp-badge.png"
                     alt="Microsoft MVP"
-                    width={40}
-                    height={40}
-                    className="rounded-[3px]"
+                    width={32}
+                    height={32}
+                    className="shrink-0 rounded-[3px]"
                   />
                   Microsoft MVPs
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+                <span className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-foreground">
                   <Image
                     src="/mct-badge.png"
                     alt="Microsoft Certified Trainer"
-                    width={40}
-                    height={40}
+                    width={32}
+                    height={32}
+                    className="shrink-0"
                   />
                   Microsoft Certified Trainers
                 </span>

@@ -154,12 +154,6 @@ export default function PoliciesPage() {
                 </table>
               </div>
               <p>
-                Some of these providers are based in the US, so your data may be
-                processed outside the EU/EEA. Where that happens it&apos;s under
-                recognised safeguards, such as the EU-US Data Privacy Framework
-                or Standard Contractual Clauses.
-              </p>
-              <p>
                 You can ask us to access or delete your data at any time, just
                 get in touch.
               </p>
