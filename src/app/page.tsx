@@ -268,7 +268,7 @@ export default async function Home() {
 
       {/* ---------- About ---------- */}
       <section id="about" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
-        <h2 className="text-balance text-center text-3xl font-bold tracking-tight sm:text-4xl">
+        <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           One day. The whole community.{" "}
           <span className="brand-gradient-text">In one room.</span>
         </h2>
@@ -283,27 +283,29 @@ export default async function Home() {
           </p>
           <div className="space-y-5">
             <PoweredByMicrosoft variant="bar" />
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
+            <div className="text-sm text-muted-foreground">
               <span className="text-muted-foreground/80">In the room:</span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
-                <Image
-                  src="/mvp-badge.png"
-                  alt="Microsoft MVP"
-                  width={40}
-                  height={40}
-                  className="rounded-[3px]"
-                />
-                Microsoft MVPs
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
-                <Image
-                  src="/mct-badge.png"
-                  alt="Microsoft Certified Trainer"
-                  width={40}
-                  height={40}
-                />
-                Microsoft Certified Trainers
-              </span>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+                  <Image
+                    src="/mvp-badge.png"
+                    alt="Microsoft MVP"
+                    width={40}
+                    height={40}
+                    className="rounded-[3px]"
+                  />
+                  Microsoft MVPs
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
+                  <Image
+                    src="/mct-badge.png"
+                    alt="Microsoft Certified Trainer"
+                    width={40}
+                    height={40}
+                  />
+                  Microsoft Certified Trainers
+                </span>
+              </div>
             </div>
           </div>
         </div>
