@@ -27,6 +27,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { TicketButton } from "@/components/ticket-button";
+import { DiscordIcon } from "@/components/discord-icon";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -203,18 +204,20 @@ export default async function Home() {
                     Tickets are on sale, seats are limited
                   </p>
                   <TicketButton className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90" />
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    From {PRICING.currency}
-                    {allInPrice(PRICING.tiers[0].price)} · or{" "}
+                  <p className="mt-3 flex flex-wrap items-center justify-center gap-x-1.5 text-sm text-muted-foreground">
+                    <span>
+                      From {PRICING.currency}
+                      {allInPrice(PRICING.tiers[0].price)} · or
+                    </span>
                     <a
                       href={EVENT.discordInvite}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="whitespace-nowrap text-foreground underline underline-offset-4 hover:text-brand-pink"
+                      className="inline-flex items-center gap-1.5 whitespace-nowrap font-medium text-foreground transition-colors hover:text-[#5865F2]"
                     >
-                      join the Discord
+                      <DiscordIcon className="size-4 text-[#5865F2]" />
+                      join the community
                     </a>
-                    .
                   </p>
                   <div className="mt-4 flex flex-col gap-3 rounded-xl border border-brand-teal/30 bg-brand-teal/[0.06] p-3 sm:flex-row sm:items-center">
                     <div className="flex flex-1 items-center gap-3 text-left">
