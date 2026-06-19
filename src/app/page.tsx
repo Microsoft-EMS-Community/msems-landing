@@ -265,12 +265,12 @@ export default async function Home() {
 
       {/* ---------- About ---------- */}
       <section id="about" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl text-left">
           <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
             One day. The whole community.{" "}
             <span className="brand-gradient-text">In one room.</span>
           </h2>
-          <p className="mt-5 text-balance text-lg text-muted-foreground">
+          <p className="mt-5 text-lg text-muted-foreground">
             For one day, the whole community comes offline: real-world takes on
             the Microsoft EMS stack from the people who actually run it, what
             works and what doesn&apos;t. It&apos;s not-for-profit, community-run
@@ -278,10 +278,10 @@ export default async function Home() {
             join. Come for the sessions, leave with new contacts, straight
             answers and a few good stories from the field.
           </p>
-          <div className="mx-auto mt-8 max-w-xl">
+          <div className="mt-8 max-w-xl">
             <PoweredByMicrosoft variant="bar" />
           </div>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
+          <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
             <span className="text-muted-foreground/80">In the room:</span>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-sm">
               <Image
