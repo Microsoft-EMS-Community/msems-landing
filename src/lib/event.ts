@@ -473,10 +473,8 @@ export interface Hotel {
   readonly roomPhoto: string;
   /** Short discount label shown as a pink badge, e.g. "10% off". Omit if none. */
   readonly discountLabel?: string;
-  /** Neutral info badge, e.g. "Share a room" for a hostel. Omit if none. */
+  /** Neutral info badge, e.g. "Share a room" or "Closest to the social". */
   readonly badge?: string;
-  /** Optional highlighted one-line note, e.g. why we recommend it. */
-  readonly note?: string;
 }
 
 /**
@@ -537,17 +535,17 @@ export const HOTELS: readonly Hotel[] = [
     badge: "Most central",
   },
   {
-    name: "Wakeup Copenhagen Borgergade",
+    name: "Wakeup Copenhagen",
     area: "Modern, in the old town near Nyhavn and Kongens Nytorv",
     pricePerNight: 189,
     travel: "≈ 38 min to the venue by public transport",
     social: "≈ 15 min walk to the evening social",
+    badge: "Closest to the social",
     bookingUrl: "https://www.hotels.com/ho440970/wakeup-copenhagen-borgergade-copenhagen-denmark/",
     mapUrl: "https://www.google.com/maps/dir/Microsoft,+Kanalvej+7,+2800+Kongens+Lyngby/Wakeup+Copenhagen,+Borgergade+9,+1300+K%C3%B8benhavn",
     locationUrl: "https://www.google.com/maps/search/?api=1&query=Wakeup+Copenhagen+Borgergade",
     photo: "/hotels/wakeup-copenhagen/outside.webp",
     roomPhoto: "/hotels/wakeup-copenhagen/inside.avif",
-    note: "Closest to the evening social",
   },
 ] as const;
 

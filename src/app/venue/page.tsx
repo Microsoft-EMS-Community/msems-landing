@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, BadgePercent, Bike, Car, Footprints, MapPin, Plane, Route, Star, Train } from "lucide-react";
+import { ArrowLeft, BadgePercent, Bike, Car, Footprints, MapPin, Plane, Route, Train } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { VenueGallery } from "@/components/venue";
@@ -152,9 +152,9 @@ export default function VenuePage() {
               <span className="font-medium text-foreground">
                 Discount codes:
               </span>{" "}
-              we&apos;re aiming to save you around 10% at some of these hotels
-              and will post any codes here. Book whenever suits you, no need to
-              wait.
+              we&apos;ve talked with a few hotels. So far we&apos;re hearing
+              around 10% off or breakfast included. We&apos;ll post any codes
+              here, so book whenever suits you, no need to wait.
             </p>
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -190,12 +190,6 @@ export default function VenuePage() {
                   <p className="mt-1 min-h-10 text-sm text-muted-foreground">
                     {hotel.area}
                   </p>
-                  {hotel.note && (
-                    <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-teal">
-                      <Star className="size-3.5 shrink-0" />
-                      {hotel.note}
-                    </p>
-                  )}
                   <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
                     <Train className="size-4 shrink-0 opacity-60" />
                     {hotel.travel}
