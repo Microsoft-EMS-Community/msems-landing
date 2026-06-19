@@ -306,8 +306,8 @@ export const PRICING = {
       id: "early-bird",
       name: "Early bird",
       price: 35,
-      seatsLabel: "First 20 seats",
-      badge: "Only 20 available",
+      seatsLabel: "First 25 seats",
+      badge: "Only 25 available",
       featured: true,
       features: [
         "Full day of sessions",
@@ -319,7 +319,7 @@ export const PRICING = {
       id: "standard",
       name: "Standard",
       price: 45,
-      seatsLabel: "Seats 21 to 70",
+      seatsLabel: "Seats 26 to 70",
       features: [
         "Full day of sessions",
         "CloudHour round-table & speaker AMA",
