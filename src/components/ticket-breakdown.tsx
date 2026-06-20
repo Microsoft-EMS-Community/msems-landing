@@ -2,7 +2,7 @@
 // cost. Percentages are an approximate split, not exact accounting.
 const SLICES: ReadonlyArray<{ label: string; pct: number; color: string }> = [
   { label: "Lunch", pct: 35, color: "#ff2e88" },
-  { label: "Coffee & tea", pct: 38, color: "#a855f7" },
+  { label: "Coffee, tea & water", pct: 38, color: "#a855f7" },
   { label: "Drinks", pct: 13, color: "#22d3ee" },
   { label: "Ticketing fees", pct: 7, color: "#64748b" },
   { label: "Snacks, fruit & extras", pct: 7, color: "#f59e0b" },
