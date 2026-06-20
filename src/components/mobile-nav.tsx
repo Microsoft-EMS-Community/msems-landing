@@ -20,18 +20,28 @@ export function MobileNav() {
   const openTickets = useTickets();
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        render={
-          <button
-            type="button"
-            aria-label="Open menu"
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-foreground transition-colors hover:bg-white/10"
-          />
-        }
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={openTickets}
+        className="inline-flex h-10 items-center gap-1.5 rounded-lg brand-gradient-bg px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
       >
-        <Menu className="size-5" />
-      </SheetTrigger>
+        <Ticket className="size-4" />
+        Tickets
+      </button>
+
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger
+          render={
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="inline-flex size-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-foreground transition-colors hover:bg-white/10"
+            />
+          }
+        >
+          <Menu className="size-5" />
+        </SheetTrigger>
 
       <SheetContent
         side="right"
@@ -72,6 +82,7 @@ export function MobileNav() {
           />
         </div>
       </SheetContent>
-    </Sheet>
+      </Sheet>
+    </div>
   );
 }
