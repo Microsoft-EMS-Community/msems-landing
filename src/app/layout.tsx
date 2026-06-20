@@ -77,7 +77,7 @@ export default function RootLayout({
       lang="en"
       className={`dark ${geistSans.variable} ${geistMono.variable} ${caveat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full flex flex-col overflow-x-clip bg-background text-foreground">
         <div className="scroll-progress brand-gradient-bg" aria-hidden />
         <PointerGlow />
         <GamesProvider>

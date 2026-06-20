@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Ticket, X } from "lucide-react";
+import { useTickets } from "@/components/tickets-provider";
 
 /** The early-bird SVG, reused by the hero flight and the perched mascot. */
 function Bird({
@@ -52,6 +53,7 @@ function Bird({
  * Decorative flight is hidden for reduced-motion users.
  */
 export function FlyingBird() {
+  const openTickets = useTickets();
   const [show, setShow] = useState(false);
   const [perched, setPerched] = useState(false);
   const [bubble, setBubble] = useState(false);
@@ -81,24 +83,10 @@ export function FlyingBird() {
     timer.current = window.setTimeout(() => setShow(false), 6000);
   }
 
-  // Send people to the nearest signup form and glow it, without ever scrolling
-  // backward: flash the hero form in place if it's still on screen, otherwise
-  // scroll down to the final signup and blink that instead.
-  function flashSignup() {
+  // Open the shared ticket modal, the same action as every other CTA.
+  function getTicket() {
     setShow(false);
-    const hero = document.getElementById("signup-top");
-    const heroPast = hero ? hero.getBoundingClientRect().bottom < 120 : true;
-    const target = heroPast
-      ? document.getElementById("notify-card")
-      : hero;
-    if (!target) return;
-    if (heroPast) {
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    target.classList.remove("signup-flash");
-    void target.offsetWidth; // restart the animation on repeat clicks
-    target.classList.add("signup-flash");
-    window.setTimeout(() => target.classList.remove("signup-flash"), 2300);
+    openTickets();
   }
 
   return (
@@ -117,7 +105,7 @@ export function FlyingBird() {
         {show && (
           <button
             type="button"
-            onClick={flashSignup}
+            onClick={getTicket}
             className="pointer-events-auto fixed left-1/2 top-28 z-[60] inline-flex -translate-x-1/2 items-center gap-2 rounded-full brand-gradient-bg px-4 py-2 text-sm font-semibold text-white shadow-2xl"
           >
             <Ticket className="size-4" />
@@ -133,7 +121,7 @@ export function FlyingBird() {
             {/* Speech bubble: auto-shows once on landing, and on hover */}
             <button
               type="button"
-              onClick={flashSignup}
+              onClick={getTicket}
               className={`absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-2xl border border-white/10 bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground shadow-lg backdrop-blur transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 ${
                 bubble ? "opacity-100" : "pointer-events-none opacity-0"
               }`}
@@ -142,9 +130,9 @@ export function FlyingBird() {
             </button>
             <button
               type="button"
-              onClick={flashSignup}
-              aria-label="Get notified about tickets"
-              title="Get notified"
+              onClick={getTicket}
+              aria-label="Get your ticket"
+              title="Get your ticket"
               className="block w-14 cursor-pointer drop-shadow-[0_8px_18px_rgba(168,85,247,0.45)] transition-transform hover:scale-105 sm:w-16"
             >
               <Bird flap gradId="birdGradPerch" />
