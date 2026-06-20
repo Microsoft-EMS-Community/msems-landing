@@ -8,17 +8,6 @@ import { cardFonts } from "@/lib/og-font";
 //   GET /linkedin-cover  -> PNG at the LinkedIn-recommended size.
 export const dynamic = "force-dynamic";
 
-function MicrosoftMark() {
-  const squares = ["#F25022", "#7FBA00", "#00A4EF", "#FFB900"];
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", width: 26, height: 26, gap: 2 }}>
-      {squares.map((color) => (
-        <div key={color} style={{ width: 12, height: 12, background: color }} />
-      ))}
-    </div>
-  );
-}
-
 export async function GET() {
   const logoBytes = await readFile(join(process.cwd(), "public", "logo.png"));
   const logoSrc = `data:image/png;base64,${logoBytes.toString("base64")}`;
@@ -66,12 +55,8 @@ export async function GET() {
           </div>
         </div>
 
-        {/* Bottom row: powered by Microsoft, site URL */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", fontSize: 24 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <MicrosoftMark />
-            <span style={{ color: "#cbd5e1" }}>Powered by Microsoft</span>
-          </div>
+        {/* Bottom row: site URL */}
+        <div style={{ display: "flex", fontSize: 24 }}>
           <span style={{ fontWeight: 700, color: "#f0abfc" }}>{siteLabel}</span>
         </div>
       </div>
