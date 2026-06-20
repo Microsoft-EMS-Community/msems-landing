@@ -24,10 +24,10 @@ export function MobileNav() {
       <button
         type="button"
         onClick={openTickets}
-        className="inline-flex h-10 items-center gap-1.5 rounded-lg brand-gradient-bg px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+        aria-label="Get your ticket"
+        className="inline-flex size-10 items-center justify-center rounded-lg brand-gradient-bg text-white transition-opacity hover:opacity-90"
       >
-        <Ticket className="size-4" />
-        Tickets
+        <Ticket className="size-5" />
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
