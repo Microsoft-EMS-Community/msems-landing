@@ -48,11 +48,24 @@ export function TicketBreakdown() {
         ))}
       </ul>
 
-      <p className="mt-6 border-t border-white/10 pt-5 text-xs leading-relaxed text-muted-foreground">
-        Microsoft provides the venue. Our speakers volunteer their time and pay
-        their own travel and stay. There are no sponsors and no profit, anything
-        left over goes straight back into the event.
-      </p>
+      <div className="mt-6 space-y-3 border-t border-white/10 pt-5 text-xs leading-relaxed text-muted-foreground">
+        <p>
+          Real costs per person: lunch{" "}
+          <span className="font-medium text-foreground/80">
+            95 DKK (&asymp; &euro;12.73)
+          </span>{" "}
+          and all-day coffee, tea &amp; water{" "}
+          <span className="font-medium text-foreground/80">
+            105 DKK (&asymp; &euro;14.08)
+          </span>
+          , about &euro;27 of your ticket, just for catering.
+        </p>
+        <p>
+          Microsoft provides the venue. Our speakers volunteer their time and pay
+          their own travel and stay. There are no sponsors and no profit, anything
+          left over goes straight back into the event.
+        </p>
+      </div>
     </div>
   );
 }

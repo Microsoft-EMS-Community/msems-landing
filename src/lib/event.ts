@@ -580,6 +580,11 @@ export const FAQS: readonly FaqItem[] = [
       "The event is run at cost, so the price only ever covers the day. Microsoft kindly provides the venue, but we pay for catering, drinks and the rest, so early bird is a small thank-you for booking early that helps us pay those costs up front. Standard is the regular price once the early seats are gone. Either way it goes straight into running the event, never profit.",
   },
   {
+    question: "Do you pay speakers?",
+    answer:
+      "No. Our speakers join because they want to, they volunteer their time and cover their own travel and stay. That's also why your whole ticket goes to catering: there are no speaker fees, no sponsors and no profit.",
+  },
+  {
     question: "Where exactly is it?",
     answer: `At ${EVENT.venue}, ${EVENT.venueAddress}, ${EVENT.venueArea}. Check the venue page for the map, how to get there and where to stay.`,
   },
