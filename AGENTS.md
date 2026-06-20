@@ -17,7 +17,7 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   agenda once published; `AGENDA` is the fallback.
 - `src/lib/share.ts` + `src/lib/og-font.ts` — share posts and `next/og` card
   generators (`/share-card`, `/speaker-card`, `/announce-card`, `/attending-card`,
-  `/cfs-card`).
+  `/cfs-card`, `/linkedin-cover` — 1774x444 LinkedIn group banner).
 - Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`, `/convince`,
   `/leaderboard`.
 
