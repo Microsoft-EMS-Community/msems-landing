@@ -99,7 +99,7 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
             >
               Open the shop in a new tab
             </a>
-            .
+            . If the payment step looks off on mobile, try a desktop browser.
           </p>
         </div>
       </div>
