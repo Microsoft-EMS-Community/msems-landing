@@ -49,18 +49,16 @@ export async function GET() {
             Take the stage
           </div>
           <div style={{ display: "flex", fontSize: 26, color: "#e2e8f0" }}>
-            Level 300 talks on the Microsoft security stack
+            An audience that shows up, listens, and remembers your talk
           </div>
           <div style={{ display: "flex", fontSize: 22, color: "#94a3b8" }}>
             {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}
           </div>
         </div>
 
-        {/* Right: logo */}
-        <div style={{ display: "flex", padding: 5, borderRadius: 34, background: "linear-gradient(135deg, #ff2e88, #a855f7 50%, #22d3ee)" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logoSrc} width={150} height={150} style={{ borderRadius: 30 }} alt="" />
-        </div>
+        {/* Right: logo (already a gradient circle on transparency) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoSrc} width={168} height={168} alt="" />
       </div>
     ),
     { width: 1280, height: 320, ...(fonts.length ? { fonts } : {}) },
