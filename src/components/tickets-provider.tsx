@@ -21,10 +21,11 @@ export function useTickets(): () => void {
 export function TicketsProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const openTickets = useCallback(() => setOpen(true), []);
+  const closeTickets = useCallback(() => setOpen(false), []);
   return (
     <TicketsContext.Provider value={openTickets}>
       {children}
-      <TicketModal open={open} onClose={() => setOpen(false)} />
+      <TicketModal open={open} onClose={closeTickets} />
     </TicketsContext.Provider>
   );
 }

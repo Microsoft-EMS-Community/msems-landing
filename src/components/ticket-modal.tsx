@@ -23,18 +23,33 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const attached = useRef(false);
 
+  // Lock the background while open using the position-fixed technique. Plain
+  // `body { overflow: hidden }` leaves mobile (iOS Safari) needing a second
+  // swipe to re-engage scrolling after close; pinning the body and restoring
+  // the exact scroll position avoids that.
   useEffect(() => {
     if (!open) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const body = document.body;
+    const scrollY = window.scrollY;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prevOverflow;
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", onKey);
     };
   }, [open, onClose]);
@@ -60,7 +75,7 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
     <div
       aria-hidden={!open}
       onClick={onClose}
-      className={`fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-black/70 p-3 backdrop-blur-sm transition-opacity sm:p-6 ${
+      className={`fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto overscroll-contain bg-black/70 p-3 backdrop-blur-sm transition-opacity sm:p-6 ${
         open ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
