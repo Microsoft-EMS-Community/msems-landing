@@ -52,11 +52,11 @@ export function TicketBreakdown() {
         <p>
           Real costs per person: lunch{" "}
           <span className="font-medium text-foreground/80">
-            95 DKK (&asymp; &euro;12.73)
+            &asymp; &euro;12.73 (95 DKK)
           </span>{" "}
           and all-day coffee, tea &amp; water{" "}
           <span className="font-medium text-foreground/80">
-            105 DKK (&asymp; &euro;14.08)
+            &asymp; &euro;14.08 (105 DKK)
           </span>
           , about &euro;27 of your ticket, just for catering.
         </p>
