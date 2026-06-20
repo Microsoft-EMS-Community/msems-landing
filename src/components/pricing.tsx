@@ -2,7 +2,7 @@ import { Check, HandHeart, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TicketButton } from "@/components/ticket-button";
 import { TicketBreakdown } from "@/components/ticket-breakdown";
-import { EVENT, PRICING, allInPrice } from "@/lib/event";
+import { PRICING, allInPrice } from "@/lib/event";
 
 export function Pricing() {
   const { currency, socialAddon } = PRICING;
@@ -107,10 +107,8 @@ export function Pricing() {
       <TicketBreakdown />
 
       <p className="mx-auto mt-6 max-w-xl text-center text-xs text-muted-foreground">
-        {socialAddon.description}{" "}
-        {!PRICING.pricesFinal && <span>{PRICING.note}</span>} This is a
-        not-for-profit, community-run event powered by {EVENT.venue}. Tickets are
-        sold via Weeztix; see our{" "}
+        {!PRICING.pricesFinal && <span>{PRICING.note} </span>}
+        Tickets are sold via Weeztix; see our{" "}
         <a
           href="/policies"
           className="underline underline-offset-2 hover:text-foreground"

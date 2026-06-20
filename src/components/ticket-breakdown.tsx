@@ -47,6 +47,12 @@ export function TicketBreakdown() {
           </li>
         ))}
       </ul>
+
+      <p className="mt-6 border-t border-white/10 pt-5 text-xs leading-relaxed text-muted-foreground">
+        Microsoft provides the venue. Our speakers volunteer their time and pay
+        their own travel and stay. There are no sponsors and no profit, anything
+        left over goes straight back into the event.
+      </p>
     </div>
   );
 }
