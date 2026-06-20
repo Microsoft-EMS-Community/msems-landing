@@ -1,10 +1,10 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { EVENT, COMMUNITY, SITE_URL } from "@/lib/event";
+import { COMMUNITY, SITE_URL } from "@/lib/event";
 import { cardFonts } from "@/lib/og-font";
 
-// A 1774x444 cover banner for the LinkedIn group/page header.
+// A 1774x444 cover banner for the general LinkedIn community group header.
 //   GET /linkedin-cover  -> PNG at the LinkedIn-recommended size.
 export const dynamic = "force-dynamic";
 
@@ -47,27 +47,22 @@ export async function GET() {
         <div style={{ position: "absolute", top: -240, left: -140, width: 540, height: 540, borderRadius: "50%", background: "#ff2e88", opacity: 0.30, filter: "blur(120px)" }} />
         <div style={{ position: "absolute", bottom: -280, right: -140, width: 580, height: 580, borderRadius: "50%", background: "#06b6d4", opacity: 0.26, filter: "blur(120px)" }} />
 
-        {/* Top row: logo + community, status pill */}
+        {/* Top row: logo, member-count pill */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logoSrc} width={56} height={56} style={{ borderRadius: 12 }} alt="" />
-            <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", color: "#e879c9" }}>
-              {COMMUNITY.name}
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", fontSize: 21, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#cbd5e1", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 999, padding: "10px 24px" }}>
-            {EVENT.status}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logoSrc} width={60} height={60} style={{ borderRadius: 13 }} alt="" />
+          <div style={{ display: "flex", alignItems: "center", fontSize: 20, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#cbd5e1", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 999, padding: "10px 24px" }}>
+            Enterprise Mobility + Security
           </div>
         </div>
 
-        {/* Title + date */}
+        {/* Name + what it covers */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", fontFamily: display, fontSize: 74, fontWeight: 800, lineHeight: 1.2, letterSpacing: -1, paddingBottom: 6, backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
-            {EVENT.name}
+          <div style={{ display: "flex", fontFamily: display, fontSize: 76, fontWeight: 800, lineHeight: 1.2, letterSpacing: -1, paddingBottom: 6, backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
+            {COMMUNITY.name}
           </div>
-          <div style={{ display: "flex", fontSize: 30, color: "#e2e8f0" }}>
-            {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}
+          <div style={{ display: "flex", fontSize: 29, color: "#e2e8f0" }}>
+            For admins and enthusiasts of Intune, Entra ID and Microsoft Defender XDR
           </div>
         </div>
 
