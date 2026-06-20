@@ -75,9 +75,9 @@ export function TicketModal({ open, onClose }: TicketModalProps) {
     <div
       aria-hidden={!open}
       onClick={onClose}
-      className={`fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto overscroll-contain bg-black/70 p-3 backdrop-blur-sm transition-opacity sm:p-6 ${
-        open ? "opacity-100" : "pointer-events-none opacity-0"
-      }`}
+      className={`fixed inset-0 z-[80] ${
+        open ? "flex" : "hidden"
+      } items-start justify-center overflow-y-auto overscroll-contain bg-black/70 p-3 backdrop-blur-sm sm:p-6`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
