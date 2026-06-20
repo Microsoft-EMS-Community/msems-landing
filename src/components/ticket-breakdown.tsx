@@ -12,6 +12,9 @@ export function TicketBreakdown() {
   return (
     <div className="relative mx-auto mt-12 max-w-2xl rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
       <h3 className="text-lg font-bold tracking-tight">Where your ticket goes</h3>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Run at cost, so every cent covers the day. None of it is profit.
+      </p>
 
       {/* Perforated tear: notches biting in from both edges + a dotted line */}
       <div className="relative -mx-6 my-6 sm:-mx-8">

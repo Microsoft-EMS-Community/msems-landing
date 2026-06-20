@@ -1,4 +1,4 @@
-import { Check, Plus, Zap } from "lucide-react";
+import { Check, HandHeart, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TicketButton } from "@/components/ticket-button";
 import { TicketBreakdown } from "@/components/ticket-breakdown";
@@ -13,13 +13,19 @@ export function Pricing() {
       className="mx-auto max-w-5xl scroll-mt-20 px-4 pb-20 sm:px-6"
     >
       <div className="text-center">
+        <div className="mb-4 flex justify-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-teal/30 bg-brand-teal/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wide text-brand-teal">
+            <HandHeart className="size-3.5" />
+            Not for profit · run at cost
+          </span>
+        </div>
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
           Tickets
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          {PRICING.totalSeats} seats in total, priced to cover costs only.
-          Early birds get the best rate, so the sooner you grab a seat the
-          better.
+          A not-for-profit event with {PRICING.totalSeats} seats, priced only to
+          cover the day, never to make money. Early birds get the best rate, so
+          grab a seat soon.
         </p>
       </div>
 
