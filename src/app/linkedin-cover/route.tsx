@@ -63,7 +63,7 @@ export async function GET() {
 
         {/* Title + date */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", fontFamily: display, fontSize: 74, fontWeight: 800, lineHeight: 1.0, letterSpacing: -1, backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
+          <div style={{ display: "flex", fontFamily: display, fontSize: 74, fontWeight: 800, lineHeight: 1.2, letterSpacing: -1, paddingBottom: 6, backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
             {EVENT.name}
           </div>
           <div style={{ display: "flex", fontSize: 30, color: "#e2e8f0" }}>
