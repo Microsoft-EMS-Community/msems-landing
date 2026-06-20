@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { COMMUNITY, SITE_URL } from "@/lib/event";
+import { SITE_URL } from "@/lib/event";
 import { cardFonts } from "@/lib/og-font";
 
 // A 1774x444 cover banner for the general LinkedIn community group header.
@@ -48,16 +48,19 @@ export async function GET() {
         {/* Name + what it covers */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ display: "flex", fontFamily: display, fontSize: 76, fontWeight: 800, lineHeight: 1.2, letterSpacing: -1, paddingBottom: 6, backgroundImage: "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)", backgroundClip: "text", color: "transparent" }}>
-            {COMMUNITY.name}
+            MS EMS Community
           </div>
           <div style={{ display: "flex", fontSize: 29, color: "#e2e8f0" }}>
             For admins and enthusiasts of Intune, Entra ID and Microsoft Defender XDR
           </div>
         </div>
 
-        {/* Bottom row: site URL */}
-        <div style={{ display: "flex", fontSize: 24 }}>
-          <span style={{ fontWeight: 700, color: "#f0abfc" }}>{siteLabel}</span>
+        {/* Bottom row: site URL + independence disclaimer */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+          <span style={{ fontSize: 24, fontWeight: 700, color: "#f0abfc" }}>{siteLabel}</span>
+          <span style={{ fontSize: 18, color: "#8b93a7" }}>
+            Independent community, not affiliated with Microsoft
+          </span>
         </div>
       </div>
     ),
