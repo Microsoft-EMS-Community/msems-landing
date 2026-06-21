@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Gamepad2, LogOut, RotateCcw, Trophy, X } from "lucide-react";
+import { startGame } from "@/lib/start-game";
 import { MEDALS } from "@/lib/medals";
 
 // Microsoft EMS product faces (6 pairs). Icon files live in /public/games
@@ -102,6 +103,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
   // Verified Discord identity (null = logged out, undefined = still checking).
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
   const savedRef = useRef(false);
+  const tokenRef = useRef<string | null>(null);
 
   const won = deck.length > 0 && deck.every((c) => c.matched);
 
@@ -189,7 +191,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
         const res = await fetch("/api/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ moves, time: seconds }),
+          body: JSON.stringify({ moves, time: seconds, token: tokenRef.current }),
         });
         if (res.ok) {
           const data: { improved?: boolean; rank?: number } = await res.json();
@@ -204,8 +206,9 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
     })();
   }, [won, moves, seconds, loadLeaderboard]);
 
-  function start() {
+  async function start() {
     if (!user) return;
+    tokenRef.current = await startGame("memory");
     savedRef.current = false;
     setDeck(newDeck());
     setFlipped([]);
@@ -219,7 +222,8 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
     setStarted(true);
   }
 
-  function reset() {
+  async function reset() {
+    tokenRef.current = await startGame("memory");
     savedRef.current = false;
     setDeck(newDeck());
     setFlipped([]);

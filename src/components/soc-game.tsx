@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LogOut, ShieldCheck, Trophy, X } from "lucide-react";
 import { useAuthUser, loginHref } from "@/components/use-auth-user";
+import { startGame } from "@/lib/start-game";
 import { MEDALS } from "@/lib/medals";
 
 /**
@@ -154,6 +155,7 @@ export function SocGame({ onClose }: { onClose: () => void }) {
   const nextSpawnRef = useRef(0);
   const uidRef = useRef(0);
   const savedRef = useRef(false);
+  const tokenRef = useRef<string | null>(null);
 
   const loadBoard = useCallback(async () => {
     try {
@@ -239,7 +241,7 @@ export function SocGame({ onClose }: { onClose: () => void }) {
         const res = await fetch("/api/soc", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ score: finalScore }),
+          body: JSON.stringify({ score: finalScore, token: tokenRef.current }),
         });
         if (res.ok) {
           const data: { improved?: boolean; rank?: number } = await res.json();
@@ -254,8 +256,9 @@ export function SocGame({ onClose }: { onClose: () => void }) {
     })();
   }, [phase, loadBoard]);
 
-  function play() {
+  async function play() {
     if (!user) return;
+    tokenRef.current = await startGame("soc");
     game.current = { alerts: [], breach: 0, score: 0, streak: 0 };
     startRef.current = now();
     nextSpawnRef.current = 500;

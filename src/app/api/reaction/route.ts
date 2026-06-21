@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import { getTopReactions, REACTION_ORDER } from "@/lib/reactions";
 import { getSession } from "@/lib/auth";
 import { submitScore, resultTail } from "@/lib/game-score";
+import { guardSubmission } from "@/lib/game-guard";
 
 export const dynamic = "force-dynamic";
 
 interface ReactionBody {
   ms?: unknown;
+  token?: unknown;
 }
 
 interface PrevReaction {
@@ -33,6 +35,14 @@ export async function POST(request: Request): Promise<NextResponse> {
     body = (await request.json()) as ReactionBody;
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });
+  }
+
+  const guard = await guardSubmission(body.token, "reaction");
+  if (!guard.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Start a game before submitting a time." },
+      { status: 403 },
+    );
   }
 
   const ms = Number(body.ms);

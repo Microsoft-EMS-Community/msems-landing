@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import { getTopSoc, SOC_ORDER } from "@/lib/soc";
 import { getSession } from "@/lib/auth";
 import { submitScore, resultTail } from "@/lib/game-score";
+import { guardSubmission } from "@/lib/game-guard";
 
 export const dynamic = "force-dynamic";
 
 interface SocBody {
   score?: unknown;
+  token?: unknown;
 }
 
 interface PrevSoc {
@@ -33,6 +35,14 @@ export async function POST(request: Request): Promise<NextResponse> {
     body = (await request.json()) as SocBody;
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });
+  }
+
+  const guard = await guardSubmission(body.token, "soc");
+  if (!guard.ok) {
+    return NextResponse.json(
+      { ok: false, error: "Start a game before submitting a score." },
+      { status: 403 },
+    );
   }
 
   const score = Number(body.score);

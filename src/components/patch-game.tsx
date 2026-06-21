@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LogOut, RotateCcw, ShieldAlert, Trophy, X, Zap } from "lucide-react";
 import { useAuthUser, loginHref } from "@/components/use-auth-user";
+import { startGame } from "@/lib/start-game";
 import { MEDALS } from "@/lib/medals";
 
 const ROUNDS = 6;
@@ -41,6 +42,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
   const timerRef = useRef<number | null>(null);
   const showAtRef = useRef<number>(0);
   const savedRef = useRef(false);
+  const tokenRef = useRef<string | null>(null);
 
   const avg = times.length
     ? Math.round(times.reduce((a, b) => a + b, 0) / times.length)
@@ -98,7 +100,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
         const res = await fetch("/api/reaction", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ms: avg }),
+          body: JSON.stringify({ ms: avg, token: tokenRef.current }),
         });
         if (res.ok) {
           const data: { improved?: boolean; rank?: number } = await res.json();
@@ -113,8 +115,9 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
     })();
   }, [phase, avg, loadBoard]);
 
-  function play() {
+  async function play() {
     if (!user) return;
+    tokenRef.current = await startGame("reaction");
     savedRef.current = false;
     setTimes([]);
     setLastMs(null);
