@@ -35,7 +35,25 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   `frame-src https://shop.weeztix.com`).
 - Games + signups use Supabase (REST) + Discord OAuth. Vercel env vars:
   `SUPABASE_URL`/`SUPABASE_SECRET_KEY`, `DISCORD_CLIENT_ID`/`DISCORD_CLIENT_SECRET`,
-  `DISCORD_WEBHOOK_URL`. Supabase tables: `scores`, `soc_scores`, `reactions`, `signups`.
+  `DISCORD_WEBHOOK_URL`, `GAME_SIGNING_SECRET`. Supabase tables: `scores`,
+  `soc_scores`, `reactions`, `signups`, `used_nonces`.
+
+## Leaderboard anti-cheat (games)
+- Scores are guarded server-side. A run starts via `POST /api/game/start`
+  (Discord login required), which issues an HMAC-signed, single-use,
+  time-bounded session token (`src/lib/game-token.ts`). Each submit route
+  (`/api/score`, `/api/reaction`, `/api/soc`) calls `guardSubmission()`
+  (`game-guard.ts`), which verifies the token and atomically claims its nonce
+  via the `used_nonces` UNIQUE constraint (`game-nonce.ts`) to block replay.
+- **Activation:** dormant/permissive until BOTH the `used_nonces` table exists
+  AND `GAME_SIGNING_SECRET` is set (create the table first, or all submits fail).
+- Plus per-game plausibility bounds (reaction ≥150ms; memory time floor
+  `max(3, moves*0.5)s`; SOC cap derived from `soc-rules.ts`, so the cap tracks
+  the game balance and scenario count never changes it).
+- Known limit: client-rendered games (memory/SOC/reaction) can't be made *fully*
+  server-authoritative via log replay — the client must hold the game state to
+  play. The token + bounds are deliberate "good enough" deterrence; full
+  authority would need a server-driven (per-flip / streamed) rewrite.
 
 ## Conventions
 - **No em-dashes** in copy. American spelling.
