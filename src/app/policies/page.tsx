@@ -49,7 +49,7 @@ export default function PoliciesPage() {
             </div>
             <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
               <p>
-                Tickets are sold by sky made simple ApS through the ticketing
+                Tickets are sold by sky made simple ApS (Owned by Jonas Bøgvad) as our legal entity, through the ticketing
                 platform Weeztix. When you buy a ticket you also agree to the{" "}
                 <a
                   href={WEEZTIX_TERMS}

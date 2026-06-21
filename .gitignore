@@ -50,3 +50,5 @@ next-env.d.ts
 # hotel source material (originals + notes; site uses copies in /public/hotels)
 /hotels/
 /*_Boulebar_*.pdf
+
+.vercel
