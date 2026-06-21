@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Microsoft EMS Community Summit
 
-## Getting Started
+The public landing site for the **Microsoft EMS Community Summit** — an
+independent, community-run, not-for-profit event for admins and enthusiasts of
+the Microsoft Enterprise Mobility + Security stack (Intune, Entra ID, Microsoft
+Defender XDR and friends).
 
-First, run the development server:
+- **When:** Friday, September 4th, 2026
+- **Where:** Microsoft, near Copenhagen (Kanalvej 7, 2800 Kongens Lyngby)
+- **Live:** https://www.msems.community
+
+Built by the community. Not affiliated with, endorsed by, or sponsored by
+Microsoft.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · Tailwind v4 · TypeScript. Deployed on
+Vercel (EU region) behind Cloudflare; games and signups use Supabase + Discord
+OAuth.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # dev server on http://localhost:3000
+npm run build    # production build (run before committing)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A pre-commit hook runs `eslint --max-warnings=0`, so fix every warning.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/lib/event.ts` — single source of truth: event details, pricing, agenda
+  (fallback), FAQs, topics, team.
+- `src/lib/sessionize.ts` — agenda + speakers from Sessionize once published.
+- `src/lib/share.ts` + the `*-card` / `*-cover` routes — `next/og` share and
+  banner image generators.
+- Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`,
+  `/convince`, `/leaderboard`.
 
-## Learn More
+See [`AGENTS.md`](./AGENTS.md) for the full project overview, conventions, and
+the leaderboard anti-cheat model.
 
-To learn more about Next.js, take a look at the following resources:
+## Environment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Configured in Vercel (never commit secrets): `SUPABASE_URL`,
+`SUPABASE_SECRET_KEY`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`,
+`DISCORD_WEBHOOK_URL`, `GAME_SIGNING_SECRET`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Issues and PRs welcome. Verify with `npm run build` and keep lint clean before
+opening a PR.
