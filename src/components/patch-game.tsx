@@ -168,7 +168,7 @@ export function PatchGame({ onClose }: { onClose: () => void }) {
               key={`${s.name}-${i}`}
               className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-1.5 text-sm"
             >
-              <span className="truncate">
+              <span className="truncate" title={s.name}>
                 <span className="text-muted-foreground">
                   {i < 3 ? MEDALS[i] : `${i + 1}.`}
                 </span>{" "}

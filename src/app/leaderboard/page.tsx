@@ -89,7 +89,10 @@ function Board({
                   {s.name.charAt(0).toUpperCase()}
                 </span>
               )}
-              <span className="flex-1 truncate text-sm font-medium">
+              <span
+                className="flex-1 truncate text-sm font-medium"
+                title={s.name}
+              >
                 {s.name}
               </span>
               <span className="shrink-0 font-mono text-xs text-muted-foreground">
