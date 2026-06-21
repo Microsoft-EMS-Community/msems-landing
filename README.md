@@ -37,6 +37,8 @@ A pre-commit hook runs `eslint --max-warnings=0`, so fix every warning.
   banner image generators.
 - Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`,
   `/convince`, `/leaderboard`.
+- Image routes (`next/og`): `/share-card`, `/speaker-card`, `/announce-card`,
+  `/attending-card`, `/cfs-card`, `/cfs-banner`, `/linkedin-cover`.
 
 See [`AGENTS.md`](./AGENTS.md) for the full project overview, conventions, and
 the leaderboard anti-cheat model.
