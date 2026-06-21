@@ -3,6 +3,7 @@ import { getTopSoc, SOC_ORDER } from "@/lib/soc";
 import { getSession } from "@/lib/auth";
 import { submitScore, resultTail } from "@/lib/game-score";
 import { guardSubmission } from "@/lib/game-guard";
+import { socMaxPlausibleScore } from "@/lib/soc-rules";
 
 export const dynamic = "force-dynamic";
 
@@ -45,10 +46,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
   }
 
+  // Cap is derived from the shared game rules (shift length, spawn rate, point
+  // values), so it tracks the balance automatically. Adding scenarios does not
+  // change it; only the timing/point constants do.
   const score = Number(body.score);
-  // A perfect 100s shift tops out near ~12k (≈41 alerts × 260 max + 500 bonus);
-  // 25k leaves generous headroom while rejecting absurd forged scores.
-  const valid = Number.isInteger(score) && score >= 0 && score <= 25_000;
+  const valid =
+    Number.isInteger(score) && score >= 0 && score <= socMaxPlausibleScore();
   if (!valid) {
     return NextResponse.json(
       { ok: false, error: "Invalid score." },

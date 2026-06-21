@@ -5,6 +5,13 @@ import { createPortal } from "react-dom";
 import { LogOut, ShieldCheck, Trophy, X } from "lucide-react";
 import { useAuthUser, loginHref } from "@/components/use-auth-user";
 import { startGame } from "@/lib/start-game";
+import {
+  SOC_SHIFT_MS,
+  SOC_SPAWN_SLOW_MS,
+  SOC_SPAWN_FAST_MS,
+  SOC_SURVIVE_BONUS,
+  SOC_SEV_POINTS,
+} from "@/lib/soc-rules";
 import { MEDALS } from "@/lib/medals";
 
 /**
@@ -103,9 +110,9 @@ const SCENARIOS: readonly Scenario[] = [
   { sev: "low", title: "DLP false positive", detail: "Pattern matched a card number but it's an internal order ID", correct: "dismiss" },
 ];
 
-const SHIFT_MS = 100_000;
+const SHIFT_MS = SOC_SHIFT_MS;
 const CAP = 6; // max concurrent alerts
-const SURVIVE_BONUS = 500;
+const SURVIVE_BONUS = SOC_SURVIVE_BONUS;
 
 // Module-scope wrappers keep the impure calls out of component render scope.
 function now(): number {
@@ -116,7 +123,7 @@ function pick<T>(arr: readonly T[]): T {
 }
 
 function sevBase(sev: Severity): number {
-  return sev === "high" ? 130 : sev === "med" ? 80 : 40;
+  return SOC_SEV_POINTS[sev];
 }
 function sevPenalty(sev: Severity): number {
   return sev === "high" ? 16 : sev === "med" ? 10 : 6;
@@ -126,7 +133,7 @@ function sevTtl(sev: Severity): number {
 }
 function spawnInterval(elapsed: number): number {
   const t = Math.min(elapsed / SHIFT_MS, 1);
-  return 3500 - (3500 - 1300) * t;
+  return SOC_SPAWN_SLOW_MS - (SOC_SPAWN_SLOW_MS - SOC_SPAWN_FAST_MS) * t;
 }
 
 const SEV_DOT: Record<Severity, string> = {
