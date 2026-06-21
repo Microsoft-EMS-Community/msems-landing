@@ -8,13 +8,13 @@ export const dynamic = "force-dynamic";
 
 interface ScoreBody {
   moves?: unknown;
-  time?: unknown;
+  timeMs?: unknown;
   token?: unknown;
 }
 
 interface PrevScore {
   moves: number;
-  time_seconds: number;
+  time_ms: number;
 }
 
 /** Top scores: fewest moves, then fastest time. */
@@ -48,19 +48,19 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   const moves = Number(body.moves);
-  const time = Number(body.time);
+  const timeMs = Number(body.timeMs);
 
   // Sanity bounds: 6 pairs => 6 minimum moves. Every move is two card flips, so
   // a full board can't be cleared faster than ~0.5s/move (and never under 3s),
   // which rejects the "6 moves in 0:01" type forgery.
-  const minTime = Math.max(3, Math.round(moves * 0.5));
+  const minMs = Math.max(3000, moves * 500);
   const valid =
     Number.isInteger(moves) &&
     moves >= 6 &&
     moves <= 500 &&
-    Number.isInteger(time) &&
-    time >= minTime &&
-    time <= 7200;
+    Number.isInteger(timeMs) &&
+    timeMs >= minMs &&
+    timeMs <= 7_200_000;
   if (!valid) {
     return NextResponse.json(
       { ok: false, error: "Invalid score." },
@@ -73,12 +73,12 @@ export async function POST(request: Request): Promise<NextResponse> {
       user,
       table: "scores",
       order: MEMORY_ORDER,
-      selectPrev: "moves,time_seconds",
+      selectPrev: "moves,time_ms",
       isBetter: (p) =>
-        moves < p.moves || (moves === p.moves && time < p.time_seconds),
-      row: { moves, time_seconds: time },
+        moves < p.moves || (moves === p.moves && timeMs < p.time_ms),
+      row: { moves, time_ms: timeMs, time_seconds: Math.round(timeMs / 1000) },
       message: (ctx) =>
-        `🎮 <@${user.id}> ${!ctx.hasPrev ? "scored" : ctx.improved ? "improved to" : "played"} **${moves} moves** · ${formatScoreTime(time)} in the MS EMS memory game${resultTail(ctx)}`,
+        `🎮 <@${user.id}> ${!ctx.hasPrev ? "scored" : ctx.improved ? "improved to" : "played"} **${moves} moves** · ${formatScoreTime(timeMs)} in the MS EMS memory game${resultTail(ctx)}`,
     });
     return NextResponse.json({ ok: true, improved, rank });
   } catch {

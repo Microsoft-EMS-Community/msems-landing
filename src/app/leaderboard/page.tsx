@@ -117,7 +117,7 @@ export default async function LeaderboardPage() {
   const memoryRows: Row[] = memory.map((s) => ({
     name: s.name,
     avatar: s.avatar,
-    value: `${s.moves} moves · ${formatScoreTime(s.time_seconds)}`,
+    value: `${s.moves} moves · ${formatScoreTime(s.time_ms)}`,
   }));
   const reactionRows: Row[] = reactions.map((s) => ({
     name: s.name,

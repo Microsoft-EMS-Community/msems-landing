@@ -27,7 +27,9 @@ const FACES: readonly CardFace[] = [
   { key: "teams", label: "Microsoft Teams", src: "/games/teams.svg", accent: "#F59E0B" },
 ];
 
-const BEST_KEY = "msems-memory-best";
+// Bumped to -ms when the timer moved from seconds to milliseconds, so old
+// second-based personal bests are ignored rather than rendered as 0:00.xx.
+const BEST_KEY = "msems-memory-best-ms";
 
 interface Card {
   id: number;
@@ -44,7 +46,7 @@ interface Best {
 interface Score {
   name: string;
   moves: number;
-  time_seconds: number;
+  time_ms: number;
   avatar?: string | null;
 }
 
@@ -72,10 +74,13 @@ function newDeck(): Card[] {
   );
 }
 
-function formatTime(total: number): string {
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${s.toString().padStart(2, "0")}`;
+/** Format milliseconds as M:SS.cc (centiseconds), e.g. 15340 -> "0:15.34". */
+function formatTime(ms: number): string {
+  const cs = Math.round(ms / 10);
+  const m = Math.floor(cs / 6000);
+  const s = Math.floor((cs % 6000) / 100);
+  const c = cs % 100;
+  return `${m}:${s.toString().padStart(2, "0")}.${c.toString().padStart(2, "0")}`;
 }
 
 /** Discord wordmark glyph (lucide has no Discord icon). */
@@ -92,7 +97,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
   const [deck, setDeck] = useState<Card[]>(() => newDeck());
   const [flipped, setFlipped] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [elapsedMs, setElapsedMs] = useState(0);
   const [locked, setLocked] = useState(false);
   const [active, setActive] = useState(false); // timer runs after first flip
   const [best, setBest] = useState<Best | null>(null);
@@ -104,6 +109,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
   const savedRef = useRef(false);
   const tokenRef = useRef<string | null>(null);
+  const startMsRef = useRef(0);
 
   const won = deck.length > 0 && deck.every((c) => c.matched);
 
@@ -151,9 +157,12 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
   }, []);
 
   // Timer runs once the first card is flipped, until the board is cleared.
+  // Tracked from a high-res timestamp so the recorded time is millisecond-exact.
   useEffect(() => {
     if (!active || won) return;
-    const id = setInterval(() => setSeconds((s) => s + 1), 1000);
+    const id = setInterval(() => {
+      setElapsedMs(performance.now() - startMsRef.current);
+    }, 73);
     return () => clearInterval(id);
   }, [active, won]);
 
@@ -171,12 +180,16 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
     if (!won || savedRef.current) return;
     savedRef.current = true;
 
-    const score: Best = { moves, time: seconds };
+    // Final time, millisecond-exact from the first-flip timestamp.
+    const timeMs = Math.max(0, Math.round(performance.now() - startMsRef.current));
+    setElapsedMs(timeMs); // freeze the display on the recorded value
+
+    const score: Best = { moves, time: timeMs };
     setBest((prev) => {
       const better =
         !prev ||
         moves < prev.moves ||
-        (moves === prev.moves && seconds < prev.time);
+        (moves === prev.moves && timeMs < prev.time);
       const next = better ? score : prev;
       try {
         localStorage.setItem(BEST_KEY, JSON.stringify(next));
@@ -191,7 +204,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
         const res = await fetch("/api/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ moves, time: seconds, token: tokenRef.current }),
+          body: JSON.stringify({ moves, timeMs, token: tokenRef.current }),
         });
         if (res.ok) {
           const data: { improved?: boolean; rank?: number } = await res.json();
@@ -204,7 +217,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
         // best-effort
       }
     })();
-  }, [won, moves, seconds, loadLeaderboard]);
+  }, [won, moves, loadLeaderboard]);
 
   async function start() {
     if (!user) return;
@@ -213,7 +226,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
     setDeck(newDeck());
     setFlipped([]);
     setMoves(0);
-    setSeconds(0);
+    setElapsedMs(0);
     setLocked(false);
     setActive(false);
     setSubmitted(false);
@@ -228,7 +241,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
     setDeck(newDeck());
     setFlipped([]);
     setMoves(0);
-    setSeconds(0);
+    setElapsedMs(0);
     setLocked(false);
     setActive(false);
     setSubmitted(false);
@@ -251,7 +264,12 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
     const card = deck.find((c) => c.id === id);
     if (!card || card.flipped || card.matched) return;
 
-    if (!active) setActive(true); // start the clock on the first flip
+    if (!active) {
+      // Start the clock on the first flip (high-res timestamp for ms accuracy).
+      // eslint-disable-next-line react-hooks/purity
+      startMsRef.current = performance.now();
+      setActive(true);
+    }
 
     if (flipped.length === 0) {
       setDeck((d) => d.map((c) => (c.id === id ? { ...c, flipped: true } : c)));
@@ -310,7 +328,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
                 {s.name}
               </span>
               <span className="ml-2 shrink-0 font-mono text-xs text-muted-foreground">
-                {s.moves} / {formatTime(s.time_seconds)}
+                {s.moves} / {formatTime(s.time_ms)}
               </span>
             </li>
           ))}
@@ -418,7 +436,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
               <span>
                 Time{" "}
                 <span className="font-mono font-semibold text-foreground">
-                  {formatTime(seconds)}
+                  {formatTime(elapsedMs)}
                 </span>
               </span>
               <span className="text-muted-foreground">
@@ -482,7 +500,7 @@ export function MemoryGame({ onClose }: { onClose: () => void }) {
                   {rank >= 1 && rank <= 3 ? MEDALS[rank - 1] : "🎉"}
                 </div>
                 <p className="mt-1 font-semibold text-amber-300">
-                  Solved! {moves} moves · {formatTime(seconds)}
+                  Solved! {moves} moves · {formatTime(elapsedMs)}
                 </p>
                 {submitted && rank >= 1 && (
                   <p className="mt-1 font-medium text-foreground">
