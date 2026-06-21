@@ -50,13 +50,16 @@ export async function POST(request: Request): Promise<NextResponse> {
   const moves = Number(body.moves);
   const time = Number(body.time);
 
-  // Sanity bounds: 6 pairs => 6 minimum moves; cap to keep it tidy.
+  // Sanity bounds: 6 pairs => 6 minimum moves. Every move is two card flips, so
+  // a full board can't be cleared faster than ~0.5s/move (and never under 3s),
+  // which rejects the "6 moves in 0:01" type forgery.
+  const minTime = Math.max(3, Math.round(moves * 0.5));
   const valid =
     Number.isInteger(moves) &&
     moves >= 6 &&
     moves <= 500 &&
     Number.isInteger(time) &&
-    time >= 1 &&
+    time >= minTime &&
     time <= 7200;
   if (!valid) {
     return NextResponse.json(

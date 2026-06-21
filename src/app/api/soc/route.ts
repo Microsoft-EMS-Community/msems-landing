@@ -46,7 +46,9 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   const score = Number(body.score);
-  const valid = Number.isInteger(score) && score >= 0 && score <= 200_000;
+  // A perfect 100s shift tops out near ~12k (≈41 alerts × 260 max + 500 bonus);
+  // 25k leaves generous headroom while rejecting absurd forged scores.
+  const valid = Number.isInteger(score) && score >= 0 && score <= 25_000;
   if (!valid) {
     return NextResponse.json(
       { ok: false, error: "Invalid score." },

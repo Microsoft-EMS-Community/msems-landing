@@ -47,9 +47,9 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const ms = Number(body.ms);
 
-  // Human reaction floor is ~150ms; allow a margin but reject implausible
-  // (bot-fast) values and absurdly slow ones.
-  const valid = Number.isInteger(ms) && ms >= 100 && ms <= 5000;
+  // The score is an average of 6 rounds; no human averages below the ~150ms
+  // reaction floor, so reject anything faster (bot/forged) or absurdly slow.
+  const valid = Number.isInteger(ms) && ms >= 150 && ms <= 5000;
   if (!valid) {
     return NextResponse.json(
       { ok: false, error: "Invalid time." },
