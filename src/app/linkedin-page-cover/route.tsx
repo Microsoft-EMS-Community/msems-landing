@@ -55,7 +55,7 @@ export async function GET() {
         <div style={{ position: "absolute", left: "50%", top: -260, width: 560, height: 560, borderRadius: "50%", background: "#a855f7", opacity: 0.22, filter: "blur(140px)" }} />
 
         <div style={{ display: "flex", fontFamily: display, fontSize: 54, fontWeight: 800, letterSpacing: -1, paddingBottom: 2, backgroundImage: "linear-gradient(100deg, #ff8ac0, #d8b4fe 45%, #67e8f9)", backgroundClip: "text", color: "transparent" }}>
-          Real-world Microsoft security, together
+          Run Microsoft security? So do we.
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 48, fontSize: 30, color: "#e2e8f0" }}>
