@@ -312,7 +312,7 @@ export const PRICING = {
       name: "Early bird",
       price: 35,
       seatsLabel: "First 25 seats",
-      badge: "Only 25 available",
+      badge: "Only 18 available",
       featured: true,
       features: [
         "Full day of sessions",
