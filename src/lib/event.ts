@@ -448,7 +448,13 @@ export const TEAM: readonly TeamMember[] = [
     country: "Denmark",
     linkedin: "https://www.linkedin.com/in/frohn/",
   },
-  { name: "ToastedTy", handle: "toastedty", role: "contributor", country: "United Kingdom" },
+  {
+    name: "Mike Towey",
+    handle: "toastedty",
+    role: "contributor",
+    country: "United Kingdom",
+    linkedin: "https://www.linkedin.com/in/michael-towey/",
+  },
 ] as const;
 
 export interface Hotel {
