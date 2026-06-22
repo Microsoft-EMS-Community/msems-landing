@@ -312,7 +312,7 @@ export const PRICING = {
       name: "Early bird",
       price: 35,
       seatsLabel: "First 25 seats",
-      badge: "Only 18 available",
+      badge: "Only 7 left",
       featured: true,
       features: [
         "Full day of sessions",
@@ -452,6 +452,7 @@ export const TEAM: readonly TeamMember[] = [
     name: "Mike Towey",
     handle: "toastedty",
     role: "contributor",
+    photo: "/team/mike-towey.jpg",
     country: "United Kingdom",
     linkedin: "https://www.linkedin.com/in/michael-towey/",
   },
