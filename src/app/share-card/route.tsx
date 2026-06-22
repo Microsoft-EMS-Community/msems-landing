@@ -40,7 +40,7 @@ export async function GET() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "64px 72px",
+          padding: "82px 112px",
           background:
             "linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 45%, #0a1622 100%)",
           color: "#ffffff",
@@ -104,9 +104,9 @@ export async function GET() {
           <div
             style={{
               fontFamily: display,
-              fontSize: 88,
+              fontSize: 82,
               fontWeight: 800,
-              lineHeight: 1.02,
+              lineHeight: 1.04,
               letterSpacing: -2,
             }}
           >
@@ -115,9 +115,9 @@ export async function GET() {
           <div
             style={{
               fontFamily: display,
-              fontSize: 88,
+              fontSize: 82,
               fontWeight: 800,
-              lineHeight: 1.02,
+              lineHeight: 1.04,
               letterSpacing: -2,
               backgroundImage:
                 "linear-gradient(100deg, #ff2e88, #a855f7 45%, #22d3ee)",
@@ -131,13 +131,13 @@ export async function GET() {
 
         {/* Bottom: date + location, then powered-by + link */}
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-          <div style={{ display: "flex", gap: 48, fontSize: 32 }}>
+          <div style={{ display: "flex", gap: 44, fontSize: 27 }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "#94a3b8", fontSize: 22 }}>WHEN</span>
+              <span style={{ color: "#94a3b8", fontSize: 18 }}>WHEN</span>
               <span style={{ fontWeight: 700 }}>{EVENT.dateLabel}</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ color: "#94a3b8", fontSize: 22 }}>WHERE</span>
+              <span style={{ color: "#94a3b8", fontSize: 18 }}>WHERE</span>
               <span style={{ fontWeight: 700 }}>
                 {EVENT.venue}, {EVENT.venueArea}
               </span>
@@ -151,7 +151,7 @@ export async function GET() {
               justifyContent: "space-between",
               borderTop: "1px solid rgba(255,255,255,0.12)",
               paddingTop: 22,
-              fontSize: 24,
+              fontSize: 22,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
