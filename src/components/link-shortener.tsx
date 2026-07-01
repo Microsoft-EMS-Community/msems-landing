@@ -100,7 +100,6 @@ export function LinkShortener() {
   }
 
   if (status.state === "done") {
-    const display = status.shortUrl.replace(/^https?:\/\//, "");
     return (
       <div className="flex flex-col items-center gap-4 py-4 text-center">
         <p className="text-sm text-muted-foreground">Your short link is live:</p>
@@ -110,7 +109,7 @@ export function LinkShortener() {
           rel="noopener noreferrer"
           className="break-all text-lg font-semibold text-foreground underline underline-offset-4 hover:text-brand-pink"
         >
-          {display}
+          {status.shortUrl}
         </a>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
