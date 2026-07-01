@@ -1,0 +1,192 @@
+import crypto from "node:crypto";
+import { SITE_URL } from "@/lib/event";
+import type { DiscordUser } from "@/lib/auth";
+
+/**
+ * Community link shortener backed by the existing Supabase project
+ * (`short_links` table). Creating a link requires a verified Discord session
+ * and is rate limited per user; the redirect itself is public and stores
+ * nothing per click (no cookies, no IPs, no counters).
+ *
+ * Moderation is webhook-based: every created link is posted to the team
+ * Discord channel, and removing an abusive link is a row delete in Supabase.
+ */
+
+const supabaseUrl =
+  process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+const serviceKey =
+  process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+/** 3-40 chars, lowercase letters/digits/hyphens, no leading/trailing hyphen. */
+export const SLUG_RE = /^[a-z0-9][a-z0-9-]{1,38}[a-z0-9]$/;
+export const MAX_URL_LENGTH = 2048;
+/** Max links one Discord account can create per rolling 24 hours. */
+export const DAILY_LINK_LIMIT = 10;
+
+/** Alphabet for generated slugs; skips look-alikes (0/o, 1/l/i). */
+const SLUG_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
+const GENERATED_SLUG_LENGTH = 6;
+
+export type DestinationCheck =
+  | { readonly ok: true; readonly url: string }
+  | { readonly ok: false; readonly error: string };
+
+/**
+ * Validates and normalizes a destination URL. Only public http(s) URLs are
+ * accepted, and links back into the shortener itself are rejected so a slug
+ * can never chain or loop through /go/.
+ */
+export function validateDestination(raw: unknown): DestinationCheck {
+  const input = typeof raw === "string" ? raw.trim() : "";
+  if (!input) {
+    return { ok: false, error: "Enter the URL you want to shorten." };
+  }
+  if (input.length > MAX_URL_LENGTH) {
+    return { ok: false, error: "That URL is too long (max 2048 characters)." };
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(input);
+  } catch {
+    return {
+      ok: false,
+      error: "That doesn't look like a full URL. Include https:// in front.",
+    };
+  }
+
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+    return { ok: false, error: "Only http and https links can be shortened." };
+  }
+  if (!parsed.hostname.includes(".")) {
+    return { ok: false, error: "Enter a public URL with a real domain." };
+  }
+
+  // Canonicalize before comparing: strip www. and any trailing FQDN dot so
+  // "msems.community." can't sneak past the anti-chaining check.
+  const siteHost = new URL(SITE_URL).hostname.replace(/^www\./, "");
+  const targetHost = parsed.hostname.replace(/^www\./, "").replace(/\.$/, "");
+  const path = parsed.pathname;
+  if (targetHost === siteHost && (path === "/go" || path.startsWith("/go/"))) {
+    return { ok: false, error: "A short link can't point at another short link." };
+  }
+
+  return { ok: true, url: parsed.toString() };
+}
+
+/** Random 6-char slug from an unambiguous alphabet (~9 * 10^8 combinations). */
+export function randomSlug(): string {
+  let slug = "";
+  for (let i = 0; i < GENERATED_SLUG_LENGTH; i += 1) {
+    slug += SLUG_ALPHABET[crypto.randomInt(SLUG_ALPHABET.length)];
+  }
+  return slug;
+}
+
+function restHeaders(key: string): Record<string, string> {
+  return {
+    "Content-Type": "application/json",
+    apikey: key,
+    Authorization: `Bearer ${key}`,
+  };
+}
+
+/** Resolves a slug to its destination URL, or null when unknown. */
+export async function getShortLink(slug: string): Promise<string | null> {
+  if (!supabaseUrl || !serviceKey) return null;
+  try {
+    // Cached for 60s: hot slugs don't hammer Supabase on every click, and a
+    // moderation delete still takes effect within about a minute.
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/short_links?slug=eq.${encodeURIComponent(slug)}&select=url&limit=1`,
+      { headers: restHeaders(serviceKey), next: { revalidate: 60 } },
+    );
+    if (!res.ok) return null;
+    const rows = (await res.json()) as Array<{ url?: unknown }>;
+    const url = rows[0]?.url;
+    return typeof url === "string" ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Number of links this user created in the last 24 hours (capped at limit). */
+export async function countRecentLinks(discordId: string): Promise<number> {
+  if (!supabaseUrl || !serviceKey) return 0;
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const query =
+    `discord_id=eq.${encodeURIComponent(discordId)}` +
+    `&created_at=gte.${encodeURIComponent(since)}` +
+    `&select=slug&limit=${DAILY_LINK_LIMIT}`;
+  const res = await fetch(`${supabaseUrl}/rest/v1/short_links?${query}`, {
+    headers: restHeaders(serviceKey),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Supabase ${res.status}`);
+  const rows = (await res.json()) as unknown[];
+  return Array.isArray(rows) ? rows.length : 0;
+}
+
+export type InsertResult = "ok" | "taken" | "limited" | "error";
+
+/**
+ * Inserts a link. "taken" when the slug already exists (PK conflict);
+ * "limited" when the database trigger rejected it for exceeding the daily
+ * cap. The trigger (see the table SQL) is the authoritative rate limit — it
+ * serializes inserts per user, so concurrent requests can't race past the
+ * app-side `countRecentLinks` pre-check.
+ */
+export async function insertShortLink(row: {
+  slug: string;
+  url: string;
+  user: DiscordUser;
+}): Promise<InsertResult> {
+  if (!supabaseUrl || !serviceKey) return "error";
+  const res = await fetch(`${supabaseUrl}/rest/v1/short_links`, {
+    method: "POST",
+    headers: { ...restHeaders(serviceKey), Prefer: "return=minimal" },
+    body: JSON.stringify({
+      slug: row.slug,
+      url: row.url,
+      discord_id: row.user.id,
+      discord_name: row.user.username,
+    }),
+  });
+  if (res.ok) return "ok";
+  if (res.status === 409) return "taken";
+  try {
+    const body = (await res.json()) as { code?: unknown };
+    // P0001 = plpgsql RAISE EXCEPTION, only raised by our daily-limit trigger.
+    if (body.code === "P0001") return "limited";
+  } catch {
+    // Non-JSON error body; fall through to the generic failure.
+  }
+  return "error";
+}
+
+/** Escapes Discord markdown so a crafted username can't mangle the post. */
+function escapeMarkdown(text: string): string {
+  return text.replace(/([\\`*_~|])/g, "\\$1");
+}
+
+/** Posts the new link to the team Discord channel for moderation visibility. */
+export async function announceLink(
+  user: DiscordUser,
+  slug: string,
+  url: string,
+): Promise<void> {
+  const webhook = process.env.DISCORD_WEBHOOK_URL;
+  if (!webhook) return;
+  try {
+    await fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: `🔗 **${escapeMarkdown(user.username)}** created ${SITE_URL}/go/${slug} -> <${url}>`,
+        allowed_mentions: { parse: [] },
+      }),
+    });
+  } catch {
+    // Best-effort; never blocks link creation.
+  }
+}

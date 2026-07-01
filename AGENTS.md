@@ -20,7 +20,7 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   `/cfs-card`, `/linkedin-cover` — 1774x444 LinkedIn group banner,
   `/cfs-banner` — 1280x320 white Sessionize Call-for-Speakers header).
 - Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`, `/convince`,
-  `/leaderboard`.
+  `/leaderboard`, `/go` (community link shortener; see below).
 
 ## Tickets
 - Weeztix shop embedded as a **plain `<iframe>`** (their injector.js/integrate.js break
@@ -36,7 +36,20 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
 - Games + signups use Supabase (REST) + Discord OAuth. Vercel env vars:
   `SUPABASE_URL`/`SUPABASE_SECRET_KEY`, `DISCORD_CLIENT_ID`/`DISCORD_CLIENT_SECRET`,
   `DISCORD_WEBHOOK_URL`, `GAME_SIGNING_SECRET`. Supabase tables: `scores`,
-  `soc_scores`, `reactions`, `signups`, `used_nonces`.
+  `soc_scores`, `reactions`, `signups`, `used_nonces`, `short_links`.
+
+## Link shortener (`/go`)
+- Cookie-free community shortener: `msems.community/go/<slug>` 302-redirects via
+  `src/app/go/[slug]/route.ts`; nothing is stored per click (no counters/IPs).
+- Creation (`POST /api/go`, form on `/go`) requires the Discord session login
+  and a same-origin check, and validates destinations (http/https only, no
+  links back into `/go/`). Rate limit 10/day/user: the app-side row count in
+  `src/lib/short-links.ts` is just the friendly early error — the authoritative
+  cap is a Supabase BEFORE INSERT trigger (advisory lock per discord_id, so
+  concurrent requests can't race it; surfaces as PostgREST error P0001).
+- Moderation is webhook-based: every created link posts to
+  `DISCORD_WEBHOOK_URL`; remove abuse by deleting the row in Supabase
+  (`short_links`: slug PK, url, discord_id, discord_name, created_at).
 
 ## Leaderboard anti-cheat (games)
 - Scores are guarded server-side. A run starts via `POST /api/game/start`
