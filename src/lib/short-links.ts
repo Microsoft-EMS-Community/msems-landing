@@ -164,6 +164,25 @@ export async function insertShortLink(row: {
   return "error";
 }
 
+/**
+ * Bumps the link's click counter and last-used timestamp via the
+ * `record_click` RPC (an atomic `clicks = clicks + 1` update; PostgREST can't
+ * express increments in a PATCH). Stores nothing about the visitor. Called
+ * with `after()` so it never delays the redirect; counting is best-effort.
+ */
+export async function recordClick(slug: string): Promise<void> {
+  if (!supabaseUrl || !serviceKey) return;
+  try {
+    await fetch(`${supabaseUrl}/rest/v1/rpc/record_click`, {
+      method: "POST",
+      headers: restHeaders(serviceKey),
+      body: JSON.stringify({ p_slug: slug }),
+    });
+  } catch {
+    // A lost count never matters; the redirect already happened.
+  }
+}
+
 /** Escapes Discord markdown so a crafted username can't mangle the post. */
 function escapeMarkdown(text: string): string {
   return text.replace(/([\\`*_~|])/g, "\\$1");

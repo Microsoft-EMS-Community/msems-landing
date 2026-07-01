@@ -12,7 +12,7 @@ import { DAILY_LINK_LIMIT } from "@/lib/short-links";
 export const metadata: Metadata = {
   title: "Link shortener | Microsoft EMS Community Summit",
   description:
-    "Create short msems.community/go links. Community run: no cookies, no trackers, no click logging.",
+    "Create short msems.community/go links. Community run: no cookies, no trackers, no visitor logging.",
 };
 
 const PROMISES: ReadonlyArray<{
@@ -23,7 +23,7 @@ const PROMISES: ReadonlyArray<{
   {
     icon: Cookie,
     title: "No cookies, no trackers",
-    body: "A click is a redirect and nothing more. We don't log who clicked, set cookies, or count visits.",
+    body: "We never log who clicked: no cookies, no IPs, no profiles. Each link only keeps a click count and a last-used date.",
   },
   {
     icon: Users,
@@ -33,7 +33,7 @@ const PROMISES: ReadonlyArray<{
   {
     icon: ShieldCheck,
     title: "Kept clean",
-    body: `Every new link is posted to the team channel, and abusive links are removed. Up to ${DAILY_LINK_LIMIT} links per person per day.`,
+    body: `Every new link is posted to the team channel, and abusive links are removed. Links never clicked in their first 90 days are cleaned up. Up to ${DAILY_LINK_LIMIT} links per person per day.`,
   },
 ];
 

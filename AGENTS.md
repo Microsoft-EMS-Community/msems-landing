@@ -40,7 +40,10 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
 
 ## Link shortener (`/go`)
 - Cookie-free community shortener: `msems.community/go/<slug>` 302-redirects via
-  `src/app/go/[slug]/route.ts`; nothing is stored per click (no counters/IPs).
+  `src/app/go/[slug]/route.ts`. No visitor data is stored; each click bumps a
+  per-link `clicks` counter + `last_clicked_at` via the `record_click` RPC,
+  fired with `after()` so it never delays the redirect. A pg_cron job prunes
+  links never clicked within 90 days of creation.
 - Creation (`POST /api/go`, form on `/go`) requires the Discord session login
   and a same-origin check, and validates destinations (http/https only, no
   links back into `/go/`). Rate limit 10/day/user: the app-side row count in

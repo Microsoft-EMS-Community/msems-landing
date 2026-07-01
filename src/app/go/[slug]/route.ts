@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { SITE_URL } from "@/lib/event";
-import { SLUG_RE, getShortLink } from "@/lib/short-links";
+import { SLUG_RE, getShortLink, recordClick } from "@/lib/short-links";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Public short-link redirect: msems.community/go/<slug> -> destination.
- * Cookie-free and stores nothing per click. Unknown slugs land on the
- * shortener page with a notice instead of a bare 404.
+ * Cookie-free; stores no visitor data, only a per-link click tally. Unknown
+ * slugs land on the shortener page with a notice instead of a bare 404.
  */
 export async function GET(
   _request: Request,
@@ -20,6 +20,10 @@ export async function GET(
   const res = url
     ? NextResponse.redirect(url, 302)
     : NextResponse.redirect(`${SITE_URL}/go?missing=1`, 302);
+
+  // Per-link tally only (count + last-used, for pruning dead links); runs
+  // after the response so it never delays the redirect.
+  if (url) after(() => recordClick(normalized));
 
   // Let the CDN absorb repeat clicks for a minute, but never let browsers
   // hold a stale redirect: a moderation delete must take effect quickly.
