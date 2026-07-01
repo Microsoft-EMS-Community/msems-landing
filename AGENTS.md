@@ -50,9 +50,12 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   `src/lib/short-links.ts` is just the friendly early error — the authoritative
   cap is a Supabase BEFORE INSERT trigger (advisory lock per discord_id, so
   concurrent requests can't race it; surfaces as PostgREST error P0001).
+- `/go` publicly lists ALL links (most-clicked first, `getPublicLinks`, cached
+  60s) — a deliberate product choice; the page copy discloses it to creators.
 - Moderation is webhook-based: every created link posts to
-  `DISCORD_WEBHOOK_URL`; remove abuse by deleting the row in Supabase
-  (`short_links`: slug PK, url, discord_id, discord_name, created_at).
+  `DISCORD_WEBHOOK_URL` (tags the creator); remove abuse by deleting the row
+  in Supabase (`short_links`: slug PK, url, discord_id, discord_name,
+  created_at, clicks, last_clicked_at).
 
 ## Leaderboard anti-cheat (games)
 - Scores are guarded server-side. A run starts via `POST /api/game/start`

@@ -127,6 +127,30 @@ export async function countRecentLinks(discordId: string): Promise<number> {
   return Array.isArray(rows) ? rows.length : 0;
 }
 
+export interface PublicLink {
+  readonly slug: string;
+  readonly url: string;
+  readonly discord_name: string | null;
+  readonly clicks: number;
+  readonly created_at: string;
+}
+
+/** All links for the public list on /go, most used first (cached 60s). */
+export async function getPublicLinks(limit = 100): Promise<PublicLink[]> {
+  if (!supabaseUrl || !serviceKey) return [];
+  try {
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/short_links?select=slug,url,discord_name,clicks,created_at&order=clicks.desc,created_at.desc&limit=${limit}`,
+      { headers: restHeaders(serviceKey), next: { revalidate: 60 } },
+    );
+    if (!res.ok) return [];
+    const rows = (await res.json()) as PublicLink[];
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    return [];
+  }
+}
+
 export type InsertResult = "ok" | "taken" | "limited" | "error";
 
 /**

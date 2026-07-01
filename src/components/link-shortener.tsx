@@ -86,7 +86,7 @@ export function LinkShortener() {
       <div className="flex flex-col items-center gap-3 py-6 text-center">
         <p className="text-sm text-muted-foreground">
           Log in with Discord to create links. Only your username is stored
-          with the link, nothing else.
+          with the link, and every link is listed publicly on this page.
         </p>
         <a
           href={loginHref("")}

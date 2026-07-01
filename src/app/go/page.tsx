@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Link2, ShieldCheck, Cookie, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  Link2,
+  MousePointerClick,
+  ShieldCheck,
+  Cookie,
+  Users,
+} from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { LinkShortener } from "@/components/link-shortener";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { DAILY_LINK_LIMIT } from "@/lib/short-links";
+import { DAILY_LINK_LIMIT, getPublicLinks } from "@/lib/short-links";
 
 export const metadata: Metadata = {
   title: "Link shortener | Microsoft EMS Community Summit",
@@ -28,7 +35,7 @@ const PROMISES: ReadonlyArray<{
   {
     icon: Users,
     title: "By the community",
-    body: "Creating a link takes a Discord login, the same one as the games. Your username is stored with the link so we know who made what.",
+    body: "Creating a link takes a Discord login, the same one as the games. All links are listed publicly on this page, with your username next to them.",
   },
   {
     icon: ShieldCheck,
@@ -42,7 +49,10 @@ interface GoPageProps {
 }
 
 export default async function GoPage({ searchParams }: GoPageProps) {
-  const { missing } = await searchParams;
+  const [{ missing }, links] = await Promise.all([
+    searchParams,
+    getPublicLinks(),
+  ]);
   return (
     <main className="flex-1">
       <SiteHeader />
@@ -81,6 +91,49 @@ export default async function GoPage({ searchParams }: GoPageProps) {
           </CardContent>
         </Card>
       </section>
+
+      {links.length > 0 && (
+        <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <h2 className="text-2xl font-bold tracking-tight">
+              Community links
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Every link created here, most used first.
+            </p>
+            <ul className="mt-6 divide-y divide-white/5">
+              {links.map((link) => (
+                <li
+                  key={link.slug}
+                  className="flex flex-wrap items-center gap-x-4 gap-y-1 py-3"
+                >
+                  <a
+                    href={`/go/${link.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline-offset-4 transition-colors hover:text-brand-pink hover:underline"
+                  >
+                    go/{link.slug}
+                  </a>
+                  <span
+                    title={link.url}
+                    className="min-w-0 flex-1 truncate text-sm text-muted-foreground"
+                  >
+                    {link.url.replace(/^https?:\/\//, "")}
+                  </span>
+                  <span className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <MousePointerClick className="size-3.5 text-brand-teal" />
+                      {link.clicks}
+                    </span>
+                    {link.discord_name && <span>by {link.discord_name}</span>}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <div className="grid gap-4 sm:grid-cols-3">
