@@ -45,8 +45,9 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   fired with `after()` so it never delays the redirect. A pg_cron job prunes
   links never clicked within 90 days of creation.
 - Creation (`POST /api/go`, form on `/go`) requires the Discord session login
-  and a same-origin check, and validates destinations (http/https only, no
-  links back into `/go/`). Custom slugs can't contain brand terms
+  and a same-origin check, and validates destinations (http/https only; no
+  links back into `/go/`, raw IPs, public shorteners, or hosts impersonating
+  microsoft/msems - see `validateDestination`). Custom slugs can't contain brand terms
   (msems/microsoft) or use reserved auth words like `login`
   (`slugBlockedReason`). Rate limit 10/day/user: the app-side row count in
   `src/lib/short-links.ts` is just the friendly early error — the authoritative

@@ -59,6 +59,38 @@ export type DestinationCheck =
   | { readonly ok: false; readonly error: string };
 
 /**
+ * Public URL shorteners: chaining through one hides the real destination
+ * from the public list and the moderation webhook. aka.ms stays allowed
+ * (only Microsoft can create those).
+ */
+const SHORTENER_HOSTS: ReadonlySet<string> = new Set([
+  "bit.ly",
+  "tinyurl.com",
+  "t.co",
+  "goo.gl",
+  "is.gd",
+  "ow.ly",
+  "buff.ly",
+  "cutt.ly",
+  "tiny.cc",
+  "rb.gy",
+  "shorturl.at",
+  "s.id",
+]);
+
+/** Destination hosts allowed to contain "microsoft" (real Microsoft domains). */
+const MICROSOFT_DOMAINS = [
+  "microsoft.com",
+  "microsoftonline.com",
+  "microsoft365.com",
+  "microsoftstore.com",
+] as const;
+
+function hostMatches(host: string, domain: string): boolean {
+  return host === domain || host.endsWith(`.${domain}`);
+}
+
+/**
  * Validates and normalizes a destination URL. Only public http(s) URLs are
  * accepted, and links back into the shortener itself are rejected so a slug
  * can never chain or loop through /go/.
@@ -89,12 +121,39 @@ export function validateDestination(raw: unknown): DestinationCheck {
     return { ok: false, error: "Enter a public URL with a real domain." };
   }
 
-  // Canonicalize before comparing: strip www. and any trailing FQDN dot so
-  // "msems.community." can't sneak past the anti-chaining check.
+  // Canonicalize before checking: strip any trailing FQDN dot so
+  // "msems.community." can't sneak past host comparisons.
+  const host = parsed.hostname.replace(/\.$/, "").toLowerCase();
+  const bareHost = host.replace(/^www\./, "");
+
+  // Raw IPs (v4 or bracketed v6): shared links never look like this,
+  // phishing kits and malware drops often do.
+  if (host.startsWith("[") || /^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
+    return { ok: false, error: "Use a domain name, not a raw IP address." };
+  }
+
+  if (SHORTENER_HOSTS.has(bareHost)) {
+    return {
+      ok: false,
+      error: "That's already a shortener. Link straight to the destination.",
+    };
+  }
+
+  // Brand impersonation: "microsoft" only on real Microsoft domains,
+  // "msems" only on this site's own domain.
+  if (
+    host.includes("microsoft") &&
+    !MICROSOFT_DOMAINS.some((domain) => hostMatches(host, domain))
+  ) {
+    return { ok: false, error: "That domain impersonates Microsoft." };
+  }
   const siteHost = new URL(SITE_URL).hostname.replace(/^www\./, "");
-  const targetHost = parsed.hostname.replace(/^www\./, "").replace(/\.$/, "");
+  if (host.includes("msems") && !hostMatches(host, siteHost)) {
+    return { ok: false, error: "That domain impersonates this site." };
+  }
+
   const path = parsed.pathname;
-  if (targetHost === siteHost && (path === "/go" || path.startsWith("/go/"))) {
+  if (bareHost === siteHost && (path === "/go" || path.startsWith("/go/"))) {
     return { ok: false, error: "A short link can't point at another short link." };
   }
 
