@@ -35,7 +35,9 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   `frame-src https://shop.weeztix.com`).
 - Games + signups use Supabase (REST) + Discord OAuth. Vercel env vars:
   `SUPABASE_URL`/`SUPABASE_SECRET_KEY`, `DISCORD_CLIENT_ID`/`DISCORD_CLIENT_SECRET`,
-  `DISCORD_WEBHOOK_URL`, `GAME_SIGNING_SECRET`. Supabase tables: `scores`,
+  `DISCORD_WEBHOOK_URL`, `GAME_SIGNING_SECRET`,
+  `NEXT_PUBLIC_TURNSTILE_SITE_KEY`/`TURNSTILE_SECRET_KEY` (link shortener).
+  Supabase tables: `scores`,
   `soc_scores`, `reactions`, `signups`, `used_nonces`, `short_links`.
 
 ## Link shortener (`/go`)
@@ -44,21 +46,27 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   per-link `clicks` counter + `last_clicked_at` via the `record_click` RPC,
   fired with `after()` so it never delays the redirect. A pg_cron job prunes
   links never clicked within 90 days of creation.
-- Creation (`POST /api/go`, form on `/go`) requires the Discord session login
-  and a same-origin check, and validates destinations (http/https only; no
-  links back into `/go/`, raw IPs, public shorteners, or hosts impersonating
-  microsoft/msems - see `validateDestination`). Custom slugs can't contain brand terms
-  (msems/microsoft) or use reserved auth words like `login`
-  (`slugBlockedReason`). Rate limit 10/day/user: the app-side row count in
-  `src/lib/short-links.ts` is just the friendly early error — the authoritative
-  cap is a Supabase BEFORE INSERT trigger (advisory lock per discord_id, so
-  concurrent requests can't race it; surfaces as PostgREST error P0001).
+- Creation (`POST /api/go`, form on `/go`) needs no account: it's gated by
+  Cloudflare Turnstile (`src/lib/turnstile.ts`; env vars
+  `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY`; fails CLOSED in
+  production when the secret is missing, permissive in dev) plus a
+  same-origin check. Destinations are validated (http/https only; no links
+  back into `/go/`, raw IPs, public shorteners, or hosts impersonating
+  microsoft/msems - see `validateDestination`). Custom slugs can't contain
+  brand terms (msems/microsoft) or use reserved auth words like `login`
+  (`slugBlockedReason`). Rate limit 10/day/creator, keyed on `creatorKey()`
+  (an HMAC of the IP stored in the `discord_id` column; creation only, clicks
+  store nothing): the app-side row count is just the friendly early error —
+  the authoritative cap is a Supabase BEFORE INSERT trigger (advisory lock
+  per discord_id, so concurrent requests can't race it; surfaces as PostgREST
+  error P0001). Team links seeded via SQL keep `discord_name` and show
+  "by ..." in the public list; anonymous links don't.
 - `/go` publicly lists ALL links (most-clicked first, `getPublicLinks`, cached
   60s) — a deliberate product choice; the page copy discloses it to creators.
 - Moderation is webhook-based: every created link posts to
-  `DISCORD_WEBHOOK_URL` (tags the creator); remove abuse by deleting the row
-  in Supabase (`short_links`: slug PK, url, discord_id, discord_name,
-  created_at, clicks, last_clicked_at).
+  `DISCORD_WEBHOOK_URL`; remove abuse by deleting the row in Supabase
+  (`short_links`: slug PK, url, discord_id, discord_name, created_at,
+  clicks, last_clicked_at).
 
 ## Leaderboard anti-cheat (games)
 - Scores are guarded server-side. A run starts via `POST /api/game/start`

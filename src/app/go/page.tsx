@@ -30,12 +30,12 @@ const PROMISES: ReadonlyArray<{
   {
     icon: Cookie,
     title: "No cookies, no trackers",
-    body: "We never log who clicked: no cookies, no IPs, no profiles. Each link only keeps a click count and a last-used date.",
+    body: "We never log who clicked: no cookies, no IPs, no profiles. Each link only keeps a click count and a last-used date. Creating a link stores a one-way hash of your connection, just to enforce the daily limit.",
   },
   {
     icon: Users,
     title: "By the community",
-    body: "Creating a link takes a Discord login, the same one as the games. All links are listed publicly on this page, with your username next to them.",
+    body: "No account needed: a quick Cloudflare bot check and you're set. All links are listed publicly on this page.",
   },
   {
     icon: ShieldCheck,

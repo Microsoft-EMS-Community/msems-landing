@@ -1,12 +1,12 @@
 import crypto from "node:crypto";
 import { SITE_URL } from "@/lib/event";
-import type { DiscordUser } from "@/lib/auth";
 
 /**
  * Community link shortener backed by the existing Supabase project
- * (`short_links` table). Creating a link requires a verified Discord session
- * and is rate limited per user; the redirect itself is public and stores
- * nothing per click (no cookies, no IPs, no counters).
+ * (`short_links` table). Creating a link requires passing a Cloudflare
+ * Turnstile check (no account) and is rate limited per creator via a one-way
+ * hash of the connection IP; the redirect itself is public and stores no
+ * visitor data, only a per-link click tally.
  *
  * Moderation is webhook-based: every created link is posted to the team
  * Discord channel, and removing an abusive link is a row delete in Supabase.
@@ -160,6 +160,20 @@ export function validateDestination(raw: unknown): DestinationCheck {
   return { ok: true, url: parsed.toString() };
 }
 
+/**
+ * Anonymous creator key for the daily cap: a keyed one-way hash of the IP,
+ * stored in the discord_id column the trigger already rate limits on. Not
+ * reversible, applies to creation only — clicks store nothing.
+ */
+export function creatorKey(ip: string): string {
+  const secret = process.env.SESSION_SECRET ?? "msems-links";
+  const digest = crypto
+    .createHmac("sha256", secret)
+    .update(ip)
+    .digest("base64url");
+  return `ip:${digest.slice(0, 24)}`;
+}
+
 /** Random 6-char slug from an unambiguous alphabet (~9 * 10^8 combinations). */
 export function randomSlug(): string {
   let slug = "";
@@ -196,12 +210,12 @@ export async function getShortLink(slug: string): Promise<string | null> {
   }
 }
 
-/** Number of links this user created in the last 24 hours (capped at limit). */
-export async function countRecentLinks(discordId: string): Promise<number> {
+/** Number of links this creator made in the last 24 hours (capped at limit). */
+export async function countRecentLinks(creatorId: string): Promise<number> {
   if (!supabaseUrl || !serviceKey) return 0;
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const query =
-    `discord_id=eq.${encodeURIComponent(discordId)}` +
+    `discord_id=eq.${encodeURIComponent(creatorId)}` +
     `&created_at=gte.${encodeURIComponent(since)}` +
     `&select=slug&limit=${DAILY_LINK_LIMIT}`;
   const res = await fetch(`${supabaseUrl}/rest/v1/short_links?${query}`, {
@@ -249,7 +263,7 @@ export type InsertResult = "ok" | "taken" | "limited" | "error";
 export async function insertShortLink(row: {
   slug: string;
   url: string;
-  user: DiscordUser;
+  creatorId: string;
 }): Promise<InsertResult> {
   if (!supabaseUrl || !serviceKey) return "error";
   const res = await fetch(`${supabaseUrl}/rest/v1/short_links`, {
@@ -258,8 +272,8 @@ export async function insertShortLink(row: {
     body: JSON.stringify({
       slug: row.slug,
       url: row.url,
-      discord_id: row.user.id,
-      discord_name: row.user.username,
+      discord_id: row.creatorId,
+      discord_name: null,
     }),
   });
   if (res.ok) return "ok";
@@ -295,11 +309,7 @@ export async function recordClick(slug: string): Promise<void> {
 
 
 /** Posts the new link to the team Discord channel for moderation visibility. */
-export async function announceLink(
-  user: DiscordUser,
-  slug: string,
-  url: string,
-): Promise<void> {
+export async function announceLink(slug: string, url: string): Promise<void> {
   const webhook = process.env.DISCORD_WEBHOOK_URL;
   if (!webhook) return;
   try {
@@ -307,9 +317,8 @@ export async function announceLink(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content: `🔗 <@${user.id}> created ${SITE_URL}/go/${slug} -> <${url}>`,
-        // Ping only the creator; role/everyone mentions stay blocked.
-        allowed_mentions: { users: [user.id] },
+        content: `🔗 New link ${SITE_URL}/go/${slug} -> <${url}>`,
+        allowed_mentions: { parse: [] },
       }),
     });
   } catch {

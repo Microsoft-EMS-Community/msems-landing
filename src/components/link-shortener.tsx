@@ -1,11 +1,30 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { Check, Copy, Link2, LoaderCircle, LogOut, Plus } from "lucide-react";
-import { useAuthUser, loginHref } from "@/components/use-auth-user";
-import { DiscordIcon } from "@/components/discord-icon";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import Script from "next/script";
+import { Check, Copy, Link2, LoaderCircle, Plus } from "lucide-react";
 
 const SHORT_PREFIX = "msems.community/go/";
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+interface TurnstileApi {
+  render: (
+    element: HTMLElement,
+    options: {
+      sitekey: string;
+      theme?: "light" | "dark" | "auto";
+      callback?: (token: string) => void;
+      "expired-callback"?: () => void;
+    },
+  ) => string;
+  reset: (widgetId?: string) => void;
+}
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
 
 interface CreateResponse {
   ok?: boolean;
@@ -20,15 +39,47 @@ type Status =
   | { readonly state: "done"; readonly shortUrl: string };
 
 /**
- * Create-a-short-link form. Creation requires the same Discord login as the
- * games; the resulting msems.community/go/<slug> link is public.
+ * Create-a-short-link form. No account needed: creation is gated by a
+ * Cloudflare Turnstile check, verified server-side in /api/go.
  */
 export function LinkShortener() {
-  const { user, logout } = useAuthUser();
   const [url, setUrl] = useState("");
   const [slug, setSlug] = useState("");
   const [status, setStatus] = useState<Status>({ state: "idle" });
   const [copied, setCopied] = useState(false);
+  const [token, setToken] = useState("");
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<string | null>(null);
+
+  const renderWidget = useCallback(() => {
+    if (
+      !TURNSTILE_SITE_KEY ||
+      !widgetRef.current ||
+      !window.turnstile ||
+      widgetId.current !== null
+    ) {
+      return;
+    }
+    widgetId.current = window.turnstile.render(widgetRef.current, {
+      sitekey: TURNSTILE_SITE_KEY,
+      theme: "dark",
+      callback: (t) => setToken(t),
+      "expired-callback": () => setToken(""),
+    });
+  }, []);
+
+  // The script may already be loaded (e.g. client-side navigation back here).
+  useEffect(() => {
+    renderWidget();
+  }, [renderWidget]);
+
+  // Tokens are single use: after any submit, ask Turnstile for a fresh one.
+  function resetChallenge() {
+    setToken("");
+    if (widgetId.current !== null) {
+      window.turnstile?.reset(widgetId.current);
+    }
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,7 +90,11 @@ export function LinkShortener() {
       const res = await fetch("/api/go", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, slug: slug || undefined }),
+        body: JSON.stringify({
+          url,
+          slug: slug || undefined,
+          turnstileToken: token || undefined,
+        }),
       });
       const data = (await res.json()) as CreateResponse;
       if (!res.ok || !data.ok || !data.shortUrl) {
@@ -52,6 +107,8 @@ export function LinkShortener() {
       setStatus({ state: "done", shortUrl: data.shortUrl });
     } catch {
       setStatus({ state: "error", message: "Something went wrong. Try again." });
+    } finally {
+      resetChallenge();
     }
   }
 
@@ -70,33 +127,6 @@ export function LinkShortener() {
     setSlug("");
     setStatus({ state: "idle" });
     setCopied(false);
-  }
-
-  // Loading the session: keep layout stable, no flash of the login button.
-  if (user === undefined) {
-    return (
-      <div className="flex items-center justify-center py-10 text-sm text-muted-foreground">
-        <LoaderCircle className="size-4 animate-spin" />
-      </div>
-    );
-  }
-
-  if (user === null) {
-    return (
-      <div className="flex flex-col items-center gap-3 py-6 text-center">
-        <p className="text-sm text-muted-foreground">
-          Log in with Discord to create links. Only your username is stored
-          with the link, and every link is listed publicly on this page.
-        </p>
-        <a
-          href={loginHref("")}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#5865F2] px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-        >
-          <DiscordIcon className="size-4" />
-          Log in with Discord
-        </a>
-      </div>
-    );
   }
 
   if (status.state === "done") {
@@ -133,21 +163,17 @@ export function LinkShortener() {
     );
   }
 
+  const awaitingChallenge = Boolean(TURNSTILE_SITE_KEY) && !token;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-        <span>
-          Logged in as <span className="font-medium text-foreground">{user.username}</span>
-        </span>
-        <button
-          type="button"
-          onClick={logout}
-          className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
-        >
-          <LogOut className="size-3" />
-          Log out
-        </button>
-      </div>
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          onLoad={renderWidget}
+          strategy="lazyOnload"
+        />
+      )}
 
       <div>
         <label htmlFor="link-url" className="mb-1.5 block text-sm font-medium">
@@ -185,6 +211,9 @@ export function LinkShortener() {
         </div>
       </div>
 
+      {/* Cloudflare Turnstile bot check; renders compactly, often invisibly. */}
+      <div ref={widgetRef} className="flex justify-center empty:hidden" />
+
       {status.state === "error" && (
         <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-300">
           {status.message}
@@ -193,7 +222,7 @@ export function LinkShortener() {
 
       <button
         type="submit"
-        disabled={status.state === "saving"}
+        disabled={status.state === "saving" || awaitingChallenge}
         className="brand-gradient-bg inline-flex w-full items-center justify-center gap-2 rounded-xl border-0 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {status.state === "saving" ? (
@@ -201,7 +230,11 @@ export function LinkShortener() {
         ) : (
           <Link2 className="size-4" />
         )}
-        {status.state === "saving" ? "Creating..." : "Create short link"}
+        {status.state === "saving"
+          ? "Creating..."
+          : awaitingChallenge
+            ? "Checking you're human..."
+            : "Create short link"}
       </button>
     </form>
   );
