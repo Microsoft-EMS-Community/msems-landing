@@ -183,10 +183,6 @@ export async function recordClick(slug: string): Promise<void> {
   }
 }
 
-/** Escapes Discord markdown so a crafted username can't mangle the post. */
-function escapeMarkdown(text: string): string {
-  return text.replace(/([\\`*_~|])/g, "\\$1");
-}
 
 /** Posts the new link to the team Discord channel for moderation visibility. */
 export async function announceLink(
@@ -201,8 +197,9 @@ export async function announceLink(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content: `🔗 **${escapeMarkdown(user.username)}** created ${SITE_URL}/go/${slug} -> <${url}>`,
-        allowed_mentions: { parse: [] },
+        content: `🔗 <@${user.id}> created ${SITE_URL}/go/${slug} -> <${url}>`,
+        // Ping only the creator; role/everyone mentions stay blocked.
+        allowed_mentions: { users: [user.id] },
       }),
     });
   } catch {
