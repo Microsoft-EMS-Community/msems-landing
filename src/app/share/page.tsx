@@ -13,7 +13,7 @@ import {
   SHARE_POSTS,
   HASHTAGS,
   PRIMARY_HASHTAG,
-  SHARE_LINK,
+  GO_SUMMIT_LINK,
   buildPostText,
 } from "@/lib/share";
 
@@ -303,12 +303,12 @@ export default async function SharePage() {
           <div className="mt-6 flex items-center gap-2 text-sm">
             <span className="text-muted-foreground">Link to share:</span>
             <a
-              href={SHARE_LINK}
+              href={GO_SUMMIT_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="break-all text-foreground underline underline-offset-4 hover:text-brand-pink"
             >
-              {SHARE_LINK}
+              {GO_SUMMIT_LINK}
             </a>
           </div>
         </div>

@@ -94,39 +94,44 @@ export default async function GoPage({ searchParams }: GoPageProps) {
 
       {links.length > 0 && (
         <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-            <h2 className="text-2xl font-bold tracking-tight">
-              Community links
-            </h2>
-            <p className="mt-2 text-muted-foreground">
-              Every link created here, most used first.
-            </p>
-            <ul className="mt-6 divide-y divide-white/5">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+            <div className="flex items-baseline justify-between gap-2 px-1">
+              <h2 className="text-lg font-semibold tracking-tight">
+                Community links{" "}
+                <span className="text-sm font-normal text-muted-foreground">
+                  ({links.length})
+                </span>
+              </h2>
+              <span className="text-xs text-muted-foreground">
+                most used first
+              </span>
+            </div>
+            <ul className="mt-3 max-h-96 divide-y divide-white/5 overflow-y-auto px-1">
               {links.map((link) => (
                 <li
                   key={link.slug}
-                  className="flex flex-wrap items-center gap-x-4 gap-y-1 py-3"
+                  className="flex items-center gap-x-3 py-1.5"
                 >
                   <a
                     href={`/go/${link.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium underline-offset-4 transition-colors hover:text-brand-pink hover:underline"
+                    className="shrink-0 text-sm font-medium underline-offset-4 transition-colors hover:text-brand-pink hover:underline"
                   >
                     go/{link.slug}
                   </a>
                   <span
                     title={link.url}
-                    className="min-w-0 flex-1 truncate text-sm text-muted-foreground"
+                    className="min-w-0 flex-1 truncate text-xs text-muted-foreground"
                   >
                     {link.url.replace(/^https?:\/\//, "")}
                   </span>
-                  <span className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
-                    <span className="inline-flex items-center gap-1">
-                      <MousePointerClick className="size-3.5 text-brand-teal" />
-                      {link.clicks}
-                    </span>
-                    {link.discord_name && <span>by {link.discord_name}</span>}
+                  <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline">
+                    {link.discord_name}
+                  </span>
+                  <span className="inline-flex w-12 shrink-0 items-center justify-end gap-1 text-xs tabular-nums text-muted-foreground">
+                    <MousePointerClick className="size-3 text-brand-teal" />
+                    {link.clicks}
                   </span>
                 </li>
               ))}

@@ -1,7 +1,15 @@
 import { EVENT, SITE_URL } from "./event";
 
-/** The link people include when they share: the public event site. */
+/** Printed on the OG cards: the bare, memorable domain. */
 export const SHARE_LINK = SITE_URL;
+
+/**
+ * Tracked short links for post text (seeded in the short_links table), so
+ * share-post click-through shows up in the /go stats. The cards keep the
+ * bare domain above.
+ */
+export const GO_SUMMIT_LINK = `${SITE_URL}/go/summit`;
+export const GO_CFS_LINK = `${SITE_URL}/go/cfs`;
 
 /** The lead hashtag, highlighted in the UI and always first in posts. */
 export const PRIMARY_HASHTAG = "#MSEMS";
@@ -66,7 +74,7 @@ ${EVENT.dateLabel} · ${EVENT.venue}, ${EVENT.venueArea}. Not-for-profit and com
 /** Builds the full post text including link and hashtags. */
 export function buildPostText(post: SharePost): string {
   const tags = post.id === "general" ? "" : `\n\n${HASHTAGS.join(" ")}`;
-  // The CFS post links straight to the submission form, not the site.
-  const link = post.id === "cfs" ? EVENT.cfsUrl : SHARE_LINK;
+  // Tracked /go links: CFS points at the Sessionize form, the rest at the site.
+  const link = post.id === "cfs" ? GO_CFS_LINK : GO_SUMMIT_LINK;
   return `${post.body}\n\n${link}${tags}`;
 }
