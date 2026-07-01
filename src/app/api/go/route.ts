@@ -5,6 +5,7 @@ import {
   SLUG_RE,
   DAILY_LINK_LIMIT,
   validateDestination,
+  slugBlockedReason,
   randomSlug,
   countRecentLinks,
   insertShortLink,
@@ -69,6 +70,10 @@ export async function POST(request: Request): Promise<NextResponse> {
       "Short names are 3-40 characters: lowercase letters, numbers, and hyphens.",
       400,
     );
+  }
+  if (customSlug) {
+    const blocked = slugBlockedReason(customSlug);
+    if (blocked) return fail(blocked, 400);
   }
 
   try {

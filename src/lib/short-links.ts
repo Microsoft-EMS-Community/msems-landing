@@ -27,6 +27,33 @@ export const DAILY_LINK_LIMIT = 10;
 const SLUG_ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";
 const GENERATED_SLUG_LENGTH = 6;
 
+/**
+ * Impersonation guard for custom slugs. Brand terms can't appear anywhere in
+ * a slug, and a few auth words are reserved outright because a link like
+ * msems.community/go/login reads as a page of this site itself. Team links
+ * are seeded via SQL, which skips this creation-time check.
+ */
+const BLOCKED_SLUG_SUBSTRINGS = ["msems", "microsoft"] as const;
+const RESERVED_SLUGS: ReadonlySet<string> = new Set([
+  "login",
+  "signin",
+  "sign-in",
+  "verify",
+  "mfa",
+  "password",
+  "account",
+  "admin",
+]);
+
+/** Why a custom slug isn't allowed, or null when it's fine. */
+export function slugBlockedReason(slug: string): string | null {
+  if (RESERVED_SLUGS.has(slug)) {
+    return "That short name is reserved.";
+  }
+  const brand = BLOCKED_SLUG_SUBSTRINGS.find((term) => slug.includes(term));
+  return brand ? `Short names can't contain "${brand}".` : null;
+}
+
 export type DestinationCheck =
   | { readonly ok: true; readonly url: string }
   | { readonly ok: false; readonly error: string };

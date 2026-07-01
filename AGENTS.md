@@ -46,7 +46,9 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   links never clicked within 90 days of creation.
 - Creation (`POST /api/go`, form on `/go`) requires the Discord session login
   and a same-origin check, and validates destinations (http/https only, no
-  links back into `/go/`). Rate limit 10/day/user: the app-side row count in
+  links back into `/go/`). Custom slugs can't contain brand terms
+  (msems/microsoft) or use reserved auth words like `login`
+  (`slugBlockedReason`). Rate limit 10/day/user: the app-side row count in
   `src/lib/short-links.ts` is just the friendly early error — the authoritative
   cap is a Supabase BEFORE INSERT trigger (advisory lock per discord_id, so
   concurrent requests can't race it; surfaces as PostgREST error P0001).
