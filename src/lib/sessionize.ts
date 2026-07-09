@@ -1,4 +1,11 @@
-import { EVENT, type Speaker, type AgendaItem, type AgendaKind } from "./event";
+import {
+  EVENT,
+  speakerCountry,
+  speakerLinkedIn,
+  type Speaker,
+  type AgendaItem,
+  type AgendaKind,
+} from "./event";
 
 /** Raw shape of a speaker from the Sessionize "Speakers" view. */
 interface SessionizeLink {
@@ -10,6 +17,7 @@ interface SpeakerSession {
   name?: string;
 }
 interface SessionizeSpeaker {
+  id?: string;
   fullName?: string;
   tagLine?: string;
   bio?: string | null;
@@ -25,7 +33,7 @@ interface ScheduleSession {
   startsAt?: string | null;
   endsAt?: string | null;
   isServiceSession?: boolean;
-  speakers?: { name?: string }[];
+  speakers?: { id?: string; name?: string }[];
 }
 interface GridRoom {
   sessions?: ScheduleSession[];
@@ -73,18 +81,32 @@ function classify(title: string): {
  * site's Speaker shape. Cached for 10 minutes (ISR). Returns [] on any error
  * so the Speakers section can fall back gracefully.
  */
-export async function getSessionizeSpeakers(): Promise<Speaker[]> {
+/**
+ * The raw Speakers view. Shared by the speakers list and the agenda's photo
+ * join; both hit the same URL with the same options, so Next serves the second
+ * caller from the fetch cache rather than making a second request.
+ */
+async function fetchSpeakersRaw(): Promise<SessionizeSpeaker[]> {
   const base = EVENT.sessionizeApiBase;
   if (!base) return [];
   try {
     const res = await fetch(`${base}/Speakers`, { next: { revalidate: 600 } });
     if (!res.ok) return [];
     const data: unknown = await res.json();
-    if (!Array.isArray(data)) return [];
+    return Array.isArray(data) ? (data as SessionizeSpeaker[]) : [];
+  } catch {
+    return [];
+  }
+}
 
-    return (data as SessionizeSpeaker[])
+export async function getSessionizeSpeakers(): Promise<Speaker[]> {
+  try {
+    const data = await fetchSpeakersRaw();
+
+    return data
       .filter((s) => typeof s.fullName === "string" && s.fullName.trim())
       .map((s) => {
+        const name = s.fullName!.trim();
         const linkedin = s.links?.find(
           (l) => l.linkType === "LinkedIn",
         )?.url;
@@ -93,12 +115,13 @@ export async function getSessionizeSpeakers(): Promise<Speaker[]> {
           .filter(Boolean)
           .join(", ");
         return {
-          name: s.fullName!.trim(),
+          name,
           title: s.tagLine?.trim() || undefined,
           session: session || undefined,
           bio: s.bio?.trim() || undefined,
           photo: s.profilePicture || undefined,
-          linkedin: linkedin || undefined,
+          linkedin: speakerLinkedIn(name, linkedin),
+          country: speakerCountry(name),
         } satisfies Speaker;
       });
   } catch {
@@ -116,7 +139,10 @@ export async function getSessionizeAgenda(): Promise<AgendaItem[]> {
   const base = EVENT.sessionizeApiBase;
   if (!base) return [];
   try {
-    const res = await fetch(`${base}/GridSmart`, { next: { revalidate: 600 } });
+    const [res, speakerRows] = await Promise.all([
+      fetch(`${base}/GridSmart`, { next: { revalidate: 600 } }),
+      fetchSpeakersRaw(),
+    ]);
     if (!res.ok) return [];
     const days: unknown = await res.json();
     if (!Array.isArray(days)) return [];
@@ -137,16 +163,36 @@ export async function getSessionizeAgenda(): Promise<AgendaItem[]> {
       )
       .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
 
+    // The grid only names its speakers, so pull photo and tagline across from
+    // the Speakers view. Match on id (exact); fall back to name if it is absent.
+    const byId = new Map(
+      speakerRows.filter((s) => s.id).map((s) => [s.id!, s] as const),
+    );
+    const byName = new Map(
+      speakerRows
+        .filter((s) => s.fullName)
+        .map((s) => [s.fullName!.trim().toLowerCase(), s] as const),
+    );
+
     return scheduled.map((s) => {
       // Strip redundant "(45 mins)"-style durations from grid titles.
       const title = s.title.replace(/\s*\(\d+\s*min(?:ute)?s?\)/gi, "").trim();
-      const names = (s.speakers ?? [])
-        .map((sp) => sp.name)
-        .filter((n): n is string => Boolean(n));
+      const speakers: Speaker[] = (s.speakers ?? []).flatMap((sp) => {
+        const name = sp.name?.trim();
+        if (!name) return [];
+        // Degrades to a name-only credit when the join misses.
+        const full =
+          (sp.id ? byId.get(sp.id) : undefined) ??
+          byName.get(name.toLowerCase());
+        return [
+          {
+            name,
+            title: full?.tagLine?.trim() || undefined,
+            photo: full?.profilePicture || undefined,
+          },
+        ];
+      });
       const meta = classify(title);
-      const description = names.length
-        ? `with ${names.join(", ")}`
-        : meta.description;
       return {
         time: s.startsAt.slice(11, 16),
         endTime:
@@ -154,8 +200,9 @@ export async function getSessionizeAgenda(): Promise<AgendaItem[]> {
             ? s.endsAt.slice(11, 16)
             : undefined,
         title,
-        description,
+        description: meta.description,
         kind: meta.kind,
+        ...(speakers.length ? { speakers } : {}),
         ...(meta.featured ? { featured: true } : {}),
       } satisfies AgendaItem;
     });

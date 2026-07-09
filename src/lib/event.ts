@@ -126,6 +126,12 @@ export interface AgendaItem {
   /** Optional blurb; session placeholders stay title-only until confirmed. */
   readonly description?: string;
   readonly kind: AgendaKind;
+  /**
+   * Who is presenting. Sessionize's grid only names them, so photo and title
+   * are joined in from the Speakers view. Empty for breaks and unfilled slots,
+   * which is what makes a real talk stand out on the timeline.
+   */
+  readonly speakers?: readonly Speaker[];
   /** Number of talks in this block (renders a "N sessions" badge). */
   readonly sessions?: number;
   /** Highlights a signature moment of the day. */
@@ -134,8 +140,7 @@ export interface AgendaItem {
   readonly optional?: boolean;
 }
 
-export const AGENDA_NOTE =
-  "Provisional running order. Times and sessions will be confirmed as the program and Call for Speakers are finalized.";
+export const AGENDA_NOTE = "The sequence of sessions is not final.";
 
 export const AGENDA: readonly AgendaItem[] = [
   {
@@ -261,6 +266,8 @@ export interface Speaker {
   /** Photo path in /public, e.g. /speakers/jane-doe.jpg. */
   readonly photo?: string;
   readonly linkedin?: string;
+  /** Where they're based; renders a flag. Must match a case in <Flag />. */
+  readonly country?: string;
 }
 
 /**
@@ -269,6 +276,68 @@ export interface Speaker {
  * Put speaker photos in /public/speakers and reference them here.
  */
 export const SPEAKERS: readonly Speaker[] = [];
+
+/**
+ * Community speaker slots on the day. Slots beyond the confirmed lineup render
+ * as "To be announced" cards, so the grid shows there is still room. Matches
+ * the six community sessions in the agenda.
+ */
+export const SPEAKER_SLOTS = 6;
+
+/** Unfilled slots left once the confirmed speakers are placed. */
+export function openSpeakerSlots(confirmed: number): number {
+  return Math.max(0, SPEAKER_SLOTS - confirmed);
+}
+
+/**
+ * Microsoft MVP awardees whose Sessionize tagline does not say so. Sessionize
+ * has no MVP field, and most awardees mention it in their tagline (which
+ * `isMvpSpeaker` picks up), so only the ones who leave it out go here.
+ */
+export const MVP_SPEAKERS: readonly string[] = ["Mattias Melkersen"];
+
+/**
+ * LinkedIn profiles, keyed by lowercased full name. Sessionize only exposes
+ * the links a speaker adds to their own profile, and ours have added none, so
+ * these are curated. A link the speaker adds later wins over this list.
+ */
+export const SPEAKER_LINKEDIN: Readonly<Record<string, string>> = {
+  "mattias melkersen": "https://www.linkedin.com/in/mattiasmelkersen/",
+  "somesh pathak": "https://www.linkedin.com/in/someshpathak/",
+  "truls dahlsveen": "https://www.linkedin.com/in/truls-dahlsveen/",
+};
+
+/** A speaker's LinkedIn: whatever Sessionize has, else our curated lookup. */
+export function speakerLinkedIn(
+  name: string,
+  fromSessionize?: string,
+): string | undefined {
+  return fromSessionize || SPEAKER_LINKEDIN[name.trim().toLowerCase()];
+}
+
+/**
+ * Where each speaker is based, keyed by lowercased full name. Sessionize has no
+ * country field, so this is curated. Values must match a case in <Flag />.
+ */
+export const SPEAKER_COUNTRY: Readonly<Record<string, string>> = {
+  "mattias melkersen": "Denmark",
+  "somesh pathak": "Netherlands",
+  "truls dahlsveen": "Norway",
+};
+
+/** The speaker's country, or undefined when we haven't recorded one. */
+export function speakerCountry(name: string): string | undefined {
+  return SPEAKER_COUNTRY[name.trim().toLowerCase()];
+}
+
+/** True when a speaker should get the Microsoft MVP badge. */
+export function isMvpSpeaker(speaker: Speaker): boolean {
+  const named = MVP_SPEAKERS.some(
+    (n) => n.toLowerCase() === speaker.name.trim().toLowerCase(),
+  );
+  // Case-sensitive: match the award, not "mvp" inside another word.
+  return named || /\bMVP\b/.test(speaker.title ?? "");
+}
 
 export interface PricingTier {
   readonly id: string;

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Mic } from "lucide-react";
-import { SPEAKERS } from "@/lib/event";
+import { Flag } from "@/components/flag";
+import { MvpBadge } from "@/components/mvp-badge";
+import { SPEAKERS, isMvpSpeaker, openSpeakerSlots } from "@/lib/event";
 import { getSessionizeSpeakers } from "@/lib/sessionize";
 
 function initials(name: string): string {
@@ -13,11 +15,31 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
+/** An unfilled speaker slot. */
+function PlaceholderCard() {
+  return (
+    <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
+      <span className="grid size-24 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 text-muted-foreground">
+        <Mic className="size-6 opacity-40" />
+      </span>
+      <h3 className="mt-4 font-semibold text-muted-foreground">
+        To be announced
+      </h3>
+      <p className="mt-1 text-sm text-muted-foreground/70">
+        Session coming soon
+      </p>
+    </div>
+  );
+}
+
 export async function Speakers() {
   // Live from Sessionize when published; otherwise the manual fallback list.
   const live = await getSessionizeSpeakers();
   const speakers = live.length > 0 ? live : SPEAKERS;
   const hasSpeakers = speakers.length > 0;
+  // Show the room left in the lineup. With nothing confirmed yet, a shorter
+  // teaser row reads better than a full grid of empty cards.
+  const openSlots = hasSpeakers ? openSpeakerSlots(speakers.length) : 3;
 
   return (
     <section
@@ -36,60 +58,48 @@ export async function Speakers() {
       </div>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {hasSpeakers
-          ? speakers.map((speaker) => (
-              <div
-                key={speaker.name}
-                className="reveal flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
-              >
-                <span className="brand-gradient-bg shrink-0 rounded-full p-[3px]">
-                  {speaker.photo ? (
-                    <Image
-                      src={speaker.photo}
-                      alt={speaker.name}
-                      width={96}
-                      height={96}
-                      className="size-24 rounded-full object-cover"
-                      unoptimized
-                    />
-                  ) : (
-                    <span
-                      aria-hidden
-                      className="grid size-24 place-items-center rounded-full bg-card text-xl font-bold brand-gradient-text"
-                    >
-                      {initials(speaker.name)}
-                    </span>
-                  )}
+        {speakers.map((speaker) => (
+          <div
+            key={speaker.name}
+            className="reveal flex h-full flex-col items-center rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
+          >
+            <span className="brand-gradient-bg shrink-0 rounded-full p-[3px]">
+              {speaker.photo ? (
+                <Image
+                  src={speaker.photo}
+                  alt={speaker.name}
+                  width={96}
+                  height={96}
+                  className="size-24 rounded-full object-cover"
+                  unoptimized
+                />
+              ) : (
+                <span
+                  aria-hidden
+                  className="grid size-24 place-items-center rounded-full bg-card text-xl font-bold brand-gradient-text"
+                >
+                  {initials(speaker.name)}
                 </span>
-                <h3 className="mt-4 font-semibold">{speaker.name}</h3>
-                {speaker.title && (
-                  <p className="text-sm text-muted-foreground">
-                    {speaker.title}
-                  </p>
-                )}
-                {speaker.session && (
-                  <p className="mt-2 text-balance text-sm text-foreground/90">
-                    {speaker.session}
-                  </p>
-                )}
-              </div>
-            ))
-          : Array.from({ length: 3 }, (_, i) => (
-              <div
-                key={i}
-                className="flex flex-col items-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center"
-              >
-                <span className="grid size-24 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 text-muted-foreground">
-                  <Mic className="size-6 opacity-40" />
-                </span>
-                <h3 className="mt-4 font-semibold text-muted-foreground">
-                  To be announced
-                </h3>
-                <p className="mt-1 text-sm text-muted-foreground/70">
-                  Session coming soon
-                </p>
-              </div>
-            ))}
+              )}
+            </span>
+            <h3 className="mt-4 flex items-center justify-center gap-1.5 font-semibold">
+              {speaker.name}
+              {speaker.country && <Flag country={speaker.country} />}
+              {isMvpSpeaker(speaker) && <MvpBadge />}
+            </h3>
+            {speaker.title && (
+              <p className="text-sm text-muted-foreground">{speaker.title}</p>
+            )}
+            {speaker.session && (
+              <p className="mt-2 text-balance text-sm text-foreground/90">
+                {speaker.session}
+              </p>
+            )}
+          </div>
+        ))}
+        {Array.from({ length: openSlots }, (_, i) => (
+          <PlaceholderCard key={`open-${i}`} />
+        ))}
       </div>
 
       <div className="mt-8 text-center">

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { DiscordIcon } from "@/components/discord-icon";
+import { Flag } from "@/components/flag";
 import { TEAM, EVENT, type TeamMember, type TeamRole } from "@/lib/event";
 
 // Inlined LinkedIn glyph (lucide dropped brand logos in recent versions).
@@ -9,62 +10,6 @@ function LinkedInIcon({ className }: { className?: string }) {
       <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .77 0 1.73v20.54C0 23.23.8 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
     </svg>
   );
-}
-
-// Inline SVG flags — emoji flags don't render on Windows, so we draw them.
-function Flag({ country }: { country: string }) {
-  const cls = "inline-block h-3.5 w-5 shrink-0 rounded-[2px] ring-1 ring-black/15";
-  switch (country) {
-    case "Denmark":
-      return (
-        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={cls} role="img" aria-label="Denmark">
-          <rect width="28" height="20" fill="#c8102e" />
-          <rect y="8" width="28" height="4" fill="#fff" />
-          <rect x="9" width="4" height="20" fill="#fff" />
-        </svg>
-      );
-    case "Netherlands":
-      return (
-        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={cls} role="img" aria-label="Netherlands">
-          <rect width="28" height="20" fill="#21468b" />
-          <rect width="28" height="13.34" fill="#fff" />
-          <rect width="28" height="6.67" fill="#ae1c28" />
-        </svg>
-      );
-    case "Greece":
-      return (
-        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={cls} role="img" aria-label="Greece">
-          <rect width="28" height="20" fill="#0d5eaf" />
-          <rect y="2.22" width="28" height="2.22" fill="#fff" />
-          <rect y="6.67" width="28" height="2.22" fill="#fff" />
-          <rect y="11.11" width="28" height="2.22" fill="#fff" />
-          <rect y="15.56" width="28" height="2.22" fill="#fff" />
-          <rect width="11.11" height="11.11" fill="#0d5eaf" />
-          <rect x="4.45" width="2.22" height="11.11" fill="#fff" />
-          <rect y="4.45" width="11.11" height="2.22" fill="#fff" />
-        </svg>
-      );
-    case "United Kingdom":
-      return (
-        <svg viewBox="0 0 60 30" preserveAspectRatio="none" className={cls} role="img" aria-label="United Kingdom">
-          <clipPath id="uk-s">
-            <path d="M0,0 v30 h60 v-30 z" />
-          </clipPath>
-          <clipPath id="uk-t">
-            <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
-          </clipPath>
-          <g clipPath="url(#uk-s)">
-            <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
-            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
-            <path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#uk-t)" stroke="#c8102e" strokeWidth="4" />
-            <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
-            <path d="M30,0 v30 M0,15 h60" stroke="#c8102e" strokeWidth="6" />
-          </g>
-        </svg>
-      );
-    default:
-      return null;
-  }
 }
 
 function initials(name: string): string {

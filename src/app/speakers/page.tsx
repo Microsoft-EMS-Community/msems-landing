@@ -5,7 +5,15 @@ import { ArrowLeft, ImageDown, Mic } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
-import { EVENT, SPEAKERS, type Speaker } from "@/lib/event";
+import { Flag } from "@/components/flag";
+import { MvpBadge } from "@/components/mvp-badge";
+import {
+  EVENT,
+  SPEAKERS,
+  isMvpSpeaker,
+  openSpeakerSlots,
+  type Speaker,
+} from "@/lib/event";
 import { getSessionizeSpeakers } from "@/lib/sessionize";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +53,7 @@ function announceUrl(s: Speaker): string {
 
 function SpeakerCard({ speaker }: { speaker: Speaker }) {
   return (
-    <div className="reveal flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center">
+    <div className="reveal flex h-full flex-col items-center rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center">
       <span className="brand-gradient-bg shrink-0 rounded-full p-[3px]">
         {speaker.photo ? (
           <Image
@@ -66,7 +74,11 @@ function SpeakerCard({ speaker }: { speaker: Speaker }) {
         )}
       </span>
 
-      <h2 className="mt-4 text-lg font-semibold">{speaker.name}</h2>
+      <h2 className="mt-4 flex items-center justify-center gap-1.5 text-lg font-semibold">
+        {speaker.name}
+        {speaker.country && <Flag country={speaker.country} />}
+        {isMvpSpeaker(speaker) && <MvpBadge size={20} />}
+      </h2>
       {speaker.title && (
         <p className="text-sm text-muted-foreground">{speaker.title}</p>
       )}
@@ -82,7 +94,9 @@ function SpeakerCard({ speaker }: { speaker: Speaker }) {
         </p>
       )}
 
-      <div className="mt-4 flex items-center gap-4 text-xs">
+      {/* mt-auto pins the actions to the card floor, so they line up across
+          the row however long the tagline, session title or bio run. */}
+      <div className="mt-auto flex items-center gap-4 pt-5 text-xs">
         {speaker.linkedin && (
           <a
             href={speaker.linkedin}
@@ -110,7 +124,7 @@ function SpeakerCard({ speaker }: { speaker: Speaker }) {
 
 function PlaceholderCard() {
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
+    <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center">
       <span className="grid size-28 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5 text-muted-foreground">
         <Mic className="size-7 opacity-40" />
       </span>
@@ -126,6 +140,9 @@ export default async function SpeakersPage() {
   const live = await getSessionizeSpeakers();
   const speakers = live.length > 0 ? live : SPEAKERS;
   const hasSpeakers = speakers.length > 0;
+  // Unfilled slots show the room left in the lineup. With nothing confirmed,
+  // fill the grid so the section does not look broken.
+  const openSlots = hasSpeakers ? openSpeakerSlots(speakers.length) : 6;
 
   return (
     <main className="flex-1">
@@ -147,9 +164,12 @@ export default async function SpeakersPage() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {hasSpeakers
-            ? speakers.map((s) => <SpeakerCard key={s.name} speaker={s} />)
-            : Array.from({ length: 6 }, (_, i) => <PlaceholderCard key={i} />)}
+          {speakers.map((s) => (
+            <SpeakerCard key={s.name} speaker={s} />
+          ))}
+          {Array.from({ length: openSlots }, (_, i) => (
+            <PlaceholderCard key={`open-${i}`} />
+          ))}
         </div>
 
         {!hasSpeakers && EVENT.cfsOpen && (

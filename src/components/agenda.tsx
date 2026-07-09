@@ -7,7 +7,16 @@ import {
   Sparkles,
   ArrowLeftRight,
 } from "lucide-react";
-import { AGENDA, type AgendaItem, type AgendaKind } from "@/lib/event";
+import Image from "next/image";
+import { MvpBadge } from "@/components/mvp-badge";
+import {
+  AGENDA,
+  AGENDA_NOTE,
+  isMvpSpeaker,
+  type AgendaItem,
+  type AgendaKind,
+  type Speaker,
+} from "@/lib/event";
 import { getSessionizeAgenda } from "@/lib/sessionize";
 
 /** "08:30" -> "8:30 AM", "17:00" -> "5 PM" (drops :00 on whole hours). */
@@ -71,27 +80,68 @@ function CompactRow({ item }: { item: AgendaItem }) {
   );
 }
 
-/** Full card for sessions and key moments — an icon node on the rail + a card. */
-function FullRow({ item }: { item: AgendaItem }) {
+/** The timeline node: a speaker's face for a talk, otherwise the kind's icon. */
+function RailNode({ item }: { item: AgendaItem }) {
   const { icon: Icon } = KIND_META[item.kind];
+  const portrait = item.speakers?.find((s) => s.photo);
+
+  if (portrait?.photo) {
+    return (
+      <span className="brand-gradient-bg relative z-10 mt-0.5 shrink-0 rounded-full p-[2px]">
+        <Image
+          src={portrait.photo}
+          alt=""
+          width={32}
+          height={32}
+          unoptimized
+          className="size-8 rounded-full object-cover"
+        />
+      </span>
+    );
+  }
+  return (
+    <span
+      className={`relative z-10 mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl border ${
+        item.featured
+          ? "border-transparent brand-gradient-bg text-white"
+          : "border-white/10 bg-card text-brand-pink"
+      }`}
+    >
+      <Icon className="size-4" />
+    </span>
+  );
+}
+
+/** The people presenting, credited under the title with their MVP badge. */
+function SpeakerCredits({ speakers }: { speakers: readonly Speaker[] }) {
+  return (
+    <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-foreground/90">
+      {speakers.map((speaker) => (
+        <span key={speaker.name} className="inline-flex items-center gap-1">
+          {speaker.name}
+          {isMvpSpeaker(speaker) && <MvpBadge size={13} />}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+/** Full card for sessions and key moments — a node on the rail + a card. */
+function FullRow({ item }: { item: AgendaItem }) {
+  // A real talk outranks the connective tissue around it.
+  const isTalk = item.kind === "sessions";
   return (
     <li className="reveal flex gap-3">
-      <span
-        className={`relative z-10 mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl border ${
-          item.featured
-            ? "border-transparent brand-gradient-bg text-white"
-            : "border-white/10 bg-card text-brand-pink"
-        }`}
-      >
-        <Icon className="size-4" />
-      </span>
+      <RailNode item={item} />
       <div
         className={`min-w-0 flex-1 rounded-xl border p-3 transition-colors ${
           item.featured
             ? "border-brand-pink/30 bg-brand-pink/[0.06]"
             : item.optional
               ? "border-dashed border-white/15 bg-white/[0.02]"
-              : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
+              : isTalk
+                ? "border-white/15 bg-white/[0.055] hover:bg-white/[0.08]"
+                : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
         }`}
       >
         <div className="flex items-center justify-between gap-2">
@@ -111,11 +161,19 @@ function FullRow({ item }: { item: AgendaItem }) {
             )
           )}
         </div>
-        <h3 className="text-sm font-semibold leading-tight">{item.title}</h3>
-        {item.description && (
-          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-            {item.description}
-          </p>
+        <h3
+          className={`font-semibold leading-tight ${isTalk ? "text-base" : "text-sm"}`}
+        >
+          {item.title}
+        </h3>
+        {item.speakers?.length ? (
+          <SpeakerCredits speakers={item.speakers} />
+        ) : (
+          item.description && (
+            <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+              {item.description}
+            </p>
+          )
         )}
       </div>
     </li>
@@ -167,6 +225,9 @@ export async function Agenda() {
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           Six community sessions through the day, our CloudHour round-table and
           speaker AMA, then networking and drinks to round it off.
+        </p>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground/80">
+          {AGENDA_NOTE}
         </p>
       </div>
 
