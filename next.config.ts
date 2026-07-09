@@ -14,7 +14,7 @@ const contentSecurityPolicy = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   "frame-src 'self' https://shop.weeztix.com https://challenges.cloudflare.com",
-  "img-src 'self' data: blob: https://cdn.discordapp.com https://sessionize.com",
+  "img-src 'self' data: blob: https://cdn.discordapp.com https://sessionize.com https://cdn.sessionize.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://static.cloudflareinsights.com https://challenges.cloudflare.com`,
@@ -43,6 +43,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.discordapp.com" },
       { protocol: "https", hostname: "sessionize.com" },
+      { protocol: "https", hostname: "cdn.sessionize.com" },
     ],
   },
   async headers() {

@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 import { resolvePhoto } from "@/lib/card-photo";
+import { TOPIC_MAX_CHARS, topicFontSize } from "@/lib/card-text";
 import { cardFonts } from "@/lib/og-font";
 
 // A 1080x1350 "I'm speaking at" card.
@@ -26,7 +27,7 @@ function MicrosoftMark() {
 
 async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | null) {
   const name = nameRaw.trim().slice(0, 40);
-  const topic = topicRaw.trim().slice(0, 90);
+  const topic = topicRaw.trim().slice(0, TOPIC_MAX_CHARS);
   const photoSrc = await resolvePhoto(photoRaw);
   const personalised = Boolean(name);
 
@@ -79,14 +80,17 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
           </div>
 
           {personalised ? (
-            <>
+            // A fragment here would render as a row: satori has no special
+            // handling for fragments, so it becomes a node with its default
+            // flexDirection: row. Stack the two lines with a real column div.
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
               <div style={{ display: "flex", fontFamily: display, maxWidth: 880, fontSize: 56, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1, textAlign: "center" }}>
                 {name}
               </div>
-              <div style={{ fontSize: 26, letterSpacing: 4, textTransform: "uppercase", color: "#cbd5e1" }}>
+              <div style={{ display: "flex", fontSize: 26, letterSpacing: 4, textTransform: "uppercase", color: "#cbd5e1" }}>
                 Speaking at
               </div>
-            </>
+            </div>
           ) : (
             <div style={{ fontSize: 30, fontWeight: 600, letterSpacing: 6, textTransform: "uppercase", color: "#cbd5e1" }}>
               {"I'm speaking at"}
@@ -98,7 +102,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
           </div>
 
           {personalised && topic ? (
-            <div style={{ display: "flex", maxWidth: 820, fontSize: 28, color: "#e2e8f0", textAlign: "center" }}>
+            <div style={{ display: "flex", maxWidth: 820, fontSize: topicFontSize(topic, 28), lineHeight: 1.35, color: "#e2e8f0", textAlign: "center" }}>
               {topic}
             </div>
           ) : (

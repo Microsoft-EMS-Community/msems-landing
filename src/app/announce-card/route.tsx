@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 import { EVENT, COMMUNITY } from "@/lib/event";
 import { SHARE_LINK } from "@/lib/share";
 import { resolvePhoto } from "@/lib/card-photo";
+import { TOPIC_MAX_CHARS, topicFontSize } from "@/lib/card-text";
 import { cardFonts } from "@/lib/og-font";
 
 // A 1080x1350 "speaker announcement" card for the team.
@@ -25,7 +26,7 @@ function MicrosoftMark() {
 
 async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | null) {
   const name = (nameRaw || "Speaker name").slice(0, 40);
-  const topic = (topicRaw || "").slice(0, 90);
+  const topic = (topicRaw || "").slice(0, TOPIC_MAX_CHARS);
   const photoSrc = await resolvePhoto(photoRaw);
 
   const logoBytes = await readFile(join(process.cwd(), "public", "logo.png"));
@@ -84,7 +85,7 @@ async function renderCard(nameRaw: string, topicRaw: string, photoRaw: string | 
             {name}
           </div>
           {topic ? (
-            <div style={{ display: "flex", maxWidth: 840, fontSize: 32, color: "#e2e8f0", textAlign: "center" }}>
+            <div style={{ display: "flex", maxWidth: 840, fontSize: topicFontSize(topic, 32), lineHeight: 1.35, color: "#e2e8f0", textAlign: "center" }}>
               {topic}
             </div>
           ) : null}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TOPIC_MAX_CHARS } from "@/lib/card-text";
 import type { Speaker } from "@/lib/event";
 
 const inputClass =
@@ -93,7 +94,9 @@ export function CardBuilder({
             <select
               defaultValue=""
               onChange={onPickSpeaker}
-              className={`mt-1.5 ${inputClass}`}
+              // Options inherit the select's translucent background in the
+              // native popup, so give them an opaque one of their own.
+              className={`mt-1.5 ${inputClass} [&>option]:bg-card [&>option]:text-foreground`}
             >
               <option value="" disabled>
                 Choose a speaker…
@@ -122,7 +125,7 @@ export function CardBuilder({
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             placeholder="Locking down Intune at scale"
-            maxLength={90}
+            maxLength={TOPIC_MAX_CHARS}
             className={`mt-1.5 ${inputClass}`}
           />
         </label>
