@@ -380,8 +380,10 @@ export const PRICING = {
       id: "early-bird",
       name: "Early bird",
       price: 35,
-      seatsLabel: "First 25 seats",
-      badge: "Only 20 left",
+      seatsLabel: "Limited seats",
+      // Deliberately vague: a hard count goes stale the moment tickets sell,
+      // and Weeztix holds the real number.
+      badge: "Limited",
       featured: true,
       features: [
         "Full day of sessions",
@@ -393,7 +395,7 @@ export const PRICING = {
       id: "standard",
       name: "Standard",
       price: 45,
-      seatsLabel: "Seats 26 to 70",
+      seatsLabel: "Remaining seats",
       features: [
         "Full day of sessions",
         "CloudHour round-table & speaker AMA",
