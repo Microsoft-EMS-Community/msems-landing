@@ -161,6 +161,16 @@ export default async function SpeakersPage() {
               ? "The voices behind this year's sessions, and what they're bringing to the day."
               : "Expect 7 to 12 community speakers across the day. The lineup is being confirmed now and lands here, complete with sessions, as it firms up."}
           </p>
+          {hasSpeakers && (
+            <a
+              href="/lineup-card"
+              download="msems-lineup.png"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm transition-colors hover:bg-white/10"
+            >
+              <ImageDown className="size-4" />
+              Lineup card (all speakers on one image)
+            </a>
+          )}
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

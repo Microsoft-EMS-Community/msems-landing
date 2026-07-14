@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download, ArrowLeft, Hash, Megaphone, Mic } from "lucide-react";
+import { Download, ArrowLeft, Hash, Megaphone, Mic, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CopyButton } from "@/components/copy-button";
@@ -166,6 +166,46 @@ export default async function SharePage() {
           </div>
         </div>
       </section>
+
+      {/* Lineup card: every confirmed speaker on one image */}
+      {speakers.length > 0 && (
+        <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <div className="flex items-center gap-2">
+              <Users className="size-4 text-brand-teal" />
+              <h2 className="text-2xl font-bold tracking-tight">
+                The speaker lineup
+              </h2>
+            </div>
+            <p className="mt-2 text-muted-foreground">
+              All {speakers.length} confirmed speakers on one 1080x1350 PNG, with
+              their sessions. It updates itself as the lineup grows, so download
+              it fresh each time you post.
+            </p>
+            <div className="mt-6 flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+              <div className="w-full max-w-xs shrink-0 overflow-hidden rounded-2xl border border-white/10">
+                {/* Generated at /lineup-card (1080x1350 PNG). */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/lineup-card"
+                  alt="The speaker lineup for the Microsoft EMS Community Summit"
+                  width={1080}
+                  height={1350}
+                  className="h-auto w-full"
+                />
+              </div>
+              <Button
+                render={<a href="/lineup-card" download="msems-lineup.png" />}
+                size="lg"
+                className="brand-gradient-bg border-0 text-white hover:opacity-90"
+              >
+                <Download className="size-4" />
+                Download card
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Speaker card */}
       <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
