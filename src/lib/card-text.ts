@@ -26,3 +26,23 @@ export function topicFontSize(topic: string, base: number): number {
   const step = TOPIC_STEPS.find(([maxLength]) => topic.length <= maxLength);
   return base - (step ? step[1] : TOPIC_MAX_SHRINK);
 }
+
+/**
+ * Same idea for speaker names, which are set much larger than the topic and so
+ * run out of width far sooner. Steps are steeper than TOPIC_STEPS because a
+ * name wrapping to two lines reads worse than one that is a few points smaller.
+ */
+const NAME_STEPS: readonly (readonly [number, number])[] = [
+  [18, 0],
+  [26, 12],
+  [34, 20],
+];
+
+/** Applied past the last step, up to the 40-char cap the route enforces. */
+const NAME_MAX_SHRINK = 26;
+
+/** The font size to render `name` at, shrinking from `base` as it gets longer. */
+export function nameFontSize(name: string, base: number): number {
+  const step = NAME_STEPS.find(([maxLength]) => name.length <= maxLength);
+  return base - (step ? step[1] : NAME_MAX_SHRINK);
+}

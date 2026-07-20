@@ -27,10 +27,17 @@ export function CardBuilder({
   route = "/announce-card",
   downloadName = "msems-card.png",
 }: CardBuilderProps) {
-  const [name, setName] = useState("");
-  const [topic, setTopic] = useState("");
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [photoName, setPhotoName] = useState("");
+  // Seed from the first confirmed speaker so the preview shows a real card
+  // straight away. `speakers` comes from the server and does not change after
+  // mount, so this belongs in the initial state rather than in an effect.
+  const first: Speaker | undefined = speakers[0];
+  const [name, setName] = useState(first?.name ?? "");
+  const [topic, setTopic] = useState(first?.session ?? "");
+  const [title, setTitle] = useState(first?.title ?? "");
+  const [photo, setPhoto] = useState<string | null>(first?.photo ?? null);
+  const [photoName, setPhotoName] = useState(
+    first?.photo ? `${first.name} (Sessionize)` : "",
+  );
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const objUrl = useRef<string | null>(null);
@@ -40,6 +47,7 @@ export function CardBuilder({
     if (!speaker) return;
     setName(speaker.name);
     setTopic(speaker.session ?? "");
+    setTitle(speaker.title ?? "");
     setPhoto(speaker.photo ?? null);
     setPhotoName(speaker.photo ? `${speaker.name} (Sessionize)` : "");
   }
@@ -56,13 +64,16 @@ export function CardBuilder({
   }
 
   useEffect(() => {
+    // No name means no card: the route 400s rather than render an empty one.
+    // Nothing to clear here, the render below gates on `name` too.
+    if (!name.trim()) return;
     const id = setTimeout(async () => {
       setBusy(true);
       try {
         const res = await fetch(route, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, topic, photo }),
+          body: JSON.stringify({ name, topic, title, photo }),
         });
         if (res.ok) {
           const blob = await res.blob();
@@ -77,7 +88,7 @@ export function CardBuilder({
       }
     }, 500);
     return () => clearTimeout(id);
-  }, [name, topic, photo, route]);
+  }, [name, topic, title, photo, route]);
 
   useEffect(() => {
     return () => {
@@ -92,7 +103,7 @@ export function CardBuilder({
           <label className="text-sm font-medium">
             Pick from Sessionize
             <select
-              defaultValue=""
+              defaultValue={speakers.length > 0 ? "0" : ""}
               onChange={onPickSpeaker}
               // Options inherit the select's translucent background in the
               // native popup, so give them an opaque one of their own.
@@ -120,6 +131,16 @@ export function CardBuilder({
           />
         </label>
         <label className="text-sm font-medium">
+          Role / tagline
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Modern Workplace Architect - Contoso"
+            maxLength={70}
+            className={`mt-1.5 ${inputClass}`}
+          />
+        </label>
+        <label className="text-sm font-medium">
           Session title
           <input
             value={topic}
@@ -142,7 +163,11 @@ export function CardBuilder({
 
         <Button
           render={
-            <a href={preview ?? "#"} download={downloadName} aria-disabled={!preview} />
+            <a
+              href={name.trim() && preview ? preview : "#"}
+              download={downloadName}
+              aria-disabled={!(name.trim() && preview)}
+            />
           }
           className="brand-gradient-bg border-0 text-white hover:opacity-90"
         >
@@ -152,7 +177,7 @@ export function CardBuilder({
       </div>
 
       <div className="relative w-full flex-1 overflow-hidden rounded-2xl border border-white/10">
-        {preview ? (
+        {name.trim() && preview ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview}
@@ -162,8 +187,10 @@ export function CardBuilder({
             className="h-auto w-full"
           />
         ) : (
-          <div className="grid aspect-[4/5] place-items-center text-sm text-muted-foreground">
-            Loading preview…
+          <div className="grid aspect-[4/5] place-items-center px-6 text-center text-sm text-muted-foreground">
+            {name.trim()
+              ? "Loading preview…"
+              : "Pick a speaker or type a name to build a card."}
           </div>
         )}
         {busy && (
