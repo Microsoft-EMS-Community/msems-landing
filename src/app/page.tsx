@@ -219,29 +219,31 @@ export default async function Home() {
                       join the community
                     </a>
                   </p>
-                  <div className="mt-4 flex flex-col gap-3 rounded-xl border border-brand-teal/30 bg-brand-teal/[0.06] p-3 sm:flex-row sm:items-center">
-                    <div className="flex flex-1 items-center gap-3 text-left">
-                      <span className="grid size-9 shrink-0 place-items-center rounded-lg brand-gradient-bg">
-                        <Mic className="size-4 text-white" />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold">
-                          Call for Speakers is open
-                        </p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">
-                          Got a talk in you? Submit a session.
-                        </p>
+                  {EVENT.cfsOpen && (
+                    <div className="mt-4 flex flex-col gap-3 rounded-xl border border-brand-teal/30 bg-brand-teal/[0.06] p-3 sm:flex-row sm:items-center">
+                      <div className="flex flex-1 items-center gap-3 text-left">
+                        <span className="grid size-9 shrink-0 place-items-center rounded-lg brand-gradient-bg">
+                          <Mic className="size-4 text-white" />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold">
+                            Call for Speakers is open
+                          </p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            Got a talk in you? Submit a session.
+                          </p>
+                        </div>
                       </div>
+                      <a
+                        href={EVENT.cfsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="sheen w-full shrink-0 whitespace-nowrap rounded-lg brand-gradient-bg px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90 sm:w-auto"
+                      >
+                        Submit a session
+                      </a>
                     </div>
-                    <a
-                      href={EVENT.cfsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="sheen w-full shrink-0 whitespace-nowrap rounded-lg brand-gradient-bg px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90 sm:w-auto"
-                    >
-                      Submit a session
-                    </a>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -367,7 +369,8 @@ export default async function Home() {
       {/* ---------- Evening social (optional add-on) ---------- */}
       <SocialEvening />
 
-      {/* ---------- Call for Speakers ---------- */}
+      {/* ---------- Call for Speakers (hidden once EVENT.cfsOpen is false) ---------- */}
+      {EVENT.cfsOpen && (
       <section id="cfs" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6">
         <Card className="relative overflow-hidden border-white/10 bg-white/[0.03]">
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-purple/20 blur-[100px]" />
@@ -409,6 +412,7 @@ export default async function Home() {
           </CardContent>
         </Card>
       </section>
+      )}
 
       {/* ---------- Community ---------- */}
       <section

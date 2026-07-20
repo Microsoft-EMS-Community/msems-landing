@@ -31,7 +31,7 @@ export const EVENT = {
   status: "Tickets on sale",
   // Call for Speakers (Sessionize). Set cfsOpen to false once submissions close.
   cfsUrl: "https://sessionize.com/microsoft-ems-community-summit/",
-  cfsOpen: true,
+  cfsOpen: false,
   // Sessionize JSON API (read-only, public). Powers Speakers + Agenda.
   // Views appended: /Speakers, /Sessions.
   sessionizeApiBase: "https://sessionize.com/api/v2/3zmvdvh1/view",
@@ -688,7 +688,7 @@ export const FAQS: readonly FaqItem[] = [
   {
     question: "What about the agenda and speakers?",
     answer:
-      "The hour-by-hour running order is already on this page, and we're confirming speakers as the Call for Speakers wraps up. If you'd like to present, submit a session via the Call for Speakers section.",
+      "The hour-by-hour running order is already on this page, and the lineup lands on the speakers page as each session is confirmed.",
   },
   {
     question: "How do I get a seat?",
