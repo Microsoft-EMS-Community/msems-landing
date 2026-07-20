@@ -268,6 +268,8 @@ export interface Speaker {
   readonly linkedin?: string;
   /** Where they're based; renders a flag. Must match a case in <Flag />. */
   readonly country?: string;
+  /** Technology areas they cover, e.g. ["Intune"]. Renders as chips. */
+  readonly topics?: readonly string[];
 }
 
 /**
@@ -328,6 +330,23 @@ export const SPEAKER_COUNTRY: Readonly<Record<string, string>> = {
 /** The speaker's country, or undefined when we haven't recorded one. */
 export function speakerCountry(name: string): string | undefined {
   return SPEAKER_COUNTRY[name.trim().toLowerCase()];
+}
+
+/**
+ * Technology areas per speaker, keyed by lowercased full name. Sessionize has
+ * no topic field on the Speakers view, so this is curated. Keep labels short
+ * (they render as chips) and reuse TOPICS wording where it fits.
+ */
+export const SPEAKER_TOPICS: Readonly<Record<string, readonly string[]>> = {
+  "mattias melkersen": ["Intune", "Identity & Access"],
+  "somesh pathak": ["Intune"],
+  // Sentinel plus the Microsoft Defender XDR suite.
+  "truls dahlsveen": ["SIEM & XDR"],
+};
+
+/** The speaker's technology areas, or [] when we haven't recorded any. */
+export function speakerTopics(name: string): readonly string[] {
+  return SPEAKER_TOPICS[name.trim().toLowerCase()] ?? [];
 }
 
 /** True when a speaker should get the Microsoft MVP badge. */

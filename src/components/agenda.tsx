@@ -112,6 +112,30 @@ function RailNode({ item }: { item: AgendaItem }) {
   );
 }
 
+/**
+ * The technology areas a session covers: the union of its speakers' areas, in
+ * order, deduped so a co-presented talk doesn't repeat a shared area.
+ */
+function sessionTopics(speakers: readonly Speaker[]): string[] {
+  return [...new Set(speakers.flatMap((s) => s.topics ?? []))];
+}
+
+/** Technology-area chips, so the room can scan the day by subject. */
+function TopicChips({ topics }: { topics: readonly string[] }) {
+  return (
+    <p className="mt-2 flex flex-wrap gap-1">
+      {topics.map((topic) => (
+        <span
+          key={topic}
+          className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+        >
+          {topic}
+        </span>
+      ))}
+    </p>
+  );
+}
+
 /** The people presenting, credited under the title with their MVP badge. */
 function SpeakerCredits({ speakers }: { speakers: readonly Speaker[] }) {
   return (
@@ -130,6 +154,9 @@ function SpeakerCredits({ speakers }: { speakers: readonly Speaker[] }) {
 function FullRow({ item }: { item: AgendaItem }) {
   // A real talk outranks the connective tissue around it.
   const isTalk = item.kind === "sessions";
+  // Only talks get topic chips: on the round-table they'd list every area in
+  // the room, which tells the reader nothing.
+  const topics = isTalk ? sessionTopics(item.speakers ?? []) : [];
   return (
     <li className="reveal flex gap-3">
       <RailNode item={item} />
@@ -175,6 +202,7 @@ function FullRow({ item }: { item: AgendaItem }) {
             </p>
           )
         )}
+        {topics.length > 0 && <TopicChips topics={topics} />}
       </div>
     </li>
   );

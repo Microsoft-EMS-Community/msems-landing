@@ -2,6 +2,7 @@ import {
   EVENT,
   speakerCountry,
   speakerLinkedIn,
+  speakerTopics,
   type Speaker,
   type AgendaItem,
   type AgendaKind,
@@ -122,6 +123,7 @@ export async function getSessionizeSpeakers(): Promise<Speaker[]> {
           photo: s.profilePicture || undefined,
           linkedin: speakerLinkedIn(name, linkedin),
           country: speakerCountry(name),
+          topics: speakerTopics(name),
         } satisfies Speaker;
       });
   } catch {
@@ -189,6 +191,7 @@ export async function getSessionizeAgenda(): Promise<AgendaItem[]> {
             name,
             title: full?.tagLine?.trim() || undefined,
             photo: full?.profilePicture || undefined,
+            topics: speakerTopics(name),
           },
         ];
       });
