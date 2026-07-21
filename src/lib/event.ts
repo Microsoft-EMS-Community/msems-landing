@@ -570,6 +570,8 @@ export interface Hotel {
   readonly roomPhoto: string;
   /** Short discount label shown as a pink badge, e.g. "10% off". Omit if none. */
   readonly discountLabel?: string;
+  /** Booking code that unlocks the discount, shown on the card. Omit if none. */
+  readonly discountCode?: string;
   /** Neutral info badge, e.g. "Share a room" or "Closest to the social". */
   readonly badge?: string;
 }
@@ -604,6 +606,8 @@ export const HOTELS: readonly Hotel[] = [
     photo: "/hotels/go-hotel-saga/outside.webp",
     roomPhoto: "/hotels/go-hotel-saga/room.avif",
     badge: "Best value",
+    discountLabel: "10% off",
+    discountCode: "MS-CommunityEvent",
   },
   {
     name: "CABINN Copenhagen",

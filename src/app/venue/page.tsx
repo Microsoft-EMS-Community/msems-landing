@@ -159,9 +159,12 @@ export default function VenuePage() {
               <span className="font-medium text-foreground">
                 Discount codes:
               </span>{" "}
-              we&apos;ve talked with a few hotels. So far we&apos;re hearing
-              around 10% off or breakfast included. We&apos;ll post any codes
-              here, so book whenever suits you, no need to wait.
+              Go Hotel Saga is{" "}
+              <code className="rounded bg-brand-pink/15 px-1.5 py-0.5 font-mono text-xs font-semibold text-foreground">
+                MS-CommunityEvent
+              </code>{" "}
+              for 10% off. Yes DevFender, we detected all three requests. Alert
+              closed. More land here as hotels confirm.
             </p>
           </div>
           <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground">
@@ -221,6 +224,17 @@ export default function VenuePage() {
                     </span>
                     <span className="text-muted-foreground"> per night</span>
                   </p>
+                  {hotel.discountCode && (
+                    <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                      <BadgePercent className="size-4 shrink-0 text-brand-pink" />
+                      <span>
+                        Code{" "}
+                        <code className="rounded bg-brand-pink/15 px-1.5 py-0.5 font-mono text-xs font-semibold text-foreground">
+                          {hotel.discountCode}
+                        </code>
+                      </span>
+                    </p>
+                  )}
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                     <a
                       href={hotel.bookingUrl}
