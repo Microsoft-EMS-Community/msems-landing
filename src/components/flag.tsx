@@ -47,6 +47,16 @@ export function Flag({ country }: { country: string }) {
           <rect y="4.45" width="11.11" height="2.22" fill="#fff" />
         </svg>
       );
+    // Swiss cross, centered. The flag is square; drawn into the 28x20 box like
+    // the others, the arms stay symmetric enough at flag size.
+    case "Switzerland":
+      return (
+        <svg viewBox="0 0 28 20" preserveAspectRatio="none" className={CLS} role="img" aria-label="Switzerland">
+          <rect width="28" height="20" fill="#d52b1e" />
+          <rect x="11.5" y="4" width="5" height="12" fill="#fff" />
+          <rect x="8" y="7.5" width="12" height="5" fill="#fff" />
+        </svg>
+      );
     case "United Kingdom":
       return (
         <svg viewBox="0 0 60 30" preserveAspectRatio="none" className={CLS} role="img" aria-label="United Kingdom">

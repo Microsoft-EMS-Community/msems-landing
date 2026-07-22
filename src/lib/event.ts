@@ -325,6 +325,8 @@ export const SPEAKER_COUNTRY: Readonly<Record<string, string>> = {
   "mattias melkersen": "Denmark",
   "somesh pathak": "Netherlands",
   "truls dahlsveen": "Norway",
+  "albin klinaku": "Switzerland",
+  "tristan remkes": "Netherlands",
 };
 
 /** The speaker's country, or undefined when we haven't recorded one. */
@@ -342,6 +344,10 @@ export const SPEAKER_TOPICS: Readonly<Record<string, readonly string[]>> = {
   "somesh pathak": ["Intune"],
   // Sentinel plus the Microsoft Defender XDR suite.
   "truls dahlsveen": ["SIEM & XDR"],
+  // Defender for Endpoint, from the field.
+  "albin klinaku": ["Defender"],
+  // Entra Internet Access, part of Global Secure Access.
+  "tristan remkes": ["Identity & Access", "GSA"],
 };
 
 /** The speaker's technology areas, or [] when we haven't recorded any. */
