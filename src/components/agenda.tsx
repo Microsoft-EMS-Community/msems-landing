@@ -66,6 +66,40 @@ function timeRange(item: AgendaItem): string {
     : `${to12h(item.time)} onwards`;
 }
 
+// Rough rendered height per row, so the two columns split by weight instead of
+// a fixed clock time. Talks carry multi-line titles and topic chips, so they
+// dominate; compact break rows barely count. This keeps the afternoon column
+// from looking empty when the day is lopsided (more morning talks than
+// afternoon), and re-balances itself as the Sessionize schedule changes.
+function rowWeight(item: AgendaItem): number {
+  if (isCompact(item)) return 1;
+  if (item.kind === "sessions") return 5;
+  return 3;
+}
+
+/**
+ * Split the ordered agenda into two chronological columns of roughly equal
+ * height: walk the rows accumulating weight and cut where the two sides are
+ * closest to even. Column one stays earlier-in-the-day than column two.
+ */
+function balancedSplit(
+  items: readonly AgendaItem[],
+): [AgendaItem[], AgendaItem[]] {
+  const total = items.reduce((sum, item) => sum + rowWeight(item), 0);
+  let acc = 0;
+  let bestIdx = 1;
+  let bestDiff = Infinity;
+  for (let i = 1; i < items.length; i++) {
+    acc += rowWeight(items[i - 1]);
+    const diff = Math.abs(acc - (total - acc));
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      bestIdx = i;
+    }
+  }
+  return [items.slice(0, bestIdx), items.slice(bestIdx)];
+}
+
 /** Slim row for changeovers and short breaks — a dot on the rail + a one-liner. */
 function CompactRow({ item }: { item: AgendaItem }) {
   return (
@@ -237,9 +271,9 @@ export async function Agenda() {
   const items: readonly AgendaItem[] =
     live.length > 0 ? (evening ? [...live, evening] : live) : AGENDA;
 
-  // Split the day into two balanced columns: morning closes with lunch.
-  const morning = items.filter((i) => i.time <= "12:25");
-  const afternoon = items.filter((i) => i.time > "12:25");
+  // Split the day into two columns of roughly equal height, rather than at a
+  // fixed time, so neither column looks empty when the schedule is lopsided.
+  const [morning, afternoon] = balancedSplit(items);
 
   return (
     <section

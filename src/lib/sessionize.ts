@@ -155,7 +155,9 @@ export async function getSessionizeAgenda(): Promise<AgendaItem[]> {
 
     // Keep only scheduled rows (have a start time) and order by it. The
     // timestamp is wall-clock for the event, so read HH:MM straight from the
-    // string rather than converting time zones.
+    // string rather than converting time zones. Empty grid slots keep
+    // Sessionize's default "Session N" title (e.g. after a talk is withdrawn)
+    // and are left in on purpose: they auto-fill once a speaker is assigned.
     const scheduled = sessions
       .filter((s): s is ScheduleSession & { startsAt: string; title: string } =>
         typeof s.startsAt === "string" &&
