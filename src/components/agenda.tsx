@@ -120,8 +120,12 @@ function RailNode({ item }: { item: AgendaItem }) {
   const portrait = item.speakers?.find((s) => s.photo);
 
   if (portrait?.photo) {
+    // self-start: the row is a flex container (default align-items: stretch),
+    // so without it this ring stretches to the card's full height and reads as
+    // a long pill, making tall cards look like longer sessions. Pinned to the
+    // top as a fixed circle, it matches the icon nodes.
     return (
-      <span className="brand-gradient-bg relative z-10 mt-0.5 shrink-0 rounded-full p-[2px]">
+      <span className="brand-gradient-bg relative z-10 mt-0.5 shrink-0 self-start rounded-full p-[2px]">
         <Image
           src={portrait.photo}
           alt=""
@@ -248,8 +252,9 @@ function Column({ label, items }: { label: string; items: AgendaItem[] }) {
       <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-pink/80">
         {label}
       </h3>
-      {/* Faint vertical rail running through the icon nodes (left gutter). */}
-      <ol className="relative space-y-2 before:absolute before:bottom-3 before:left-[17px] before:top-3 before:w-px before:bg-white/10">
+      {/* Brand-gradient spine running through the nodes (left gutter). One
+          consistent line, so it no longer depends on each avatar stretching. */}
+      <ol className="relative space-y-2 before:absolute before:bottom-3 before:left-[17px] before:top-3 before:w-0.5 before:rounded-full before:bg-gradient-to-b before:from-brand-pink/70 before:via-brand-purple/70 before:to-brand-teal/70">
         {items.map((item) =>
           isCompact(item) ? (
             <CompactRow key={`${item.time}-${item.title}`} item={item} />
