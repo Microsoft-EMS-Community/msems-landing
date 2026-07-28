@@ -242,7 +242,7 @@ export const AGENDA: readonly AgendaItem[] = [
     time: "16:35",
     endTime: "17:00",
     title: "Networking",
-    description: "Wind down with drinks and good conversation to close the day.",
+    description: "Wind down with good conversation to close the day.",
     kind: "social",
   },
   {
@@ -348,6 +348,8 @@ export const SPEAKER_TOPICS: Readonly<Record<string, readonly string[]>> = {
   "albin klinaku": ["Defender"],
   // Entra Internet Access, part of Global Secure Access.
   "tristan remkes": ["Identity & Access", "GSA"],
+  // Guest/B2B risk in Entra tenants.
+  "victor nazmi": ["Identity & Access"],
 };
 
 /** The speaker's technology areas, or [] when we haven't recorded any. */
