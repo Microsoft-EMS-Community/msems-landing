@@ -120,12 +120,12 @@ function RailNode({ item }: { item: AgendaItem }) {
   const portrait = item.speakers?.find((s) => s.photo);
 
   if (portrait?.photo) {
-    // self-start: the row is a flex container (default align-items: stretch),
-    // so without it this ring stretches to the card's full height and reads as
-    // a long pill, making tall cards look like longer sessions. Pinned to the
-    // top as a fixed circle, it matches the icon nodes.
+    // Fixed-height pill: the gradient trails below the photo, but every
+    // speaker node is the SAME height (h-24, under the shortest possible
+    // card). Letting it stretch to card height made long titles read as
+    // longer sessions.
     return (
-      <span className="brand-gradient-bg relative z-10 mt-0.5 shrink-0 self-start rounded-full p-[2px]">
+      <span className="brand-gradient-bg relative z-10 mt-0.5 flex h-24 w-9 shrink-0 justify-center self-start rounded-full p-[2px]">
         <Image
           src={portrait.photo}
           alt=""
