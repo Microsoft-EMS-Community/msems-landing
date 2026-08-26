@@ -23,13 +23,13 @@ export function Pricing() {
           Tickets
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          A not-for-profit event with {PRICING.totalSeats} seats, priced only to
-          cover the day, never to make money. Early birds get the best rate, so
-          grab a seat soon.
+          A not-for-profit event capped at {PRICING.totalSeats} seats, priced
+          only to cover the day, never to make money. One ticket, one price, and
+          only {PRICING.seatsLeft} seats left, so grab yours now.
         </p>
       </div>
 
-      <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
+      <div className="mx-auto mt-12 grid max-w-md gap-5">
         {PRICING.tiers.map((tier) => (
           <div
             key={tier.id}
@@ -53,7 +53,7 @@ export function Pricing() {
                   variant="secondary"
                   className="border border-brand-pink/30 bg-brand-pink/10 text-xs font-medium text-brand-pink"
                 >
-                  {tier.badge}
+                  Only {PRICING.seatsLeft} left
                 </Badge>
               )}
             </div>

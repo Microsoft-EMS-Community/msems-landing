@@ -10,14 +10,12 @@ import {
 import Image from "next/image";
 import { MvpBadge } from "@/components/mvp-badge";
 import {
-  AGENDA,
-  AGENDA_NOTE,
   isMvpSpeaker,
   type AgendaItem,
   type AgendaKind,
   type Speaker,
 } from "@/lib/event";
-import { getSessionizeAgenda } from "@/lib/sessionize";
+import { getAgenda } from "@/lib/agenda";
 
 /** "08:30" -> "8:30 AM", "17:00" -> "5 PM" (drops :00 on whole hours). */
 function to12h(time: string): string {
@@ -268,13 +266,9 @@ function Column({ label, items }: { label: string; items: AgendaItem[] }) {
 }
 
 export async function Agenda() {
-  // Sessionize (the published grid) is the source of truth once a schedule
-  // exists. Append the site-only optional evening social. Until the grid is
-  // published the curated AGENDA is the fallback.
-  const live = await getSessionizeAgenda();
-  const evening = AGENDA.find((a) => a.optional);
-  const items: readonly AgendaItem[] =
-    live.length > 0 ? (evening ? [...live, evening] : live) : AGENDA;
+  // The curated AGENDA is the source of truth; only speaker photos and
+  // taglines come from Sessionize.
+  const items = await getAgenda();
 
   // Split the day into two columns of roughly equal height, rather than at a
   // fixed time, so neither column looks empty when the schedule is lopsided.
@@ -292,9 +286,6 @@ export async function Agenda() {
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           Six community sessions through the day, our CloudHour round-table and
           speaker AMA, then networking and drinks to round it off.
-        </p>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground/80">
-          {AGENDA_NOTE}
         </p>
       </div>
 

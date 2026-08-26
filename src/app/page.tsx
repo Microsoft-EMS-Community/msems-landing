@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { AuroraBackground } from "@/components/aurora-background";
-import { FlyingBird } from "@/components/flying-bird";
 import { HeroPhotoBackdrop } from "@/components/hero-photo-backdrop";
 import { CountUp } from "@/components/count-up";
 import { Agenda } from "@/components/agenda";
@@ -61,7 +60,7 @@ const FACTS = [
   {
     icon: Ticket,
     label: "Fee",
-    value: `From ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}`,
+    value: `${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} all in`,
   },
 ] as const;
 
@@ -119,7 +118,6 @@ export default async function Home() {
       <section className="relative overflow-hidden">
         <HeroPhotoBackdrop />
         <AuroraBackground />
-        <FlyingBird />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
@@ -201,13 +199,13 @@ export default async function Home() {
 
                 <div id="signup-top" className="mt-7 scroll-mt-24 rounded-2xl">
                   <p className="mb-3 text-balance text-base font-semibold text-foreground">
-                    Tickets are on sale, seats are limited
+                    Tickets are on sale, only {PRICING.seatsLeft} left
                   </p>
                   <TicketButton className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90" />
                   <p className="mt-3 flex flex-wrap items-center justify-center gap-x-1.5 text-sm text-muted-foreground">
                     <span>
-                      From {PRICING.currency}
-                      {allInPrice(PRICING.tiers[0].price)} · or
+                      {PRICING.currency}
+                      {allInPrice(PRICING.tiers[0].price)} all in · or
                     </span>
                     <a
                       href={EVENT.discordInvite}

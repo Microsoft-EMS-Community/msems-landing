@@ -32,7 +32,7 @@ A pre-commit hook runs `eslint --max-warnings=0`, so fix every warning.
 
 - `src/lib/event.ts` — single source of truth: event details, pricing, agenda
   (fallback), FAQs, topics, team.
-- `src/lib/sessionize.ts` — agenda + speakers from Sessionize once published.
+- `src/lib/sessionize.ts` — speaker profiles from Sessionize (the agenda itself is hand-maintained in `event.ts`).
 - `src/lib/share.ts` + the `*-card` / `*-cover` routes — `next/og` share and
   banner image generators.
 - Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`,

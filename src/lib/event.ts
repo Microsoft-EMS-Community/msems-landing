@@ -140,8 +140,12 @@ export interface AgendaItem {
   readonly optional?: boolean;
 }
 
-export const AGENDA_NOTE = "The sequence of sessions is not final.";
-
+/**
+ * The final schedule. Hand-maintained now that the lineup is locked, so the
+ * site (and the stage timer on /stage) never depend on Sessionize being up on
+ * the day. Speaker photos and taglines are still joined in from Sessionize's
+ * Speakers view by name (see `getAgenda` in lib/agenda.ts).
+ */
 export const AGENDA: readonly AgendaItem[] = [
   {
     time: "08:30",
@@ -153,28 +157,24 @@ export const AGENDA: readonly AgendaItem[] = [
   {
     time: "09:00",
     endTime: "09:25",
-    title: "Welcome & kickoff",
+    title: "Introduction",
     description: "A quick hello from the community and how the day will run.",
     kind: "welcome",
   },
   {
     time: "09:25",
     endTime: "10:15",
-    title: "Session 1",
+    title:
+      "Microsoft EPM - a practical guide to remove your local admins permission",
     kind: "sessions",
-  },
-  {
-    time: "10:15",
-    endTime: "10:20",
-    title: "Changeover",
-    description: "Quick room swap between sessions.",
-    kind: "changeover",
+    speakers: [{ name: "Mattias Melkersen" }],
   },
   {
     time: "10:20",
     endTime: "11:10",
-    title: "Session 2",
+    title: "Why your detections suck and what to do about it",
     kind: "sessions",
+    speakers: [{ name: "Truls Dahlsveen" }],
   },
   {
     time: "11:10",
@@ -186,8 +186,10 @@ export const AGENDA: readonly AgendaItem[] = [
   {
     time: "11:35",
     endTime: "12:25",
-    title: "Session 3",
+    title:
+      "Apple Device Administration Essentials: A Beginner's Guide/Best Practices Deploying Apple Devices",
     kind: "sessions",
+    speakers: [{ name: "Somesh Pathak" }],
   },
   {
     time: "12:25",
@@ -199,50 +201,38 @@ export const AGENDA: readonly AgendaItem[] = [
   {
     time: "13:25",
     endTime: "14:15",
-    title: "Session 4",
+    title: "MDE Common Mistakes from the field",
     kind: "sessions",
+    speakers: [{ name: "Albin Klinaku" }],
   },
   {
     time: "14:15",
-    endTime: "14:20",
-    title: "Changeover",
-    description: "Quick room swap between sessions.",
-    kind: "changeover",
-  },
-  {
-    time: "14:20",
-    endTime: "15:10",
-    title: "Session 5",
+    endTime: "15:05",
+    title: "The hidden risk with the guest in your tenant",
     kind: "sessions",
+    speakers: [{ name: "Victor Nazmi" }],
   },
   {
-    time: "15:10",
-    endTime: "15:40",
+    time: "15:05",
+    endTime: "15:50",
     title: "Coffee break & networking",
     description: "Coffee and connections before the final stretch.",
     kind: "break",
   },
   {
-    time: "15:40",
-    endTime: "16:25",
-    title: "CloudHour (Session 6)",
+    time: "15:50",
+    endTime: "16:35",
+    title: "CloudHour & closing remarks",
     description:
       "Our round-the-table discussion from Discord, live and in person. An open-floor AMA with the day's speakers and the community. Bring your hardest questions.",
     kind: "discussion",
     featured: true,
   },
   {
-    time: "16:25",
-    endTime: "16:35",
-    title: "Closing remarks",
-    description: "Closing notes and what's next for the community.",
-    kind: "closing",
-  },
-  {
     time: "16:35",
     endTime: "17:00",
     title: "Networking",
-    description: "Wind down with good conversation to close the day.",
+    description: "Wind down with drinks and good conversation to close the day.",
     kind: "social",
   },
   {
@@ -384,7 +374,10 @@ export const PRICING = {
   currency: "€",
   pricesFinal: true,
   note: "Indicative pricing, not final yet. Exact prices are confirmed when registration opens.",
-  totalSeats: 70,
+  totalSeats: 30,
+  // Seats still for sale. Bump this by hand as tickets sell; Weeztix holds
+  // the real number, so keep it honest.
+  seatsLeft: 2,
   // Fees added by the ticket shop at checkout, on top of the ticket price.
   serviceFeePerTicket: 1,
   transactionFeeRate: 0.035,
@@ -402,27 +395,17 @@ export const PRICING = {
     // The venue/plan isn't locked yet; UI shows a "to be confirmed" note.
     confirmed: false,
   },
+  // Early bird is the only ticket: the event is capped at `totalSeats`, so
+  // there is no standard tier anymore.
   tiers: [
     {
       id: "early-bird",
       name: "Early bird",
       price: 35,
-      seatsLabel: "Limited seats",
-      // Deliberately vague: a hard count goes stale the moment tickets sell,
-      // and Weeztix holds the real number.
-      badge: "Limited",
+      // The UI renders "Only N left" from `seatsLeft`; `badge` just turns it on.
+      seatsLabel: "Last seats",
+      badge: "Last seats",
       featured: true,
-      features: [
-        "Full day of sessions",
-        "CloudHour round-table & speaker AMA",
-        "Lunch, drinks & beverages",
-      ],
-    },
-    {
-      id: "standard",
-      name: "Standard",
-      price: 45,
-      seatsLabel: "Remaining seats",
       features: [
         "Full day of sessions",
         "CloudHour round-table & speaker AMA",
@@ -681,12 +664,11 @@ export const FAQS: readonly FaqItem[] = [
   },
   {
     question: "How much does it cost?",
-    answer: `It's a not-for-profit event, priced to cover costs only. Early bird is ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} and standard is ${PRICING.currency}${allInPrice(PRICING.tiers[1].price)}, all in (incl. VAT and booking fees), both covering the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.`,
+    answer: `It's a not-for-profit event, priced to cover costs only. A ticket is ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}, all in (incl. VAT and booking fees), covering the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.`,
   },
   {
-    question: "Why is there an early bird and standard price?",
-    answer:
-      "The event is run at cost, so the price only ever covers the day. Microsoft kindly provides the venue, but we pay for catering, drinks and the rest, so early bird is a small thank-you for booking early that helps us pay those costs up front. Standard is the regular price once the early seats are gone. Either way it goes straight into running the event, never profit.",
+    question: "Why is it called an early bird ticket?",
+    answer: `The event is run at cost, so the price only ever covers the day. Microsoft kindly provides the venue, but we pay for catering, drinks and the rest, so early bird was a small thank-you for booking early that helped us pay those costs up front. We've since capped the day at ${PRICING.totalSeats} seats, so the early bird price is the only price: there is no standard tier, and only ${PRICING.seatsLeft} seats are left. Every cent goes straight into running the event, never profit.`,
   },
   {
     question: "Do you pay speakers?",

@@ -27,7 +27,7 @@ Why it's worth it:
 - A not-for-profit community event, so the cost stays low.
 
 Costs:
-- Ticket: early bird from ${earlyBird}, covering the full day, lunch and refreshments.
+- Ticket: ${earlyBird} all in, covering the full day, lunch and refreshments.
 - Travel: flights to Copenhagen, local transport, and a hotel night if needed.
 
 I'll write up the key takeaways and share them with the team afterwards.
@@ -40,7 +40,7 @@ Thanks for considering it,
 const FACTS = [
   { icon: CalendarDays, label: EVENT.dateLabel },
   { icon: MapPin, label: `${EVENT.venue}, ${EVENT.venueArea}` },
-  { icon: Ticket, label: `Early bird from ${earlyBird}` },
+  { icon: Ticket, label: `Ticket ${earlyBird} all in` },
 ];
 
 export default function ConvincePage() {

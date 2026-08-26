@@ -18,7 +18,9 @@ export function SiteHeader() {
         <Ticket className="size-3.5 shrink-0 sm:size-4" />
         Early bird tickets, only {PRICING.currency}
         {allInPrice(PRICING.tiers[0].price)}
-        <span className="hidden opacity-80 sm:inline">· On sale now</span>
+        <span className="hidden opacity-80 sm:inline">
+          · Only {PRICING.seatsLeft} left
+        </span>
       </Link>
 
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
