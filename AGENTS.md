@@ -11,10 +11,13 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
 
 ## Where things live (edit data/copy here first)
 - `src/lib/event.ts` — single source of truth: `EVENT`, `PRICING` (+ `allInPrice()`),
-  `AGENDA` (fallback), `FAQS`, `HIGHLIGHTS`, `TOPICS`, `TEAM`, `COMMUNITY`.
-- `src/lib/sessionize.ts` — agenda from the Sessionize **GridSmart** view, speakers
-  from **Speakers** (event id `3zmvdvh1`). Sessionize is the source of truth for the
-  agenda once published; `AGENDA` is the fallback.
+  `AGENDA` (the final schedule), `FAQS`, `HIGHLIGHTS`, `TOPICS`, `TEAM`, `COMMUNITY`.
+- `src/lib/sessionize.ts` — speakers from the Sessionize **Speakers** view (event id
+  `3zmvdvh1`). The agenda is hand-maintained in `AGENDA`; `src/lib/agenda.ts`
+  (`getAgenda`) joins speaker photos/taglines in by name and degrades to
+  name-only credits if Sessionize is down.
+- `/stage` — unlinked, noindex run-of-show timer for the team (`src/lib/run-of-show.ts`
+  + `src/components/stage/*`). State lives in that browser's localStorage only.
 - `src/lib/share.ts` + `src/lib/og-font.ts` — share posts and `next/og` card
   generators (`/share-card`, `/speaker-card`, `/announce-card`, `/attending-card`,
   `/cfs-card`, `/linkedin-cover` — 1774x444 LinkedIn group banner,
