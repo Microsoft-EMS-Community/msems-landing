@@ -28,7 +28,7 @@ export const EVENT = {
   ticketsUrl: "https://shop.weeztix.com/51630dc4-8c23-11ed-aa54-6a57c78572ab",
   githubUrl: "https://github.com/Microsoft-EMS-Community",
   contactEmail: "hello@msems.community",
-  status: "Tickets on sale",
+  status: "Sold out",
   // Call for Speakers (Sessionize). Set cfsOpen to false once submissions close.
   cfsUrl: "https://sessionize.com/microsoft-ems-community-summit/",
   cfsOpen: false,
@@ -376,8 +376,8 @@ export const PRICING = {
   note: "Indicative pricing, not final yet. Exact prices are confirmed when registration opens.",
   totalSeats: 30,
   // Seats still for sale. Bump this by hand as tickets sell; Weeztix holds
-  // the real number, so keep it honest.
-  seatsLeft: 2,
+  // the real number, so keep it honest. 0 flips the whole site to sold out.
+  seatsLeft: 0 as number,
   // Fees added by the ticket shop at checkout, on top of the ticket price.
   serviceFeePerTicket: 1,
   transactionFeeRate: 0.035,
@@ -414,6 +414,11 @@ export const PRICING = {
     },
   ] satisfies readonly PricingTier[],
 } as const;
+
+/** Every seat is taken: CTAs become "Sold out" and copy stops selling. */
+export function isSoldOut(): boolean {
+  return PRICING.seatsLeft <= 0;
+}
 
 /** The real all-in price a buyer pays: ticket + service fee + transaction %. */
 export function allInPrice(price: number): string {
@@ -664,11 +669,13 @@ export const FAQS: readonly FaqItem[] = [
   },
   {
     question: "How much does it cost?",
-    answer: `It's a not-for-profit event, priced to cover costs only. A ticket is ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}, all in (incl. VAT and booking fees), covering the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.`,
+    answer: isSoldOut()
+      ? `It's a not-for-profit event, priced to cover costs only. A ticket was ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}, all in (incl. VAT and booking fees), covering the full day, sessions, lunch and drinks. All ${PRICING.totalSeats} seats are now taken. Join the Discord and we'll shout if one frees up.`
+      : `It's a not-for-profit event, priced to cover costs only. A ticket is ${PRICING.currency}${allInPrice(PRICING.tiers[0].price)}, all in (incl. VAT and booking fees), covering the full day, sessions, lunch and drinks. An optional evening social can be added on. Grab yours in the Tickets section.`,
   },
   {
     question: "Why is it called an early bird ticket?",
-    answer: `The event is run at cost, so the price only ever covers the day. Microsoft kindly provides the venue, but we pay for catering, drinks and the rest, so early bird was a small thank-you for booking early that helped us pay those costs up front. We've since capped the day at ${PRICING.totalSeats} seats, so the early bird price is the only price: there is no standard tier, and only ${PRICING.seatsLeft} seats are left. Every cent goes straight into running the event, never profit.`,
+    answer: `The event is run at cost, so the price only ever covers the day. Microsoft kindly provides the venue, but we pay for catering, drinks and the rest, so early bird was a small thank-you for booking early that helped us pay those costs up front. We've since capped the day at ${PRICING.totalSeats} seats, so the early bird price is the only price: there is no standard tier${isSoldOut() ? ", and every seat is now taken" : `, and only ${PRICING.seatsLeft} seats are left`}. Every cent goes straight into running the event, never profit.`,
   },
   {
     question: "Do you pay speakers?",

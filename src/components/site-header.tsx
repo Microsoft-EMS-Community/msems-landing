@@ -5,23 +5,38 @@ import { TicketButton } from "@/components/ticket-button";
 import { MobileNav } from "@/components/mobile-nav";
 import { GamesLauncher, GamepadGradient } from "@/components/games-provider";
 import { NAV_LINKS } from "@/lib/nav";
-import { PRICING, allInPrice } from "@/lib/event";
+import { EVENT, PRICING, allInPrice, isSoldOut } from "@/lib/event";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-background/70 backdrop-blur-xl">
       {/* Announcement strip — part of the sticky header, so it follows. */}
-      <Link
-        href="/#tickets"
-        className="flex items-center justify-center gap-2 brand-gradient-bg px-4 py-1.5 text-center text-xs font-medium text-white transition-opacity hover:opacity-90 sm:text-sm"
-      >
-        <Ticket className="size-3.5 shrink-0 sm:size-4" />
-        Early bird tickets, only {PRICING.currency}
-        {allInPrice(PRICING.tiers[0].price)}
-        <span className="hidden opacity-80 sm:inline">
-          · Only {PRICING.seatsLeft} left
-        </span>
-      </Link>
+      {isSoldOut() ? (
+        <a
+          href={EVENT.discordInvite}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 brand-gradient-bg px-4 py-1.5 text-center text-xs font-medium text-white transition-opacity hover:opacity-90 sm:text-sm"
+        >
+          <Ticket className="size-3.5 shrink-0 sm:size-4" />
+          Sold out, thank you!
+          <span className="hidden opacity-80 sm:inline">
+            · Join the Discord in case a seat frees up
+          </span>
+        </a>
+      ) : (
+        <Link
+          href="/#tickets"
+          className="flex items-center justify-center gap-2 brand-gradient-bg px-4 py-1.5 text-center text-xs font-medium text-white transition-opacity hover:opacity-90 sm:text-sm"
+        >
+          <Ticket className="size-3.5 shrink-0 sm:size-4" />
+          Early bird tickets, only {PRICING.currency}
+          {allInPrice(PRICING.tiers[0].price)}
+          <span className="hidden opacity-80 sm:inline">
+            · Only {PRICING.seatsLeft} left
+          </span>
+        </Link>
+      )}
 
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5">

@@ -49,6 +49,7 @@ import {
   FAQS,
   PRICING,
   allInPrice,
+  isSoldOut,
   SITE_URL,
 } from "@/lib/event";
 import { getDiscordStats, formatCount } from "@/lib/discord";
@@ -60,7 +61,9 @@ const FACTS = [
   {
     icon: Ticket,
     label: "Fee",
-    value: `${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} all in`,
+    value: isSoldOut()
+      ? "Sold out"
+      : `${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} all in`,
   },
 ] as const;
 
@@ -101,7 +104,9 @@ export default async function Home() {
       "@type": "Offer",
       price: allInPrice(PRICING.tiers[0].price),
       priceCurrency: "EUR",
-      availability: "https://schema.org/PreOrder",
+      availability: isSoldOut()
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/InStock",
       url: SITE_URL,
     },
   };
@@ -199,13 +204,16 @@ export default async function Home() {
 
                 <div id="signup-top" className="mt-7 scroll-mt-24 rounded-2xl">
                   <p className="mb-3 text-balance text-base font-semibold text-foreground">
-                    Tickets are on sale, only {PRICING.seatsLeft} left
+                    {isSoldOut()
+                      ? `Sold out: all ${PRICING.totalSeats} seats are taken`
+                      : `Tickets are on sale, only ${PRICING.seatsLeft} left`}
                   </p>
                   <TicketButton className="sheen brand-gradient-bg w-full border-0 text-base text-white hover:opacity-90" />
                   <p className="mt-3 flex flex-wrap items-center justify-center gap-x-1.5 text-sm text-muted-foreground">
                     <span>
-                      {PRICING.currency}
-                      {allInPrice(PRICING.tiers[0].price)} all in · or
+                      {isSoldOut()
+                        ? "Hear first if a seat frees up:"
+                        : `${PRICING.currency}${allInPrice(PRICING.tiers[0].price)} all in · or`}
                     </span>
                     <a
                       href={EVENT.discordInvite}
@@ -582,10 +590,12 @@ export default async function Home() {
             style={{ animationDelay: "-6s" }}
           />
           <h2 className="relative mx-auto max-w-2xl text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-            Get your ticket
+            {isSoldOut() ? "Sold out, thank you!" : "Get your ticket"}
           </h2>
           <p className="relative mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-            {EVENT.feeNote} Seats are limited, so grab yours while they last.
+            {isSoldOut()
+              ? `All ${PRICING.totalSeats} seats are taken. Join the Discord below and we'll shout the moment one frees up.`
+              : `${EVENT.feeNote} Seats are limited, so grab yours while they last.`}
           </p>
           <div className="relative mx-auto mt-8 flex justify-center">
             <TicketButton className="sheen brand-gradient-bg border-0 px-8 text-base text-white hover:opacity-90" />

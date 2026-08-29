@@ -2,10 +2,11 @@ import { Check, HandHeart, Plus, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TicketButton } from "@/components/ticket-button";
 import { TicketBreakdown } from "@/components/ticket-breakdown";
-import { PRICING, allInPrice } from "@/lib/event";
+import { EVENT, PRICING, allInPrice, isSoldOut } from "@/lib/event";
 
 export function Pricing() {
   const { currency, socialAddon } = PRICING;
+  const soldOut = isSoldOut();
 
   return (
     <section
@@ -23,9 +24,27 @@ export function Pricing() {
           Tickets
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          A not-for-profit event capped at {PRICING.totalSeats} seats, priced
-          only to cover the day, never to make money. One ticket, one price, and
-          only {PRICING.seatsLeft} seats left, so grab yours now.
+          {soldOut ? (
+            <>
+              All {PRICING.totalSeats} seats are taken. Thank you for the
+              incredible support! If a seat frees up we&apos;ll say so first in{" "}
+              <a
+                href={EVENT.discordInvite}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground underline underline-offset-4 hover:text-brand-pink"
+              >
+                the Discord
+              </a>
+              .
+            </>
+          ) : (
+            <>
+              A not-for-profit event capped at {PRICING.totalSeats} seats,
+              priced only to cover the day, never to make money. One ticket, one
+              price, and only {PRICING.seatsLeft} seats left, so grab yours now.
+            </>
+          )}
         </p>
       </div>
 
@@ -53,7 +72,7 @@ export function Pricing() {
                   variant="secondary"
                   className="border border-brand-pink/30 bg-brand-pink/10 text-xs font-medium text-brand-pink"
                 >
-                  Only {PRICING.seatsLeft} left
+                  {soldOut ? "Sold out" : `Only ${PRICING.seatsLeft} left`}
                 </Badge>
               )}
             </div>
@@ -118,6 +137,7 @@ export function Pricing() {
         .
       </p>
 
+      {!soldOut && (
       <p className="mx-auto mt-6 max-w-md text-balance text-center text-sm text-muted-foreground">
         Need sign-off?{" "}
         <a
@@ -128,6 +148,7 @@ export function Pricing() {
           <span className="whitespace-nowrap">ready-made letter →</span>
         </a>
       </p>
+      )}
     </section>
   );
 }

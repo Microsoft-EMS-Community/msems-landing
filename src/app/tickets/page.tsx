@@ -5,12 +5,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TicketWidget } from "@/components/ticket-widget";
 import { Button } from "@/components/ui/button";
-import { EVENT, PRICING, allInPrice } from "@/lib/event";
+import { EVENT, PRICING, allInPrice, isSoldOut } from "@/lib/event";
 
 export const metadata: Metadata = {
   title: "Tickets | Microsoft EMS Community Summit",
-  description:
-    "Get your ticket for the Microsoft EMS Community Summit, Friday September 4th 2026, near Copenhagen.",
+  description: isSoldOut()
+    ? "The Microsoft EMS Community Summit, Friday September 4th 2026 near Copenhagen, is sold out."
+    : "Get your ticket for the Microsoft EMS Community Summit, Friday September 4th 2026, near Copenhagen.",
 };
 
 export default function TicketsPage() {
@@ -21,13 +22,40 @@ export default function TicketsPage() {
       <section className="mx-auto max-w-2xl px-4 pb-20 pt-16 sm:px-6">
         <div className="text-center">
           <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            Get your <span className="brand-gradient-text">ticket</span>
+            {isSoldOut() ? (
+              <>
+                <span className="brand-gradient-text">Sold out</span>, thank
+                you!
+              </>
+            ) : (
+              <>
+                Get your <span className="brand-gradient-text">ticket</span>
+              </>
+            )}
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
             {EVENT.dateLabel} · {EVENT.venue}, {EVENT.venueArea}.{" "}
-            {PRICING.currency}
-            {allInPrice(PRICING.tiers[0].price)} all in. Only{" "}
-            {PRICING.seatsLeft} seats left.
+            {isSoldOut() ? (
+              <>
+                All {PRICING.totalSeats} seats are taken. If one frees up
+                we&apos;ll say so first in{" "}
+                <a
+                  href={EVENT.discordInvite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-foreground underline underline-offset-4 hover:text-brand-pink"
+                >
+                  the Discord
+                </a>
+                .
+              </>
+            ) : (
+              <>
+                {PRICING.currency}
+                {allInPrice(PRICING.tiers[0].price)} all in. Only{" "}
+                {PRICING.seatsLeft} seats left.
+              </>
+            )}
           </p>
         </div>
 

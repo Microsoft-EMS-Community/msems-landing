@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { GamesLauncher } from "@/components/games-provider";
 import { useTickets } from "@/components/tickets-provider";
+import { isSoldOut } from "@/lib/event";
 import { NAV_LINKS } from "@/lib/nav";
 
 export function MobileNav() {
@@ -21,14 +22,16 @@ export function MobileNav() {
 
   return (
     <div className="flex items-center gap-2">
-      <button
-        type="button"
-        onClick={openTickets}
-        aria-label="Get your ticket"
-        className="inline-flex size-10 items-center justify-center rounded-lg brand-gradient-bg text-white transition-opacity hover:opacity-90"
-      >
-        <Ticket className="size-5" />
-      </button>
+      {!isSoldOut() && (
+        <button
+          type="button"
+          onClick={openTickets}
+          aria-label="Get your ticket"
+          className="inline-flex size-10 items-center justify-center rounded-lg brand-gradient-bg text-white transition-opacity hover:opacity-90"
+        >
+          <Ticket className="size-5" />
+        </button>
+      )}
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
@@ -63,16 +66,26 @@ export function MobileNav() {
         </nav>
 
         <div className="mt-2 px-4">
-          <Button
-            onClick={() => {
-              close();
-              openTickets();
-            }}
-            className="w-full brand-gradient-bg border-0 text-white hover:opacity-90"
-          >
-            <Ticket className="size-4" />
-            Get tickets
-          </Button>
+          {isSoldOut() ? (
+            <Button
+              disabled
+              className="w-full brand-gradient-bg border-0 text-white saturate-50 disabled:opacity-100"
+            >
+              <Ticket className="size-4" />
+              Sold out
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                close();
+                openTickets();
+              }}
+              className="w-full brand-gradient-bg border-0 text-white hover:opacity-90"
+            >
+              <Ticket className="size-4" />
+              Get tickets
+            </Button>
+          )}
         </div>
 
         <div className="mt-3 px-4">
