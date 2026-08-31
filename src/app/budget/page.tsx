@@ -152,8 +152,16 @@ export default function BudgetPage() {
                 </div>
               </li>
             ))}
-            <li className="flex items-baseline justify-between gap-4 p-4">
-              <p className="font-semibold">Total in</p>
+            <li className="flex flex-wrap items-baseline justify-between gap-4 p-4">
+              <a
+                href="/bills/weeztix-sales.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-brand-teal underline underline-offset-4 transition-colors hover:text-brand-pink"
+              >
+                See the ticket sales report →
+              </a>
+              <p className="ml-auto font-semibold">Total in</p>
               <p className="text-lg font-bold tabular-nums">
                 {formatEUR(incomeEUR)}{" "}
                 <span className="text-sm font-normal text-muted-foreground">
