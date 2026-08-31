@@ -153,18 +153,8 @@ export default function BudgetPage() {
                 </div>
               </li>
             ))}
-            <li className="flex flex-wrap items-baseline justify-between gap-4 p-4">
-              <span className="flex flex-wrap items-center gap-x-4">
-                <BillLightbox
-                  src="/bills/weeztix-sales.png"
-                  label="See the ticket sales report"
-                />
-                <BillLightbox
-                  src="/bills/weeztix-receipt-sample.png"
-                  label="A sample receipt"
-                />
-              </span>
-              <p className="ml-auto font-semibold">Total in</p>
+            <li className="flex items-baseline justify-between gap-4 p-4">
+              <p className="font-semibold">Total in</p>
               <p className="text-lg font-bold tabular-nums">
                 {formatEUR(incomeEUR)}{" "}
                 <span className="text-sm font-normal text-muted-foreground">
@@ -173,6 +163,16 @@ export default function BudgetPage() {
               </p>
             </li>
           </ul>
+          <p className="mt-1 flex flex-wrap gap-x-4 px-1">
+            <BillLightbox
+              src="/bills/weeztix-sales.png"
+              label="See the ticket sales report"
+            />
+            <BillLightbox
+              src="/bills/weeztix-receipt-sample.png"
+              label="A sample receipt"
+            />
+          </p>
         </section>
 
         {/* Bills */}
