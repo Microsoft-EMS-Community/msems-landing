@@ -7,6 +7,7 @@ import {
   Receipt,
   Wallet,
 } from "lucide-react";
+import { BillLightbox } from "@/components/bill-lightbox";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import {
@@ -153,14 +154,10 @@ export default function BudgetPage() {
               </li>
             ))}
             <li className="flex flex-wrap items-baseline justify-between gap-4 p-4">
-              <a
-                href="/bills/weeztix-sales.png"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium text-brand-teal underline underline-offset-4 transition-colors hover:text-brand-pink"
-              >
-                See the ticket sales report →
-              </a>
+              <BillLightbox
+                src="/bills/weeztix-sales.png"
+                label="See the ticket sales report"
+              />
               <p className="ml-auto font-semibold">Total in</p>
               <p className="text-lg font-bold tabular-nums">
                 {formatEUR(incomeEUR)}{" "}
@@ -194,14 +191,10 @@ export default function BudgetPage() {
                     {line.detail}
                   </p>
                   {line.billUrl && (
-                    <a
-                      href={line.billUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-1.5 inline-block text-sm font-medium text-brand-teal underline underline-offset-4 transition-colors hover:text-brand-pink"
-                    >
-                      See the original bill →
-                    </a>
+                    <BillLightbox
+                      src={line.billUrl}
+                      label="See the original bill"
+                    />
                   )}
                 </div>
                 <div className="text-right">
