@@ -58,9 +58,9 @@ export const BILLS: readonly BillLine[] = [
   },
   {
     vendor: "Boulebar Nørregade",
-    label: "Evening social: pétanque + three-course dinner for 7",
+    label: "Evening social: pétanque + three-course dinner",
     detail:
-      "595 kr per head: pétanque 125 kr + three-course menu 470 kr.",
+      "595 kr per head: pétanque 125 kr + three-course menu 470 kr. 10 are going; this bill covers 7, the other 3 pay the restaurant directly.",
     amountDKK: 4165,
     status: "booked",
     billUrl: "/bills/boulebar-booking.png",
