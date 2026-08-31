@@ -23,7 +23,7 @@ import {
   leftoverEUR,
   type BillStatus,
 } from "@/lib/budget";
-import { EVENT, PRICING } from "@/lib/event";
+import { EVENT } from "@/lib/event";
 
 export const metadata: Metadata = {
   title: "Open books | Microsoft EMS Community Summit",
@@ -228,7 +228,7 @@ export default function BudgetPage() {
             </span>
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Becomes a supermarket snack run for all {PRICING.totalSeats} of us. The receipt gets published here like the rest, so this ends at zero.
+            Goes back into the event. Usage to be decided.
           </p>
         </section>
 
