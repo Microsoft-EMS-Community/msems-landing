@@ -154,10 +154,16 @@ export default function BudgetPage() {
               </li>
             ))}
             <li className="flex flex-wrap items-baseline justify-between gap-4 p-4">
-              <BillLightbox
-                src="/bills/weeztix-sales.png"
-                label="See the ticket sales report"
-              />
+              <span className="flex flex-wrap items-center gap-x-4">
+                <BillLightbox
+                  src="/bills/weeztix-sales.png"
+                  label="See the ticket sales report"
+                />
+                <BillLightbox
+                  src="/bills/weeztix-receipt-sample.png"
+                  label="A sample receipt"
+                />
+              </span>
               <p className="ml-auto font-semibold">Total in</p>
               <p className="text-lg font-bold tabular-nums">
                 {formatEUR(incomeEUR)}{" "}
