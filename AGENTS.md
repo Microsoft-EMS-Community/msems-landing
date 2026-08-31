@@ -23,7 +23,8 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   `/cfs-card`, `/linkedin-cover` — 1774x444 LinkedIn group banner,
   `/cfs-banner` — 1280x320 white Sessionize Call-for-Speakers header).
 - Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`, `/convince`,
-  `/leaderboard`, `/go` (community link shortener; see below).
+  `/leaderboard`, `/budget` (open books: income/bills in `src/lib/budget.ts`, bill
+  scans in `public/bills/`), `/go` (community link shortener; see below).
 
 ## Tickets
 - Weeztix shop embedded as a **plain `<iframe>`** (their injector.js/integrate.js break
