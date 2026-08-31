@@ -193,9 +193,11 @@ export default function BudgetPage() {
                     <StatusChip status={line.status} />
                   </p>
                   <p className="mt-0.5 text-sm">{line.label}</p>
-                  <p className="mt-0.5 text-sm text-muted-foreground">
-                    {line.detail}
-                  </p>
+                  {line.detail && (
+                    <p className="mt-0.5 text-sm text-muted-foreground">
+                      {line.detail}
+                    </p>
+                  )}
                   {line.billUrl && (
                     <BillLightbox
                       src={line.billUrl}

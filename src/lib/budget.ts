@@ -19,7 +19,7 @@ export interface IncomeLine {
 export interface BillLine {
   readonly vendor: string;
   readonly label: string;
-  readonly detail: string;
+  readonly detail?: string;
   readonly amountDKK: number;
   readonly status: BillStatus;
   /** The original bill/booking/invoice, dropped in /public/bills. */
@@ -68,7 +68,6 @@ export const BILLS: readonly BillLine[] = [
   {
     vendor: "Stickers",
     label: "Community stickers for the attendees",
-    detail: "€32. Bought by one of the organizers, reimbursed by us.",
     amountDKK: 238.72,
     status: "booked",
   },
