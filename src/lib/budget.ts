@@ -30,7 +30,7 @@ export const INCOME: readonly IncomeLine[] = [
   {
     label: "28 early bird tickets",
     detail:
-      "€35 each. Booking fees go to the ticket provider, not us.",
+      "€35 each. Booking fees go to the ticket provider.",
     amountEUR: 980,
   },
   {
