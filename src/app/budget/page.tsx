@@ -129,7 +129,7 @@ export default function BudgetPage() {
         <section className="mt-14">
           <h2 className="inline-flex items-center gap-2 text-xl font-bold tracking-tight">
             <Wallet className="size-5 text-brand-teal" />
-            Money in
+            Money in <span className="text-sm font-normal text-muted-foreground">· incl. VAT</span>
           </h2>
           <ul className="mt-4 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03]">
             {INCOME.map((line) => (
@@ -179,7 +179,7 @@ export default function BudgetPage() {
         <section className="mt-10">
           <h2 className="inline-flex items-center gap-2 text-xl font-bold tracking-tight">
             <Receipt className="size-5 text-brand-purple" />
-            The bills
+            The bills <span className="text-sm font-normal text-muted-foreground">· incl. VAT</span>
           </h2>
           <ul className="mt-4 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03]">
             {BILLS.map((line) => (
