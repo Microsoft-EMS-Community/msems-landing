@@ -65,6 +65,13 @@ export const BILLS: readonly BillLine[] = [
     status: "booked",
     billUrl: "/bills/boulebar-booking.png",
   },
+  {
+    vendor: "Stickers",
+    label: "Community stickers for the attendees",
+    detail: "€32. Bought by one of the organizers, reimbursed by us.",
+    amountDKK: 238.72,
+    status: "booked",
+  },
 ] as const;
 
 /** The big zeros that make the rest possible. */
