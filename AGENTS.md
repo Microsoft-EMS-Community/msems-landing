@@ -22,9 +22,52 @@ Copenhagen). Next.js 16 App Router, React 19, Tailwind v4, TypeScript.
   generators (`/share-card`, `/speaker-card`, `/announce-card`, `/attending-card`,
   `/cfs-card`, `/linkedin-cover` — 1774x444 LinkedIn group banner,
   `/cfs-banner` — 1280x320 white Sessionize Call-for-Speakers header).
-- Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/share`, `/convince`,
+- Pages: `/`, `/tickets`, `/policies`, `/venue`, `/speakers`, `/photos`, `/share`, `/convince`,
   `/leaderboard`, `/budget` (open books: income/bills in `src/lib/budget.ts`, bill
   scans in `public/bills/`), `/go` (community link shortener; see below).
+
+## Event photos (`/photos`)
+- 235 photos, committed to the repo, no external storage or paid service:
+  `public/photos/full/*.jpg` (high-quality JPEG, the download) +
+  `public/photos/thumb/*.webp` (800px grid thumbnails). ~256 MB total.
+- Regenerate with `node scripts/build-photos.mjs` (needs the `sharp`
+  devDependency). Source folders are the `SOURCES` array at the top of the
+  script. Idempotent, so dropping new originals into a listed folder and
+  re-running only converts the new ones; `--force` redoes everything.
+- **IDs are sticky.** The manifest (`src/lib/photos.json`) records the original
+  each id came from, so re-runs reuse ids and only mint new ones for unseen
+  originals. That keeps `/photos/full/msems-2026-042.jpg` pointing at the same
+  picture after photos are added, which matters once links are shared. Deleting
+  a photo retires its id rather than recycling it.
+- **iPhone HEICs need a pre-pass**: sharp's bundled libheif fails on Apple's
+  HEIC variant ("bad seek", the item index runs past EOF) while Windows' own
+  codec reads them fine. `pwsh -File scripts/heic-to-png.ps1` decodes them to
+  lossless PNG in `keep/converted`, which is what `SOURCES` points at.
+- `MAX_EDGE` caps a download's long edge at 6000px. Only bites on outliers
+  (one 12240x16320 phone shot: 10 MB uncapped, 1.9 MB capped).
+- The script prints anything it skipped as an unsupported type, so a stray video
+  or raw file never disappears quietly. `keep/New folder (2)` holds a 92 MB
+  `.mp4` that is deliberately not published; the gallery is stills only.
+- Not published: `keep/jpg`, `keep/jpg-2048`, `keep/soft` and `keep/extra` are
+  working copies of PWR shots already in the main set, so listing them in
+  `SOURCES` would publish duplicates. (`keep/jpg-2048` does hold a handful of
+  non-PWR files that are not in the set: `IMG_3183/3198/3205.jpeg`,
+  `image0.jpg`, `20260904_145715_crop.jpg`.)
+- Thumbnails render as plain `<img>`, not `next/image`: they are already
+  pre-sized static files, so optimizing them again would only burn Vercel quota.
+- **Entirely out of search.** The page sets `robots: { index: false, follow:
+  false }` like `/stage`, is kept out of `sitemap.ts`, and the image files carry
+  `X-Robots-Tag: noindex` (`next.config.ts`). It stays linked from the nav and
+  footer, so attendees still find it. `robots.ts` deliberately still allows
+  crawling: a `Disallow` would stop crawlers reading the noindex at all, which
+  is how disallowed URLs end up indexed anyway.
+- Photos are in capture order (`taken` in the manifest), one timeline across all
+  three cameras. Display order is independent of ids, so re-sorting never moves
+  a URL. The grid is justified flex rows, not CSS columns: columns fill
+  top-to-bottom, which would hide the chronology.
+- Deliberately no takedown/removal copy on the page.
+- Because these are in git, deleting a file does not erase it from history. A
+  real erasure request means rewriting history, or moving the set off the repo.
 
 ## Tickets
 - Weeztix shop embedded as a **plain `<iframe>`** (their injector.js/integrate.js break

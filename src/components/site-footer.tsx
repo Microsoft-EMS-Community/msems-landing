@@ -47,6 +47,12 @@ export function SiteFooter({ memberLabel }: SiteFooterProps) {
               GitHub
             </a>
             <Link
+              href="/photos"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Photos
+            </Link>
+            <Link
               href="/budget"
               className="text-muted-foreground transition-colors hover:text-foreground"
             >

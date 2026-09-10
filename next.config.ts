@@ -54,6 +54,13 @@ const nextConfig: NextConfig = {
         source: "/bills/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex" }],
       },
+      // Attendee photos are for the people who were there, not image search.
+      // The gallery page carries its own noindex via metadata; this covers the
+      // image files, which are reachable directly and have no metadata.
+      {
+        source: "/photos/:folder(full|thumb)/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
     ];
   },
 };
