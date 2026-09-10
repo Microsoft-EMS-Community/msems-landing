@@ -39,6 +39,17 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // card-photo.ts resolves ?photo=/some/path by reading it out of public/ at
+  // request time. The path is only known at runtime, so the file tracer gives
+  // up and bundles all of public/ into every card function. That was already
+  // wasteful; the event photo set is 256 MB and pushed the functions past
+  // Vercel's 250 MB uncompressed limit, failing the build.
+  //
+  // The gallery is served straight off the CDN as static assets, and no card
+  // is ever built from a gallery shot, so nothing needs these in a function.
+  outputFileTracingExcludes: {
+    "/*": ["public/photos/**/*"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.discordapp.com" },
